@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python Qrcode on Lifering</title>
+    <link>http://kamatari.github.io/categories/python-qrcode/</link>
+    <description>Recent content in Python Qrcode on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Sun, 17 Jan 2016 17:41:12 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/python-qrcode/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>python3系のqrコマンドで出るtype errorの直し方</title>
+      <link>http://kamatari.github.io/2016/01/17/how-to-fix-typeerror-of-qr-command/</link>
+      <pubDate>Sun, 17 Jan 2016 17:41:12 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2016/01/17/how-to-fix-typeerror-of-qr-command/</guid>
+      <description>
+
+&lt;h1 id=&#34;python-qrcodeとは:5ea90d3059e4d26034263885044e6bae&#34;&gt;python-qrcodeとは&lt;/h1&gt;
+
+&lt;p&gt;Pythonでqrcodeを扱うための外部パッケージに&lt;a href=&#34;https://pypi.python.org/pypi/qrcode&#34;&gt;「qrcode」&lt;/a&gt;がある。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;インストール方法
+&lt;code&gt;
+$ pip3 install qrcode
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;で、installすると、qrコマンドが使えるようになる。次のように使うと、コマンドラインからQRコードを生成できて便利。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ qr &amp;quot;http://kamatari.github.io&amp;quot; &amp;gt; blog_url.png
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://kamatari.github.io/images/blog_url.png&#34; alt=&#34;生成されたqrcode&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;発生する問題:5ea90d3059e4d26034263885044e6bae&#34;&gt;発生する問題&lt;/h1&gt;
+
+&lt;p&gt;ただ、次のようなエラーがPython3系で発生する。メッセージを見ると、2系から3系になったときにstring型とbyte型を区別して扱うようになった影響のエラーっぽいことが分かる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Traceback (most recent call last):
+  File &amp;quot;/Library/Frameworks/Python.framework/Versions/3.5/bin/qr&amp;quot;, line 9, in &amp;lt;module&amp;gt;
+    load_entry_point(&#39;qrcode==5.1&#39;, &#39;console_scripts&#39;, &#39;qr&#39;)()
+  File &amp;quot;/Library/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/qrcode/console_scripts.py&amp;quot;, line 60, in main
+    img.save(sys.stdout)
+  File &amp;quot;/Library/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/qrcode/image/pil.py&amp;quot;, line 32, in save
+    self._img.save(stream, kind)
+  File &amp;quot;/Library/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/PIL/Image.py&amp;quot;, line 1665, in save
+    save_handler(self, fp, filename)
+  File &amp;quot;/Library/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/PIL/PngImagePlugin.py&amp;quot;, line 690, in _save
+    fp.write(_MAGIC)
+TypeError: write() argument must be str, not bytes
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;解決方法:5ea90d3059e4d26034263885044e6bae&#34;&gt;解決方法&lt;/h1&gt;
+
+&lt;p&gt;qrcodeの&lt;code&gt;console_scrripts.py&lt;/code&gt;の&lt;code&gt;img.save&lt;/code&gt;の部分を直せばよさそうだ。しかし、githubにある本家のコードを見に行った所、すでに修正されていた。pypiにリリースされるまでは、下のcommitを参考に自分の環境のファイルを修正するか、githubから落としてきたコードを使おう。(修正する場合、自分の環境のファイルがどこにあるかは、表示されているエラーの内容を確認のこと)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/lincolnloop/python-qrcode/blob/master/qrcode/console_scripts.py#L80&#34;&gt;当該ファイル&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/lincolnloop/python-qrcode/commit/97be1b444ac5522b6eef7c9b8e9bcc66f6cb616a&#34;&gt;当該commit&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>homebrewでmacにopencvを入れる &middot; kamatari</title>
+        <meta name="description" content="">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.15" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/normalize.css">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/highlight.css">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-41886618-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="Lifering" href="http://kamatari.github.io/">Lifering</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://kamatari.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                            <a class="button-square button-social hint--top" data-hint="Twitter" title="Twitter" href="https://twitter.com/iratamak">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/kamatari">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="About" href="/about/">About</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">homebrewでmacにopencvを入れる</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    
+
+<h3 id="brew-installで失敗:eccc82578bb1d0d757eb4155a25811bd">brew installで失敗</h3>
+
+<p>何もしないと、opencvのこと知らないみたいだった</p>
+
+<pre><code class="language-bash">[kamatari :~/]$ brew install opencv
+Error: No available formula for opencv
+</code></pre>
+
+<h3 id="解決方法:eccc82578bb1d0d757eb4155a25811bd">解決方法</h3>
+
+<p>homebrew scienceというのをいれる</p>
+
+<pre><code class="language-bash">[kamatari :~/]$ brew tap homebrew/science
+Cloning into '/usr/local/Library/Taps/homebrew/homebrew-science'...
+remote: Reusing existing pack: 5364, done.
+remote: Total 5364 (delta 0), reused 0 (delta 0)
+Receiving objects: 100% (5364/5364), 1.37 MiB | 633.00 KiB/s, done.
+Resolving deltas: 100% (2763/2763), done.
+Checking connectivity... done.
+Tapped 326 formulae
+</code></pre>
+
+<p>見つけられました</p>
+
+<pre><code class="language-bash">[kamatari :~/proj]$ brew install opencv
+==&gt; Installing dependencies for opencv: cmake, jpeg, libpng, libtiff
+==&gt; Installing opencv dependency: cmake
+==&gt; Downloading https://downloads.sf.net/project/machomebrew/Bottles/cmake-3.0.0.mavericks.bottle.tar.gz
+######################################################################## 100.0%
+==&gt; Pouring cmake-3.0.0.mavericks.bottle.tar.gz
+🍺  /usr/local/Cellar/cmake/3.0.0: 1622 files, 25M
+==&gt; Installing opencv dependency: jpeg
+==&gt; Downloading https://downloads.sf.net/project/machomebrew/Bottles/jpeg-8d.mavericks.bottle.2.tar.gz
+######################################################################## 100.0%
+==&gt; Pouring jpeg-8d.mavericks.bottle.2.tar.gz
+🍺  /usr/local/Cellar/jpeg/8d: 18 files, 780K
+==&gt; Installing opencv dependency: libpng
+==&gt; Downloading https://downloads.sf.net/project/machomebrew/Bottles/libpng-1.6.12.mavericks.bottle.tar.gz
+######################################################################## 100.0%
+==&gt; Pouring libpng-1.6.12.mavericks.bottle.tar.gz
+🍺  /usr/local/Cellar/libpng/1.6.12: 17 files, 1.2M
+==&gt; Installing opencv dependency: libtiff
+==&gt; Downloading https://downloads.sf.net/project/machomebrew/Bottles/libtiff-4.0.3.mavericks.bottle.tar.gz
+######################################################################## 100.0%
+==&gt; Pouring libtiff-4.0.3.mavericks.bottle.tar.gz
+🍺  /usr/local/Cellar/libtiff/4.0.3: 254 files, 3.8M
+==&gt; Installing opencv
+==&gt; Downloading https://github.com/Itseez/opencv/archive/2.4.9.tar.gz
+######################################################################## 100.0%
+==&gt; cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/Cellar/opencv/2.4.9 -DCMAKE_BUILD_TYPE=None -DCMAKE_FIND_FRAMEWORK=LAST -DCMAKE_VERBOSE_MAKEFILE=ON -Wno-dev -DCMAKE_OSX_DEPLOYMENT
+==&gt; make
+==&gt; make install
+==&gt; Caveats
+If you need Python to find the installed site-packages:
+  mkdir -p ~/Library/Python/2.7/lib/python/site-packages
+  echo '/usr/local/lib/python2.7/site-packages' &gt; ~/Library/Python/2.7/lib/python/site-packages/homebrew.pth
+==&gt; Summary
+🍺  /usr/local/Cellar/opencv/2.4.9: 219 files, 38M, built in 10.7 minutes
+</code></pre>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        <a class="icon-twitter" href="http://twitter.com/share?text=homebrew%e3%81%a7mac%e3%81%abopencv%e3%82%92%e5%85%a5%e3%82%8c%e3%82%8b&url=http%3a%2f%2fkamatari.github.io%2f2014%2f07%2f06%2fhow-to-install-opencv-in-mac%2f"
+            onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+            <i class="fa fa-twitter"></i>
+            <span class="hidden">Twitter</span>
+        </a>
+
+        <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fkamatari.github.io%2f2014%2f07%2f06%2fhow-to-install-opencv-in-mac%2f"
+            onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+            <i class="fa fa-facebook"></i>
+            <span class="hidden">Facebook</span>
+        </a>
+
+        <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fkamatari.github.io%2f2014%2f07%2f06%2fhow-to-install-opencv-in-mac%2f"
+           onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+           <i class="fa fa-google-plus"></i>
+            <span class="hidden">Google+</span>
+        </a>
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="Lifering" href="http://kamatari.github.io/">Lifering</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2016 / Powered by <a href="http://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://kamatari.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+        <script src="http://kamatari.github.io/js/jquery.fitvids.js"></script>
+        <script src="http://kamatari.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Books Api on Lifering</title>
+    <link>http://kamatari.github.io/categories/books-api/</link>
+    <description>Recent content in Books Api on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Sun, 30 Nov 2014 16:00:43 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/books-api/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Web API The Good Partsを読んだ話</title>
+      <link>http://kamatari.github.io/2014/11/30/api-design-points/</link>
+      <pubDate>Sun, 30 Nov 2014 16:00:43 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/11/30/api-design-points/</guid>
+      <description>
+
+&lt;p&gt;&lt;div class=&#34;amazlet-box&#34; style=&#34;margin-bottom:0px;&#34;&gt;&lt;div class=&#34;amazlet-image&#34; style=&#34;float:left;margin:0px 12px 1px 0px;&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4873116864&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51GHwTNJgSL._SL160_.jpg&#34; alt=&#34;Web API: The Good Parts&#34; style=&#34;border: none;&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-info&#34; style=&#34;line-height:120%; margin-bottom: 10px&#34;&gt;&lt;div class=&#34;amazlet-name&#34; style=&#34;margin-bottom:10px;line-height:120%&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4873116864&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;Web API: The Good Parts&lt;/a&gt;&lt;div class=&#34;amazlet-powered-date&#34; style=&#34;font-size:80%;margin-top:5px;line-height:120%&#34;&gt;posted with &lt;a href=&#34;http://www.amazlet.com/&#34; title=&#34;amazlet&#34; target=&#34;_blank&#34;&gt;amazlet&lt;/a&gt; at 14.12.02&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-detail&#34;&gt;水野 貴明 &lt;br /&gt;オライリージャパン &lt;br /&gt;売り上げランキング: 1,496&lt;br /&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-sub-info&#34; style=&#34;float: left;&#34;&gt;&lt;div class=&#34;amazlet-link&#34; style=&#34;margin-top: 5px&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4873116864&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;Amazon.co.jpで詳細を見る&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-footer&#34; style=&#34;clear: left&#34;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;感想:bf42ce96247b9f24eb242d5d65427cd8&#34;&gt;感想&lt;/h1&gt;
+
+&lt;p&gt;web APIの設計をするときに意識するべきことが、大手webサービス(Facebook, Twitter, Instagram, etc)のAPIと比較して書いてあり、これを読めば自分のサービスに合った設計ができるようになっていると感じた。&lt;/p&gt;
+
+&lt;p&gt;例えば自分が初めてAPIを設計しようと考えた時、自分が今までに使ったことのあるAPIを振り返ったりして、良いところや悪いところを参考にしながらつくろうとするはずで、それぞれの設計の意図やその比較がこの本のようにまとまっているのはとても分かりやすいと思う。&lt;/p&gt;
+
+&lt;p&gt;また、比較的新しい(2014に発表された)設計思想などにも触れられており、従来のパターンだけではないAPIを設計するヒントにもなるだろう。&lt;/p&gt;
+
+&lt;p&gt;以下備忘録として、三つ気になったポイントを書いておく。これらの他にも様々な項目について記載されているので、APIを設計するにあたって何かしら新しい気づきがあると思う。&lt;/p&gt;
+
+&lt;h2 id=&#34;対象となる開発者の数とapiの設計思想について:bf42ce96247b9f24eb242d5d65427cd8&#34;&gt;対象となる開発者の数とAPIの設計思想について&lt;/h2&gt;
+
+&lt;p&gt;APIの設計思想は、誰でもが使えるように広く公開するAPIと、そうでないAPIとで異なるという話があった。&lt;/p&gt;
+
+&lt;p&gt;具体的な例として、Eコマースサイトのスマートフォン向けのアプリケーションを作る為のAPIの設計の例が挙げられている。&lt;/p&gt;
+
+&lt;p&gt;このアプリのホーム画面で使いたい情報が、「新着の商品」、「人気の商品」、「ログイン中のユーザ情報」、「購買履歴に基づくレコメンド」など様々であったとき、一般的な方法に基づいてそれぞれの機能ごとのエンドポイントを持ったAPIをつくることが最良とは言えない。&lt;/p&gt;
+
+&lt;p&gt;ホーム画面で表示する情報をひとつにまとめた&amp;rdquo;ホーム画面表示用API&amp;rdquo;を作成したほうが、クライアントアプリを作る開発者にとって、確実に利便性が高いだろうという話だ。&lt;/p&gt;
+
+&lt;h2 id=&#34;hateoasについて:bf42ce96247b9f24eb242d5d65427cd8&#34;&gt;HATEOASについて&lt;/h2&gt;
+
+&lt;p&gt;HATEOAS (Hypermedia as the engine of application state)は、APIの返すデータの中に、次の行動、取得するデータ等のURIをリンクとして含めることで、そのデータを見れば次にどのエンドポイントにアクセスすればよいかがわわかるような設計のこととされている。&lt;/p&gt;
+
+&lt;p&gt;具体的な例として挙げられているのが、友達一覧のデータを取得するAPIがあったとき、そのレスポンスの中に友達の名前とともに、それぞれの友達の詳細を取得するためのuriを入れておくというような設計だ。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;{
+  &amp;quot;friends&amp;quot;:[
+    { &amp;quot;name&amp;quot;: &amp;quot;Saeed&amp;quot;,
+      &amp;quot;link&amp;quot;: {
+        &amp;quot;uri&amp;quot;: &amp;quot;https://api.exmaple.com/v1/users/12345&amp;quot;,
+        &amp;quot;rel&amp;quot;: &amp;quot;user/detail&amp;quot;
+      }
+    },
+    { &amp;quot;name&amp;quot;: &amp;quot;Jack&amp;quot;,
+      &amp;quot;link&amp;quot;: {
+        &amp;quot;uri&amp;quot;: &amp;quot;https://api.exmaple.com/v1/users/6789&amp;quot;,
+        &amp;quot;rel&amp;quot;: &amp;quot;user/detail&amp;quot;
+      }
+    },
+...
+...
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;この友人の詳細情報を取得するuriをたたくと、今度はその友人とやりとりしたメッセージを取得するuriや、友達関係を解消するuriを含んでいるかもしれない。&lt;/p&gt;
+
+&lt;h2 id=&#34;性別のデータをどう表すかについて:bf42ce96247b9f24eb242d5d65427cd8&#34;&gt;性別のデータをどう表すかについて&lt;/h2&gt;
+
+&lt;p&gt;以前であれば生物学的な性別のみで、男性と女性とを1と2の数値で表すこともあったが、近年では社会的/文化的性別を選択可能にしているサービスも増え、性別を文字列で扱うところが圧倒的に多いとしている。&lt;/p&gt;
+
+&lt;p&gt;なかでもFacebookは2014年の2月に、選択可能な性別を一気に50種類以上に増やしたそうだ。&lt;/p&gt;
+
+&lt;p&gt;ただ、生物学的な性別が必要な、例えば医療系のサービスもあるので、適切なものを選択していく必要がありそうだ。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

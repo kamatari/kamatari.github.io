@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tmux on Lifering</title>
+    <link>http://kamatari.github.io/categories/tmux/</link>
+    <description>Recent content in Tmux on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Sun, 06 Jul 2014 09:22:00 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/tmux/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title> tmux が起動しないのを直した話</title>
+      <link>http://kamatari.github.io/2014/07/06/fix-brew-tmux-error/</link>
+      <pubDate>Sun, 06 Jul 2014 09:22:00 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/07/06/fix-brew-tmux-error/</guid>
+      <description>
+
+&lt;h3 id=&#34;現象:6bd0312c1ea95fa398b8c4ff34f9ce76&#34;&gt;現象&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;[kamatari :~]$tmux                                                                                                                                        [master]
+dyld: Library not loaded: /usr/local/lib/libevent-2.0.5.dylib
+Referenced from: /usr/local/bin/tmux
+Reason: image not found
+[1]    2680 trace trap  tmux
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;直し方:6bd0312c1ea95fa398b8c4ff34f9ce76&#34;&gt;直し方&lt;/h3&gt;
+
+&lt;p&gt;libevent と tmux をuninstallして、tmuxを入れ直す&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;[kamatari :~]$ brew uninstall libevent                                                                                                                     [master]
+Uninstalling /usr/local/Cellar/libevent/2.0.21...
+
+[kamatari :~]$ brew uninstall tmux                                                                                                                         [master]
+Uninstalling /usr/local/Cellar/tmux/1.9a...
+
+[kamatari :~]$ brew install tmux                                                                                                                           [master]
+==&amp;gt; Installing tmux dependency: libevent
+==&amp;gt; Downloading https://downloads.sf.net/project/machomebrew/Bottles/libevent-2.0.21.mavericks.bottle.tar.gz
+######################################################################## 100.0%
+==&amp;gt; Pouring libevent-2.0.21.mavericks.bottle.tar.gz
+🍺  /usr/local/Cellar/libevent/2.0.21: 48 files, 1.8M
+==&amp;gt; Installing tmux
+==&amp;gt; Downloading https://downloads.sf.net/project/machomebrew/Bottles/tmux-1.9a.mavericks.bottle.tar.gz
+Already downloaded: /Library/Caches/Homebrew/tmux-1.9a.mavericks.bottle.tar.gz
+==&amp;gt; Pouring tmux-1.9a.mavericks.bottle.tar.gz
+==&amp;gt; Caveats
+Example configurations have been installed to:
+  /usr/local/Cellar/tmux/1.9a/share/tmux/examples
+
+Bash completion has been installed to:
+  /usr/local/etc/bash_completion.d
+==&amp;gt; Summary
+🍺  /usr/local/Cellar/tmux/1.9a: 16 files, 632K
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

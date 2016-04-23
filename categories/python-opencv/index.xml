@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python Opencv on Lifering</title>
+    <link>http://kamatari.github.io/categories/python-opencv/</link>
+    <description>Recent content in Python Opencv on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Tue, 07 Oct 2014 21:03:48 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/python-opencv/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>図形の輪郭座標と面積から円形度を計算する</title>
+      <link>http://kamatari.github.io/2014/10/07/calculate-degree-of-circularity/</link>
+      <pubDate>Tue, 07 Oct 2014 21:03:48 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/10/07/calculate-degree-of-circularity/</guid>
+      <description>
+
+&lt;h1 id=&#34;円形度とは:9c62e37884b042fff1454a13469e8d4d&#34;&gt;円形度とは&lt;/h1&gt;
+
+&lt;p&gt;円っぽさを定量的にはかるための尺度で、1.0に近いほど円らしいとする&lt;/p&gt;
+
+&lt;h2 id=&#34;円形度を求める理由:9c62e37884b042fff1454a13469e8d4d&#34;&gt;円形度を求める理由&lt;/h2&gt;
+
+&lt;p&gt;画像処理で対象の画像からいろんな形の図形が抽出できたとき、目的とするオブジェクトかどうか判定するのに円形度を使うことができる&lt;/p&gt;
+
+&lt;h2 id=&#34;計算方法:9c62e37884b042fff1454a13469e8d4d&#34;&gt;計算方法&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;円形度 = 4π * S/L^2&lt;/code&gt; (S = 面積, L = 図形の周囲長)&lt;/p&gt;
+
+&lt;h2 id=&#34;円形度の計算の説明:9c62e37884b042fff1454a13469e8d4d&#34;&gt;円形度の計算の説明&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;図形を円と仮定して r = 半径とすると
+面積 S = π * r^2
+周囲長 L = 2πr
+
+4π * S/L^2 の公式のS, Lをrで置き換える
+
+4π * πr^2/(2πr)^2
+
+これを計算すると
+4π * S/L^2 = 1
+
+正円の時,1になる
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;opencvを使って-円形度を計算する:9c62e37884b042fff1454a13469e8d4d&#34;&gt;opencvを使って、円形度を計算する&lt;/h2&gt;
+
+&lt;p&gt;pythonでこんな感じ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import cv2
+import numpy as np
+# contourは輪郭点のリスト cv2.findContours
+# areaは図形の面積 cv2.contourArea
+
+def calcCircleLevel (contour, area):
+    perimeter = cv2.arcLength(contour, True)
+    circle_level = 4.0 * np.pi * area / (perimeter * perimeter); # perimeter = 0 のとき気をつける
+    return circle_level
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>homebrewでopencvがインストール出来ない問題</title>
+      <link>http://kamatari.github.io/2014/09/18/how-to-avoid-problem-of-opencv-installation/</link>
+      <pubDate>Thu, 18 Sep 2014 22:57:00 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/09/18/how-to-avoid-problem-of-opencv-installation/</guid>
+      <description>
+
+&lt;h3 id=&#34;brewでopencvが入らないことがあった:5a74b82014f2b0ac553545232a7ef3ba&#34;&gt;brewでopencvが入らないことがあった&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;[local :~]$ brew install opencv
+==&amp;gt; Downloading https://github.com/Itseez/opencv/archive/2.4.9.tar.gz
+Already downloaded: /Library/Caches/Homebrew/opencv-2.4.9.tar.gz
+tar: Failed to set default locale
+==&amp;gt; cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/Cellar/opencv/2.4.9 -DCMAKE_BUILD_TYPE=None -DCMAKE_FIND_FRAMEWORK=LAST -DCMAKE_VERBOSE_MAKEFILE=ON -Wno-dev -DCMAKE_OSX_DEPLOYMENT_TARGET= -DBUILD_ZLIB=OFF -DBUILD_TIFF=OFF -DBUILD_PNG=OFF -DBUILD_OPENEXR=OFF -DBUILD
+==&amp;gt; make
+make[2]: *** Waiting for unfinished jobs....
+[100%] Building CXX object modules/python/CMakeFiles/opencv_python.dir/src2/cv2.cpp.o
+cd /tmp/opencv-AiDbmm/opencv-2.4.9/macbuild/modules/python &amp;amp;&amp;amp; /usr/local/Library/ENV/4.3/clang++   -DPYTHON_USE_NUMPY=1 -Dopencv_python_EXPORTS -fsigned-char -W -Wall -Werror=return-type -Werror=address -Werror=sequence-point -Wformat -Werror=format-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wno-narrowing -Wno-delete-non-virtual-dtor -Wno-unnamed-type-template-args -fdiagnostics-show-option -Wno-long-long -fno-omit-frame-pointer -msse -msse2 -mavx -Wno-unused-function -fPIC -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/python/src2 -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/contrib/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/nonfree/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/ocl/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/gpu/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/photo/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/objdetect/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/legacy/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/video/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/ml/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/calib3d/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/features2d/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/highgui/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/imgproc/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/flann/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/core/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/macbuild/modules/python -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/python/src -I/tmp/opencv-AiDbmm/opencv-2.4.9/modules/python/include -I/tmp/opencv-AiDbmm/opencv-2.4.9/macbuild -isystem /Users/kamatari/.pyenv/versions/2.7.6/include/python2.7 -isystem /usr/local/lib/python2.7/site-packages/numpy/core/include    -o CMakeFiles/opencv_python.dir/src2/cv2.cpp.o -c /tmp/opencv-AiDbmm/opencv-2.4.9/modules/python/src2/cv2.cpp
+make[1]: *** [modules/python/CMakeFiles/opencv_python.dir/all] Error 2
+make: *** [all] Error 2
+
+READ THIS: https://github.com/Homebrew/homebrew/wiki/troubleshooting
+If reporting this issue please do so at (not Homebrew/homebrew):
+  https://github.com/homebrew/homebrew-science/issues
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;大文字で書いてあるREAD THIS 通りに、homebrewのページを見てbrew doctorをやって全部解消しても直らなかった。&lt;/p&gt;
+
+&lt;h3 id=&#34;python-の-pyenvと相性が悪いらしい:5a74b82014f2b0ac553545232a7ef3ba&#34;&gt;python の pyenvと相性が悪いらしい&lt;/h3&gt;
+
+&lt;p&gt;相性って&amp;hellip;と思いつつ、pyenvをuninstall&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ brew uninstall pyenv
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;あらためてopencvをinstallしたら、入れることができた。
+なのでopencvを入れた後に、pyenvを再びinstallする。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ brew install opencv
+$ brew install pyenv
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

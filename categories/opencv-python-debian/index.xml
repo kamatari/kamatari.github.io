@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Opencv Python Debian on Lifering</title>
+    <link>http://kamatari.github.io/categories/opencv-python-debian/</link>
+    <description>Recent content in Opencv Python Debian on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Sun, 05 Oct 2014 00:31:13 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/opencv-python-debian/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>debianにopencv2.xをinstallした話</title>
+      <link>http://kamatari.github.io/2014/10/05/how-to-install-opencv2x-on-debian/</link>
+      <pubDate>Sun, 05 Oct 2014 00:31:13 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/10/05/how-to-install-opencv2x-on-debian/</guid>
+      <description>
+
+&lt;h1 id=&#34;opencv-2-4-9をmakeする作戦で進める:9b54f3de641fff8054d8bd7c0fd655c5&#34;&gt;opencv 2.4.9をmakeする作戦で進める&lt;/h1&gt;
+
+&lt;p&gt;debianは空の状態から作業開始.まずはupdateと必要なものをinstall&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo apt-get -yV update
+$ sudo apt-get -yV upgrade
+$ sudo apt-get install cmake
+$ sudo apt-get install g++
+$ sudo apt-get install gcc
+$ sudo apt-get install unzip
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;次にopencvを落としてきて、&lt;code&gt;cmake&lt;/code&gt; -&amp;gt; &lt;code&gt;make&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ wget http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/2.4.9/opencv-2.4.9.zip
+$ unzip opencv-2.4.9.zip
+$ cd opencv-2.4.9/
+$ mkdir release
+$ cd release
+$ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_NEW_PYTHON_SUPPORT=ON -D BUILD_EXAMPLES=ON ..
+$ make
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;そうすると、以下のようなログを出して失敗&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;・
+・
+・
+Linking CXX static library ../../lib/libopencv_ocl_pch_dephelp.a
+[ 67%] Built target opencv_ocl_pch_dephelp
+Scanning dependencies of target pch_Generate_opencv_ocl
+[ 67%] Generating precomp.hpp
+[ 67%] Generating precomp.hpp.gch/opencv_ocl_RELEASE.gch
+[ 68%] Built target pch_Generate_opencv_ocl
+[ 68%] Generating opencl_kernels.cpp, opencl_kernels.hpp
+CMake Error at /home/vagrant/opencv-2.4.9/cmake/cl2cpp.cmake:50 (string):
+  string does not recognize sub-command MD5
+   
+   make[2]: *** [modules/ocl/opencl_kernels.cpp] Error 1
+   make[1]: *** [modules/ocl/CMakeFiles/opencv_ocl.dir/all] Error
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;MD5をrecognizeできないと言うので、md5のパッケージを入れてから再度makeする&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo apt-get install isomd5sum
+$ make
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;だが、ログのメッセージは変わらず失敗&lt;/p&gt;
+
+&lt;p&gt;その後、cmakeのバージョンが古いため発生することを知る&lt;/p&gt;
+
+&lt;h2 id=&#34;cmakeの新しいバージョンをinstall:9b54f3de641fff8054d8bd7c0fd655c5&#34;&gt;cmakeの新しいバージョンをinstall&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# 失敗したcmakeのversion
+$ cmake --version
+cmake version 2.8.2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ cd
+$ mkdir cmakebuild
+$ cd cmakebuild/
+$ wget http://www.cmake.org/files/v2.8/cmake-2.8.11.2.tar.gz
+$ tar xvzf cmake-2.8.11.2.tar.gz
+$ cd cmake-2.8.11.2/
+$ ./configure
+$ make
+$ sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;cmakeのversionをあげたので、再びopencvのcmakeから行う&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_NEW_PYTHON_SUPPORT=ON -D BUILD_EXAMPLES=ON ..
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;そしてそのログ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;-- The CXX compiler identification is GNU 4.4.5
+-- The C compiler identification is GNU 4.4.5
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detected version of GNU GCC: 44 (404)
+-- Could NOT find ZLIB (missing:  ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
+-- Could NOT find TIFF (missing:  TIFF_LIBRARY TIFF_INCLUDE_DIR)
+-- Could NOT find JPEG (missing:  JPEG_LIBRARY JPEG_INCLUDE_DIR)
+-- Found JPEG: libjpeg
+-- Could NOT find Jasper (missing:  JASPER_LIBRARIES JASPER_INCLUDE_DIR)
+-- Found ZLIB: zlib (found version &amp;quot;1.2.7&amp;quot;)
+-- Could NOT find PNG (missing:  PNG_LIBRARY PNG_PNG_INCLUDE_DIR)
+-- Looking for linux/videodev.h
+-- Looking for linux/videodev.h - found
+-- Looking for linux/videodev2.h
+-- Looking for linux/videodev2.h - found
+-- Looking for sys/videoio.h
+-- Looking for sys/videoio.h - not found
+-- Looking for libavformat/avformat.h
+-- Looking for libavformat/avformat.h - not found
+-- Looking for ffmpeg/avformat.h
+-- Looking for ffmpeg/avformat.h - not found
+-- Found PythonInterp: /usr/bin/python2.6 (found suitable version &amp;quot;2.6.6&amp;quot;, minimum required is &amp;quot;2.0&amp;quot;)
+-- Could NOT find PythonLibs (missing:  PYTHON_LIBRARIES PYTHON_INCLUDE_DIRS) (Required is exact version &amp;quot;2.6.6&amp;quot;)                                                                                                                                                    [87/1904]
+Traceback (most recent call last):
+  File &amp;quot;&amp;lt;string&amp;gt;&amp;quot;, line 1, in &amp;lt;module&amp;gt;
+  ImportError: No module named numpy.distutils
+  -- Could NOT find JNI (missing:  JAVA_AWT_LIBRARY JAVA_JVM_LIBRARY JAVA_INCLUDE_PATH JAVA_INCLUDE_PATH2 JAVA_AWT_INCLUDE_PATH)
+  ・
+  ・
+  ・
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;ログから-足りないらしいものをいくつか入れる:9b54f3de641fff8054d8bd7c0fd655c5&#34;&gt;ログから、足りないらしいものをいくつか入れる&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo apt-get install python-numpy
+$ sudo apt-get install python-dev
+$ easy_install pip
+$ ln -sv /usr/local/bin/pipxx /usr/bin/pip
+$ pip install pip --upgrade
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;もう一度 &lt;code&gt;cmake&lt;/code&gt; -&amp;gt; &lt;code&gt;make&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ cd opencv-2.4.9/release
+$ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_NEW_PYTHON_SUPPORT=ON -D BUILD_EXAMPLES=ON ..
+$ make
+・
+・
+・
+Scanning dependencies of target example_ocl_surf_matcher
+[ 99%] Building CXX object samples/ocl/CMakeFiles/example_ocl_surf_matcher.dir/surf_matcher.cpp.o
+Linking CXX executable ../../bin/ocl-example-surf_matcher
+[ 99%] Built target example_ocl_surf_matcher
+Scanning dependencies of target example_ocl_tvl1_optical_flow
+[100%] Building CXX object samples/ocl/CMakeFiles/example_ocl_tvl1_optical_flow.dir/tvl1_optical_flow.cpp.o
+Linking CXX executable ../../bin/ocl-example-tvl1_optical_flow
+[100%] Built target example_ocl_tvl1_optical_flow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ようやくうまくいったので、インストール&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;最後にcv2をimportできるかを確認:9b54f3de641fff8054d8bd7c0fd655c5&#34;&gt;最後にcv2をimportできるかを確認&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ python
+Python 2.6.6 (r266:84292, Dec 26 2010, 22:31:48)
+[GCC 4.4.5] on linux2
+Type &amp;quot;help&amp;quot;, &amp;quot;copyright&amp;quot;, &amp;quot;credits&amp;quot; or &amp;quot;license&amp;quot; for more information.
+&amp;gt;&amp;gt;&amp;gt; import cv2
+&amp;gt;&amp;gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;OK! おしまい&lt;/p&gt;
+
+&lt;h2 id=&#34;蛇足:9b54f3de641fff8054d8bd7c0fd655c5&#34;&gt;蛇足&lt;/h2&gt;
+
+&lt;p&gt;以下のように&lt;code&gt;import cv2&lt;/code&gt;が失敗するときは、&lt;code&gt;/usr/local/lib/python2.6/site-packages/&lt;/code&gt;の下に&lt;code&gt;cv2.so&lt;/code&gt;が無いから。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ python                                                                                                                                                          []
+&amp;gt;&amp;gt;&amp;gt; import cv2
+Traceback (most recent call last):
+  File &amp;quot;&amp;lt;stdin&amp;gt;&amp;quot;, line 1, in &amp;lt;module&amp;gt;
+  ImportError: No module named cv2
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

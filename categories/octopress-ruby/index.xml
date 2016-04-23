@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Octopress Ruby on Lifering</title>
+    <link>http://kamatari.github.io/categories/octopress-ruby/</link>
+    <description>Recent content in Octopress Ruby on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Sat, 04 Oct 2014 07:44:40 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/octopress-ruby/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Octopressにpull reqがマージされた話</title>
+      <link>http://kamatari.github.io/2014/10/04/fix-octopress-rake-clean/</link>
+      <pubDate>Sat, 04 Oct 2014 07:44:40 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/10/04/fix-octopress-rake-clean/</guid>
+      <description>
+
+&lt;h2 id=&#34;octopressでrake-clean-が正しく動作してない:bcd0f59cc89898cf6346cc8d636f7fb8&#34;&gt;octopressでrake clean が正しく動作してない&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ bundle exec rake clean
+rm -rf .pygments-cache/** .gist-cache/** .sass-cache/** source/stylesheets/screen.css
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ぱっと見それぞれのディレクトリ以下を&lt;code&gt;rm -rf&lt;/code&gt;してるように見えるが、wildcardが展開されておらずcacheが削除されていないようだった。
+&lt;code&gt;rake clean&lt;/code&gt;の処理はRakefileの以下の部分にある&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;desc &amp;quot;Clean out caches: .pygments-cache, .gist-cache, .sass-cache&amp;quot;
+task :clean do
+  rm_rf [&amp;quot;.pygments-cache/**&amp;quot;, &amp;quot;.gist-cache/**&amp;quot;, &amp;quot;.sass-cache/**&amp;quot;, &amp;quot;source/stylesheets/screen.css&amp;quot;]
+    end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;rm_rf&lt;/code&gt;を調べてみると、&lt;a href=&#34;http://docs.ruby-lang.org/ja/search/query:rm_rf/#entry-0&#34;&gt;ファイルのリストか、Dir.globで利用できる glob パターンを指定します&lt;/a&gt;とのこと。
+&lt;code&gt;Dir.glob()&lt;/code&gt;を利用するようにして、以下のように修正をした。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-diff&#34;&gt;@@ -175,7 +175,7 @@ end
+
+ desc &amp;quot;Clean out caches: .pygments-cache, .gist-cache, .sass-cache&amp;quot;
+  task :clean do
+  -  rm_rf [&amp;quot;.pygments-cache/**&amp;quot;, &amp;quot;.gist-cache/**&amp;quot;, &amp;quot;.sass-cache/**&amp;quot;, &amp;quot;source/stylesheets/screen.css&amp;quot;]
+  +  rm_rf [Dir.glob(&amp;quot;.pygments-cache/**&amp;quot;), Dir.glob(&amp;quot;.gist-cache/**&amp;quot;), Dir.glob(&amp;quot;.sass-cache/**&amp;quot;), &amp;quot;source/stylesheets/screen.css&amp;quot;]
+   end
+
+    desc &amp;quot;Move sass to sass.old, install sass theme updates, replace sass/custom with sass.old/custom&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;pull-reqしてみた結果:bcd0f59cc89898cf6346cc8d636f7fb8&#34;&gt;pull reqしてみた結果&lt;/h2&gt;
+
+&lt;p&gt;無事にmergeされたので、&lt;code&gt;rake clean&lt;/code&gt;が動かなかったらoctopressをupdateしてみるとなおるはず&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/imathis/octopress/pull/1658&#34;&gt;https://github.com/imathis/octopress/pull/1658&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

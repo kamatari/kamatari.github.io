@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>debianにElasticsearch 1.4.1をinstallした話 &middot; kamatari</title>
+        <meta name="description" content="">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.15" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/normalize.css">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/highlight.css">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-41886618-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="Lifering" href="http://kamatari.github.io/">Lifering</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://kamatari.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                            <a class="button-square button-social hint--top" data-hint="Twitter" title="Twitter" href="https://twitter.com/iratamak">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/kamatari">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="About" href="/about/">About</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">debianにElasticsearch 1.4.1をinstallした話</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    
+
+<h1 id="java環境つくる:f44e9335b07c8e35a642c52359341df3">Java環境つくる</h1>
+
+<h2 id="oracle-jdk7のinstall:f44e9335b07c8e35a642c52359341df3">Oracle JDK7のinstall</h2>
+
+<p>ここからJDKのダウンロードページに行って、環境にあったものを選ぶ</p>
+
+<p><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a></p>
+
+<h2 id="jdk-7u71-linux-x64-tar-gzを選択:f44e9335b07c8e35a642c52359341df3">jdk-7u71-linux-x64.tar.gzを選択</h2>
+
+<pre><code class="language-bash">$ tar -xvf jdk-7u71-linux-x64.gz
+</code></pre>
+
+<h2 id="usr-lib以下に移動:f44e9335b07c8e35a642c52359341df3">/usr/lib以下に移動</h2>
+
+<pre><code class="language-bash">$ sudo mv jdk1.7.0_71 jvm/jdk1.7.0
+</code></pre>
+
+<h2 id="alternativesを使ってjavaを今回の1-7-0に切り替えておく:f44e9335b07c8e35a642c52359341df3">alternativesを使ってjavaを今回の1.7.0に切り替えておく</h2>
+
+<p>(参考: <a href="http://qiita.com/hidekuro/items/f931ae527244bce34698">update-alternativesに管理してもらうコマンドを追加する</a>)</p>
+
+<pre><code class="language-bash">$ sudo update-alternatives --install &quot;/usr/bin/java&quot; &quot;java&quot; &quot;/usr/lib/jvm/jdk1.7.0/bin/java&quot; 1
+$ sudo update-alternatives --install &quot;/usr/bin/javac&quot; &quot;javac&quot; &quot;/usr/lib/jvm/jdk1.7.0/bin/javac&quot; 1
+$ sudo update-alternatives --install &quot;/usr/bin/javaws&quot; &quot;javaws&quot; &quot;/usr/lib/jvm/jdk1.7.0/bin/javaws&quot; 1
+</code></pre>
+
+<h2 id="それぞれで今回installした-usr-lib-jdk1-7-0以下を指定:f44e9335b07c8e35a642c52359341df3">それぞれで今回installした/usr/lib/jdk1.7.0以下を指定</h2>
+
+<pre><code class="language-bash">$ sudo update-alternatives --config java
+$ sudo update-alternatives --config javac
+$ sudo update-alternatives --config javaws
+</code></pre>
+
+<h2 id="確認:f44e9335b07c8e35a642c52359341df3">確認</h2>
+
+<pre><code class="language-bash">$ java -version
+
+java -version
+java version &quot;1.7.0_71&quot;
+Java(TM) SE Runtime Environment (build 1.7.0_71-b14)
+Java HotSpot(TM) 64-Bit Server VM (build 24.71-b01, mixed mode)
+</code></pre>
+
+<h1 id="elasticsearchのinstall:f44e9335b07c8e35a642c52359341df3">Elasticsearchのinstall</h1>
+
+<h2 id="公式からdeb形式でダウンロードする:f44e9335b07c8e35a642c52359341df3">公式からdeb形式でダウンロードする</h2>
+
+<p><a href="http://www.elasticsearch.org/overview/elkdownloads/">http://www.elasticsearch.org/overview/elkdownloads/</a></p>
+
+<pre><code class="language-bash">$ wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.1.deb
+</code></pre>
+
+<h2 id="install:f44e9335b07c8e35a642c52359341df3">install</h2>
+
+<pre><code class="language-bash">$ sudo dpkg -i elasticsearch-1.4.1.deb
+</code></pre>
+
+<h2 id="起動とlogの確認:f44e9335b07c8e35a642c52359341df3">起動とlogの確認</h2>
+
+<pre><code class="language-bash">$ sudo /etc/init.d/elasticsearch start
+$ tail -f /var/log/elasticsearch/elasticsearch.log
+</code></pre>
+
+<h2 id="curlで状態を確認:f44e9335b07c8e35a642c52359341df3">curlで状態を確認</h2>
+
+<p>status が greenかどうか</p>
+
+<pre><code class="language-bash">$ curl -XGET localhost:9200/_cluster/health?pretty
+
+{
+  &quot;cluster_name&quot; : &quot;elasticsearch&quot;,
+  &quot;status&quot; : &quot;green&quot;,
+  &quot;timed_out&quot; : false,
+  &quot;number_of_nodes&quot; : 1,
+  &quot;number_of_data_nodes&quot; : 1,
+  &quot;active_primary_shards&quot; : 0,
+  &quot;active_shards&quot; : 0,
+  &quot;relocating_shards&quot; : 0,
+  &quot;initializing_shards&quot; : 0,
+  &quot;unassigned_shards&quot; : 0
+}
+</code></pre>
+
+<h2 id="pluginのinstall:f44e9335b07c8e35a642c52359341df3">pluginのinstall</h2>
+
+<p>以下ふたつ入れてみる</p>
+
+<ul>
+<li>kuromoji
+
+<ul>
+<li>対応verを確認するべし <a href="https://github.com/elasticsearch/elasticsearch-analysis-kuromoji">https://github.com/elasticsearch/elasticsearch-analysis-kuromoji</a></li>
+</ul></li>
+
+<li><p>HQ</p>
+
+<pre><code class="language-bash">$ sudo /usr/share/elasticsearch/bin/plugin -install elasticsearch/elasticsearch-analysis-kuromoji/2.4.1
+$ sudo /usr/share/elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ
+</code></pre>
+
+<h2 id="確認-1:f44e9335b07c8e35a642c52359341df3">確認</h2>
+
+<p>curlで投げたresponseの中にpluginsという項目があるので、そこにinstallしたpluginがあるか確認する</p>
+
+<pre><code>$ curl -XGET 'http://localhost:9200/_nodes?pretty=true'
+</code></pre></li>
+</ul>
+
+<h2 id="pluginを使って-状態の確認:f44e9335b07c8e35a642c52359341df3">pluginを使って、状態の確認</h2>
+
+<p>今入れたHQを使って、以下のアドレスへブラウザでアクセスして確認することができる (ドメインは適宜変更)</p>
+
+<p><a href="http://localhost:9200/_plugin/HQ">http://localhost:9200/_plugin/HQ</a></p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        <a class="icon-twitter" href="http://twitter.com/share?text=debian%e3%81%abElasticsearch%201.4.1%e3%82%92install%e3%81%97%e3%81%9f%e8%a9%b1&url=http%3a%2f%2fkamatari.github.io%2f2014%2f12%2f07%2finstall-elasticsearch-on-debian%2f"
+            onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+            <i class="fa fa-twitter"></i>
+            <span class="hidden">Twitter</span>
+        </a>
+
+        <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fkamatari.github.io%2f2014%2f12%2f07%2finstall-elasticsearch-on-debian%2f"
+            onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+            <i class="fa fa-facebook"></i>
+            <span class="hidden">Facebook</span>
+        </a>
+
+        <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fkamatari.github.io%2f2014%2f12%2f07%2finstall-elasticsearch-on-debian%2f"
+           onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+           <i class="fa fa-google-plus"></i>
+            <span class="hidden">Google+</span>
+        </a>
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="Lifering" href="http://kamatari.github.io/">Lifering</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2016 / Powered by <a href="http://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://kamatari.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+        <script src="http://kamatari.github.io/js/jquery.fitvids.js"></script>
+        <script src="http://kamatari.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

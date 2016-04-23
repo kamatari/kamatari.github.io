@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>debian環境のルート証明書を更新した話 &middot; kamatari</title>
+        <meta name="description" content="">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.15" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/normalize.css">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/highlight.css">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-41886618-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="Lifering" href="http://kamatari.github.io/">Lifering</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://kamatari.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                            <a class="button-square button-social hint--top" data-hint="Twitter" title="Twitter" href="https://twitter.com/iratamak">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/kamatari">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="About" href="/about/">About</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">debian環境のルート証明書を更新した話</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <p>とあるアプリケーションにログインする際に、エラーが出て失敗する問題が発生した。</p>
+
+<p>認証処理を行っているphpのlogには、以下のようなメッセージが吐かれている。</p>
+
+<pre><code>[11-Mar-2015 11:40:08] Got no response code when fetching  https://openid-xxxxx/
+[11-Mar-2015 11:40:08] CURL error (60): SSL certificate problem, verify that the CA cert is OK.
+Details: error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed
+</code></pre>
+
+<p>このエラーは、アプリケーションのサーバーから、認証をするサーバー(openidを使っていた)に対してのcurlで、SSLの認証の失敗で出ているようだ。</p>
+
+<p>手動でcurlを打った時のログがこれ。</p>
+
+<pre><code>$ curl https://openid-xxxxx/
+curl: (60) SSL certificate problem, verify that the CA cert is OK. Details:
+error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed
+More details here: http://curl.haxx.se/docs/sslcerts.html
+
+curl performs SSL certificate verification by default, using a &quot;bundle&quot;
+of Certificate Authority (CA) public keys (CA certs). The default
+bundle is named curl-ca-bundle.crt; you can specify an alternate file
+using the --cacert option.
+If this HTTPS server uses a certificate signed by a CA represented in
+the bundle, the certificate verification probably failed due to a
+problem with the certificate (it might be expired, or the name might
+not match the domain name in the URL).
+If you'd like to turn off curl's verification of the certificate, use
+the -k (or --insecure) option.
+</code></pre>
+
+<p>原因は、SHA-1の証明書をSHA-2へ切り替えた事で、新しい証明書に対応したルート証明書がアプリケーションのサーバーになかったことだ。
+(※ 単純なSHA-1からSHA-2の切り替えだけだとルート証明書を変えなくてもいいらしいが…?)</p>
+
+<p>現象としてはちょうど一年くらい前にあった、古いOSにインストールされてたルート証明書の期限が切れた時と同じだ。(原因はちがうけど)</p>
+
+<ul>
+<li><a href="http://oauth.jp/blog/2014/01/30/globalsign-root-cert-expired/">Y!J API が止まった日 - GlobalSign の Root 証明書切れから学んだこと</a></li>
+</ul>
+
+<p>とにかく有効なルート証明書をアプリケーションのサーバーに入れないと解消できない。
+自分を含めた古いOSをたいせつに(使う|使わざるを得ない)勢のいつかの期限切れのために、以下に更新方法を残しておく。</p>
+
+<p>debianにはupdate-ca-certificatesというコマンドがあるので、manで内容を確認しつつ使ってみる。</p>
+
+<pre><code>$ man update-ca-certificate 
+</code></pre>
+
+<ol>
+<li>使ってる認証局(globalsignとかverisign)のルート証明書を手に入れる。拡張子は.crtに。</li>
+<li>/usr/share/ca-certificates以下に、1のxxxx.crt を置く。</li>
+<li>/etc/ca-certificates.confに、2のpathを書く</li>
+<li>update-ca-certificatesを実行して、更新</li>
+</ol>
+
+<pre><code>$ sudo update-ca-certificates
+Updating certificates in /etc/ssl/certs... WARNING: Skipping duplicate certificate cacert.org.pem
+WARNING: Skipping duplicate certificate ca-certificates.crt
+1 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d....done.
+</code></pre>
+
+<p>無事更新できたら、curlしてerrorが出ない事を確認。</p>
+
+<pre><code>$ curl https://openid-xxxxx/
+</code></pre>
+
+<p>ちなみに、更新したのにcurlで以下のようなエラーが出ることがある。</p>
+
+<pre><code>curl: (35) error:0D0C50A1:asn1 encoding routines:ASN1_item_verify:unknown message digest algorithm
+</code></pre>
+
+<p>調べると太古のバグっぽい。<a href="http://curl.haxx.se/mail/tracker-2009-07/0020.html">[ curl-Bugs-2825989 ] curl refuses sha-2 signed certificates</a></p>
+
+<p>openssl系のパッケージをupdateすると、解消できた。</p>
+
+<pre><code>$ sudo apt-get install openssl
+</code></pre>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        <a class="icon-twitter" href="http://twitter.com/share?text=debian%e7%92%b0%e5%a2%83%e3%81%ae%e3%83%ab%e3%83%bc%e3%83%88%e8%a8%bc%e6%98%8e%e6%9b%b8%e3%82%92%e6%9b%b4%e6%96%b0%e3%81%97%e3%81%9f%e8%a9%b1&url=http%3a%2f%2fkamatari.github.io%2f2015%2f03%2f12%2fhow-to-install-root-certificate-on-debian%2f"
+            onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+            <i class="fa fa-twitter"></i>
+            <span class="hidden">Twitter</span>
+        </a>
+
+        <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fkamatari.github.io%2f2015%2f03%2f12%2fhow-to-install-root-certificate-on-debian%2f"
+            onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+            <i class="fa fa-facebook"></i>
+            <span class="hidden">Facebook</span>
+        </a>
+
+        <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fkamatari.github.io%2f2015%2f03%2f12%2fhow-to-install-root-certificate-on-debian%2f"
+           onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+           <i class="fa fa-google-plus"></i>
+            <span class="hidden">Google+</span>
+        </a>
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="Lifering" href="http://kamatari.github.io/">Lifering</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2016 / Powered by <a href="http://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://kamatari.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+        <script src="http://kamatari.github.io/js/jquery.fitvids.js"></script>
+        <script src="http://kamatari.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Php on Lifering</title>
+    <link>http://kamatari.github.io/categories/php/</link>
+    <description>Recent content in Php on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Wed, 01 Oct 2014 23:44:29 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>phpでhttp越しに画像サイズを取得するいくつかの方法</title>
+      <link>http://kamatari.github.io/2014/10/01/how-to-get-external-image-using-php/</link>
+      <pubDate>Wed, 01 Oct 2014 23:44:29 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/10/01/how-to-get-external-image-using-php/</guid>
+      <description>
+
+&lt;h2 id=&#34;getimagesize:0a657fb6777f240a1e259b3ee5017dbc&#34;&gt;getimagesize()&lt;/h2&gt;
+
+&lt;p&gt;urlをそのまま入れてもサイズなどを返してくれるので簡単&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
+$size = getimagesize(&#39;http://free-photos-ls01.gatag.net/images/lgf01a201304271400.jpg&#39;);
+
+/* $size のoutput
+array (
+  0 =&amp;gt; 1024,
+  1 =&amp;gt; 768,
+  2 =&amp;gt; 2,
+  3 =&amp;gt; &#39;width=&amp;quot;1024&amp;quot; height=&amp;quot;768&amp;quot;&#39;,
+  &#39;bits&#39; =&amp;gt; 8,
+  &#39;channels&#39; =&amp;gt; 3,
+  &#39;mime&#39; =&amp;gt; &#39;image/jpeg&#39;,
+)
+*/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;file-get-contents:0a657fb6777f240a1e259b3ee5017dbc&#34;&gt;file_get_contents()&lt;/h2&gt;
+
+&lt;p&gt;stream_context_create()で作ったcontextを渡す事で、proxy経由などの設定が可能&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
+// 例えばproxyを使う
+$option = array(
+  &#39;http&#39;  =&amp;gt;  array(
+    &#39;proxy&#39; =&amp;gt;  tcp://host:port, // ← 設定したいproxy
+    &#39;request_fulluri&#39; =&amp;gt; true,
+  ),
+);
+
+$context = stream_context_create($option);
+
+$img_url  = &#39;http://free-photos-ls01.gatag.net/images/lgf01a201304271400.jpg&#39;;
+$img_data_string  =  file_get_contents($img_url, false, $context);
+$img_data = imagecreatefromstring($img_data_string);
+$height = imagesx($img_data);
+$width  = imagesy($img_data);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;php5.4以降ならgetimagesizefromstringがつかえる&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$img_info = getimagesizefromstring($img_data_string);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;http-function:0a657fb6777f240a1e259b3ee5017dbc&#34;&gt;http function&lt;/h2&gt;
+
+&lt;p&gt;response code など取得出来るのでエラーハンドリングしやすい&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;$img_url = &#39;http://aaabbbccc&#39;;
+// optionを設定
+$option[&#39;proxyhost&#39;] = xxx.xxx.x.xxx;
+$option[&#39;proxyport&#39;] = yyyy;
+
+$http-&amp;gt;setOptions($option);
+$http-&amp;gt;send();
+$http_code  = $http-&amp;gt;getResponseCode();
+$response   = $http-&amp;gt;getResponseData();
+$body       = $response[&#39;body&#39;];
+
+$img_data   = imagecreatefromstring($body);
+$height     = imagesx($img_data);
+$width      = imagesy($img_data);
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

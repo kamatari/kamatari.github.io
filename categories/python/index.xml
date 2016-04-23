@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on Lifering</title>
+    <link>http://kamatari.github.io/categories/python/</link>
+    <description>Recent content in Python on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Tue, 05 May 2015 10:59:14 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/python/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>IPythonなるものの概要</title>
+      <link>http://kamatari.github.io/2015/05/05/first-step-of-ipython/</link>
+      <pubDate>Tue, 05 May 2015 10:59:14 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2015/05/05/first-step-of-ipython/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://kamatari.github.io/images/IPythonLogo.png&#34; alt=&#34;IPython_log&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;ipythonとは:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;IPythonとは&lt;/h1&gt;
+
+&lt;p&gt;ひとことで言うとpythonのインタラクティブシェルの強化版
+(&lt;a href=&#34;http://ipython.org/ipython-doc/stable/interactive/tutorial.html&#34;&gt;公式tutorial&lt;/a&gt; と &lt;a href=&#34;https://github.com/ipython/ipython&#34;&gt;github&lt;/a&gt;)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;補完機能の強化&lt;/li&gt;
+&lt;li&gt;イントロスペクションの強化&lt;/li&gt;
+&lt;li&gt;Magic Functionsという便利コマンドが使える&lt;/li&gt;
+&lt;li&gt;履歴機能の強化&lt;/li&gt;
+&lt;li&gt;OSのシェルコマンドが使える&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;インストールと起動:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;インストールと起動&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip install ipython
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ipython
+Python 2.7.5 (default, Mar  9 2014, 22:15:05)
+Type &amp;quot;copyright&amp;quot;, &amp;quot;credits&amp;quot; or &amp;quot;license&amp;quot; for more information.
+
+IPython 3.1.0 -- An enhanced Interactive Python.
+?         -&amp;gt; Introduction and overview of IPython&#39;s features.
+%quickref -&amp;gt; Quick reference.
+help      -&amp;gt; Python&#39;s own help system.
+object?   -&amp;gt; Details about &#39;object&#39;, use &#39;object??&#39; for extra details.
+
+In [1]:
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;補完機能:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;補完機能&lt;/h1&gt;
+
+&lt;p&gt;tabキーでimportできるモジュール補完。メソッドや、自分で定義した変数も補完できる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;In [1]: import c&amp;lt;tab&amp;gt;
+cPickle      calendar     cgitb        cmd          codeop       commands     contextlib   copy_reg     ctypes       cv2
+cProfile     cfmfile      chunk        code         collections  compileall   cookielib    crypt        curses       cythonmagic
+cStringIO    cgi          cmath        codecs       colorsys     compiler     copy         csv          cv
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;イントロスペクション:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;イントロスペクション&lt;/h1&gt;
+
+&lt;p&gt;importしたオブジェクトの後ろに&amp;rdquo;?&amp;ldquo;をつけてenterで、オブジェクトの説明を表示。&amp;rdquo;??&amp;ldquo;をつけると、より詳細な説明が表示される。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;In [8]: import calendar
+
+In [9]: calendar?
+Type:        module
+String form: &amp;lt;module &#39;calendar&#39; from &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/calendar.pyc&#39;&amp;gt;
+File:        /System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/calendar.py
+Docstring:
+Calendar printing functions
+
+Note when comparing these calendars to the ones printed by cal(1): By
+default, these calendars have Monday as the first day of the week, and
+Sunday as the last (the European convention). Use setfirstweekday() to
+set the first day of the week (0=Monday, 6=Sunday).
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;magic-functions:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;Magic functions&lt;/h1&gt;
+
+&lt;p&gt;独自の便利コマンドが使えるようになるという話。prefixに&amp;rdquo;%&amp;ldquo;がついているコマンド。例えば&amp;rdquo;%timeit&amp;rdquo;を使うと実行時間を計測してくれる。
+&lt;a href=&#34;https://ipython.org/ipython-doc/dev/interactive/magics.html&#34;&gt;magic function 一覧&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;In [11]: %timeit range(10000)
+The slowest run took 4.81 times longer than the fastest. This could mean that an intermediate result is being cached
+10000 loops, best of 3: 131 µs per loop
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;履歴機能:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;履歴機能&lt;/h1&gt;
+
+&lt;p&gt;InとOutの数字を指定することで、履歴を呼び出せる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;In [16]: 45 * 4
+Out[16]: 180
+
+In [17]: Out[16] #outの16を呼び出した
+Out[17]: 180
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;マジックメソッド&amp;rdquo;%history&amp;rdquo;を使って履歴をまとめて見ることも出来るし、直近の出力を、一つまえは&amp;rdquo;&lt;strong&gt;_&lt;/strong&gt;&amp;rdquo;,二つまえは&amp;rdquo;&lt;strong&gt;__&lt;/strong&gt;&amp;ldquo;、三つまえは&amp;rdquo;&lt;strong&gt;___&lt;/strong&gt;&amp;ldquo;を使ってさかのぼることが出来る。&lt;/p&gt;
+
+&lt;h1 id=&#34;osのシェルコマンドが使える:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;OSのシェルコマンドが使える&lt;/h1&gt;
+
+&lt;p&gt;先頭に&amp;rdquo;!&amp;ldquo;をつけて実行することで使える。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;In [27]: !date
+2015年 5月 5日 火曜日 12時48分17秒 JST
+
+In [28]: !uptime
+12:48  up 1 day, 12:40, 2 users, load averages: 3.08 2.23 1.72
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>動かなくなったpipをupdateした話</title>
+      <link>http://kamatari.github.io/2014/06/29/how-to-update-pip/</link>
+      <pubDate>Sun, 29 Jun 2014 18:06:00 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/06/29/how-to-update-pip/</guid>
+      <description>
+
+&lt;h3 id=&#34;現象:271868aa518419d25be652fd5254801b&#34;&gt;現象&lt;/h3&gt;
+
+&lt;p&gt;pipでパッケージをインストールしようとしたら、pipが壊れていた&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;[kamatari :~]$ pip install networkx
+Traceback (most recent call last):
+  File &amp;quot;/usr/local/bin/pip&amp;quot;, line 5, in &amp;lt;module&amp;gt;
+    from pkg_resources import load_entry_point
+  File &amp;quot;/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py&amp;quot;, line 2603, in &amp;lt;module&amp;gt;
+    working_set.require(__requires__)
+  File &amp;quot;/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py&amp;quot;, line 666, in require
+    needed = self.resolve(parse_requirements(requirements))
+  File &amp;quot;/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py&amp;quot;, line 565, in resolve
+    raise DistributionNotFound(req)  # XXX put more info here
+pkg_resources.DistributionNotFound: pip==1.5.2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;試した事:271868aa518419d25be652fd5254801b&#34;&gt;試した事&lt;/h3&gt;
+
+&lt;p&gt;updateしようとしたが、そもそもpipコマンドがつかえないんだった&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;[kamatari :~]$ pip install -U pip
+Traceback (most recent call last):
+  File &amp;quot;/usr/local/bin/pip&amp;quot;, line 5, in &amp;lt;module&amp;gt;
+    from pkg_resources import load_entry_point
+  File &amp;quot;/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py&amp;quot;, line 2603, in &amp;lt;module&amp;gt;
+    working_set.require(__requires__)
+  File &amp;quot;/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py&amp;quot;, line 666, in require
+    needed = self.resolve(parse_requirements(requirements))
+  File &amp;quot;/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py&amp;quot;, line 565, in resolve
+    raise DistributionNotFound(req)  # XXX put more info here
+pkg_resources.DistributionNotFound: pip==1.5.2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;get-pip.pyというのがあり、それをつかえば簡単に出来るという内容の記事を見つける&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;[kamatari :~]$ curl -kL https://raw.github.com/pypa/pip/master/contrib/get-pip.py |sudo python
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 1309k  100 1309k    0     0   429k      0  0:00:03  0:00:03 --:--:-- 1122k
+Downloading/unpacking pip
+  Downloading pip-1.5.6-py2.py3-none-any.whl (1.0MB): 1.0MB downloaded
+Installing collected packages: pip
+Successfully installed pip
+Cleaning up...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;だめだった&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;[kamatari :~]$ pip -v
+Traceback (most recent call last):
+  File &amp;quot;/usr/local/bin/pip&amp;quot;, line 5, in &amp;lt;module&amp;gt;
+    from pkg_resources import load_entry_point
+  File &amp;quot;/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py&amp;quot;, line 2603, in &amp;lt;module&amp;gt;
+    working_set.require(__requires__)
+  File &amp;quot;/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py&amp;quot;, line 666, in require
+    needed = self.resolve(parse_requirements(requirements))
+  File &amp;quot;/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py&amp;quot;, line 565, in resolve
+    raise DistributionNotFound(req)  # XXX put more info here
+pkg_resources.DistributionNotFound: pip==1.5.2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;正解:271868aa518419d25be652fd5254801b&#34;&gt;正解&lt;/h3&gt;
+
+&lt;p&gt;easy_install をつかってみる&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;[kamatari :~]$ sudo easy_install --upgrade pip
+Searching for pip
+Reading http://pypi.python.org/simple/pip/
+Best match: pip 1.5.6
+Downloading https://pypi.python.org/packages/source/p/pip/pip-1.5.6.tar.gz#md5=01026f87978932060cc86c1dc527903e
+Processing pip-1.5.6.tar.gz
+Running pip-1.5.6/setup.py -q bdist_egg --dist-dir /tmp/easy_install-Ml62W7/pip-1.5.6/egg-dist-tmp-LjwaIO
+warning: no files found matching &#39;pip/cacert.pem&#39;
+warning: no files found matching &#39;*.html&#39; under directory &#39;docs&#39;
+warning: no previously-included files matching &#39;*.rst&#39; found under directory &#39;docs/_build&#39;
+no previously-included directories found matching &#39;docs/_build/_sources&#39;
+Adding pip 1.5.6 to easy-install.pth file
+Installing pip script to /usr/local/bin
+Installing pip2.7 script to /usr/local/bin
+Installing pip2 script to /usr/local/bin
+
+Installed /Library/Python/2.7/site-packages/pip-1.5.6-py2.7.egg
+Processing dependencies for pip
+Finished processing dependencies for pip
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;OK!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;[kamatari :~]$ pip --version
+pip 1.5.6 from /Library/Python/2.7/site-packages/pip-1.5.6-py2.7.egg (python 2.7)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

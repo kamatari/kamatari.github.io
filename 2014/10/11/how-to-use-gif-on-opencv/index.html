@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>gif画像をopencvで扱う &middot; kamatari</title>
+        <meta name="description" content="">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.15" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/normalize.css">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/highlight.css">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-41886618-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="Lifering" href="http://kamatari.github.io/">Lifering</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://kamatari.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                            <a class="button-square button-social hint--top" data-hint="Twitter" title="Twitter" href="https://twitter.com/iratamak">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/kamatari">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="About" href="/about/">About</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">gif画像をopencvで扱う</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    
+
+<h2 id="opencvはgifに対応してなかった:03b7fc6f6a8e36424eeb697a92d4fbd7">opencvはgifに対応してなかった</h2>
+
+<pre><code class="language-python">import cv
+img = cv.LoadImage('sample.gif')
+</code></pre>
+
+<p>こんな感じでcv.LoadImageでgif画像を読み込もうとすると以下のようなエラーが出る</p>
+
+<pre><code>$ python test3.py sample.gif
+Traceback (most recent call last):
+  File &quot;test3.py&quot;, line 2, in &lt;module&gt;
+    img = cv.LoadImage('sample.gif')
+IOError: [Errno 2] No such file or directory: 'sample.gif'
+</code></pre>
+
+<h2 id="表題の通りにopencv-でgifを使うには:03b7fc6f6a8e36424eeb697a92d4fbd7">表題の通りにopencv でgifを使うには</h2>
+
+<p>cv2を使う。エラーはでない。</p>
+
+<pre><code class="language-python">import cv2
+img = cv2.imread('sample.gif')
+</code></pre>
+
+<p>しかし、世の中には古い環境などで<code>import cv</code>しか使えないつらい時がある。
+<a href="http://opencv.jp/opencv-2svn/py/cookbook.html#pil-image-opencv">opencvのマニュアル</a>を見ると、PIL Imageからopencvに変換するにはというのがあって、これを利用してみる</p>
+
+<pre><code>from PIL import Image
+import cv
+sample = Image.open('sample.gif')
+cv_im = cv.CreateImageHeader(sample.size, cv.IPL_DEPTH_8U, 3)
+cv.SetData(cv_im, sample.tostring())
+print sample.size, cv.GetSize(cv_im)
+(868, 600) (868, 600)
+&gt;&gt;&gt; print sample.tostring() == cv_im.tostring()
+False
+</code></pre>
+
+<p>gif画像のsizeは取得できたが、同じデータに変換は出来なかった</p>
+
+<h2 id="gifをcvでどうしても取り扱いたかった時どうしたか:03b7fc6f6a8e36424eeb697a92d4fbd7">gifをcvでどうしても取り扱いたかった時どうしたか</h2>
+
+<p>gifをjpgに変換することで逃げた ┗(^o^ )┓三</p>
+
+<p>以下のようにPILを使って、<code>sample.gif</code>をjpgに変換して<code>convertfromgif.jpg</code>として保存したものを利用するようにした</p>
+
+<pre><code class="language-python">from PIL import Image
+im = Image.open('sample.gif').convert('RGB').save('convertfromgif.jpg')
+</code></pre>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        <a class="icon-twitter" href="http://twitter.com/share?text=gif%e7%94%bb%e5%83%8f%e3%82%92opencv%e3%81%a7%e6%89%b1%e3%81%86&url=http%3a%2f%2fkamatari.github.io%2f2014%2f10%2f11%2fhow-to-use-gif-on-opencv%2f"
+            onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+            <i class="fa fa-twitter"></i>
+            <span class="hidden">Twitter</span>
+        </a>
+
+        <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fkamatari.github.io%2f2014%2f10%2f11%2fhow-to-use-gif-on-opencv%2f"
+            onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+            <i class="fa fa-facebook"></i>
+            <span class="hidden">Facebook</span>
+        </a>
+
+        <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fkamatari.github.io%2f2014%2f10%2f11%2fhow-to-use-gif-on-opencv%2f"
+           onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+           <i class="fa fa-google-plus"></i>
+            <span class="hidden">Google+</span>
+        </a>
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="Lifering" href="http://kamatari.github.io/">Lifering</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2016 / Powered by <a href="http://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://kamatari.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+        <script src="http://kamatari.github.io/js/jquery.fitvids.js"></script>
+        <script src="http://kamatari.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

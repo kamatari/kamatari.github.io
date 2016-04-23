@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Misc on Lifering</title>
+    <link>http://kamatari.github.io/categories/misc/</link>
+    <description>Recent content in Misc on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Thu, 06 Nov 2014 23:54:29 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/misc/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>各種フィルタの精度評価の指標について</title>
+      <link>http://kamatari.github.io/2014/11/06/indicators-of-the-filter-accuracy/</link>
+      <pubDate>Thu, 06 Nov 2014 23:54:29 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/11/06/indicators-of-the-filter-accuracy/</guid>
+      <description>
+
+&lt;p&gt;スパムメールフィルタや画像フィルタなどを使って、OK/NGを判定する仕組みを作ろうとした時に、その精度を数値化する必要がある。
+フィルタが有用かどうかを判断したり、改良するときの指標になるからだ。&lt;/p&gt;
+
+&lt;h2 id=&#34;正解率-不正解率-という指標:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;正解率(不正解率)という指標&lt;/h2&gt;
+
+&lt;p&gt;正解率とは、正しく判定出来た数を、全ての試行の数で割ったものである。
+正解率99%のフィルタと聞くと有用に思えるが、単純に正解率だけを見て採用するのは危険な場合がある。&lt;/p&gt;
+
+&lt;p&gt;例えば、フィルタがスパム判定したメールを自動的に削除するメールシステムがあるとする。
+2種類のフィルタ、AとBのどちらが適切か知るために1000件のメールを処理して正解率を算出した。&lt;/p&gt;
+
+&lt;h4 id=&#34;フィルタa-1000件処理した結果:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;フィルタA 1000件処理した結果&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;スパム判定したメールは100件&lt;/li&gt;
+&lt;li&gt;スパム判定したメールのうち、10件はスパムではなかった&lt;/li&gt;
+&lt;li&gt;スパムでないと判定したメールは、全て正しかった&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;フィルタAは間違えた10件を除いた990件が正解だったので、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;正解率 = 990/1000 * 100 = 99%
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;フィルタb-1000件処理した結果:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;フィルタB 1000件処理した結果&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;スパム判定したメールは10件&lt;/li&gt;
+&lt;li&gt;スパム判定したメールは全てスパムだった&lt;/li&gt;
+&lt;li&gt;スパムでないと判定したメールの中に、スパムが80件存在した&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;フィルタBは間違えた80件を除いた920件が正解だったので、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;正解率 = 920/1000 * 100 = 92%
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;今回のメールシステムでは誤った判定をするとメールが削除されてしまうので、正解率は低いがスパム判定を間違えないフィルタBを採用するだろう。&lt;/p&gt;
+
+&lt;h2 id=&#34;適合率と再現率という指標:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;適合率と再現率という指標&lt;/h2&gt;
+
+&lt;p&gt;前項でフィルタBを選んだ判断基準は、&amp;rdquo;適合率&amp;rdquo;と&amp;rdquo;再現率&amp;rdquo;という指標を使い数値で比較することができる。&lt;/p&gt;
+
+&lt;h4 id=&#34;適合率とは:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;適合率とは&lt;/h4&gt;
+
+&lt;p&gt;判定結果の正しさで、スパムであると判定した中に正解がどの程度あるか。&lt;/p&gt;
+
+&lt;h4 id=&#34;再現率とは:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;再現率とは&lt;/h4&gt;
+
+&lt;p&gt;判定結果の網羅性で、実際に存在したスパムをどの程度見つけることができるか。&lt;/p&gt;
+
+&lt;h4 id=&#34;実際に計算してみる:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;実際に計算してみる&lt;/h4&gt;
+
+&lt;p&gt;まず、フィルタでスパム判定した結果を4つのグループに分ける。&lt;/p&gt;
+
+&lt;p&gt;(※ハムはスパムの逆の意)&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;スパムと判定して、スパムだったもの (True Positive)&lt;/li&gt;
+&lt;li&gt;スパムと判定したが、ハムだったもの (False Positive)&lt;/li&gt;
+&lt;li&gt;ハムと判定したが、スパムだったもの (False Negative)&lt;/li&gt;
+&lt;li&gt;ハムと判定して、ハムだったもの (True Negative)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;頭にTrueとついているものが判定として正解で、逆がFalseになる。&lt;/p&gt;
+
+&lt;h4 id=&#34;計算式:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;計算式&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;適合率 = TP / (TP+FP)
+再現率 = TP / (TP+FN)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これを先ほどのフィルタでそれぞれで計算すると&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;フィルタA&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;適合率 = 90 / (90+10) = 90%&lt;/li&gt;
+&lt;li&gt;再現率 = 90 / (90+0)  = 100%&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;フィルタB&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;適合率 = 10 / (10+0)  = 100%&lt;/li&gt;
+&lt;li&gt;再現率 = 10 / (10+80) = 11.1%&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;つまり、先ほどは適合率(判定結果の正しさ)を見て、フィルタBを選択したといえる。&lt;/p&gt;
+
+&lt;h2 id=&#34;フィルタを改良する時に見る指標について:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;フィルタを改良する時に見る指標について&lt;/h2&gt;
+
+&lt;p&gt;適合率と再現率をともに高めていくことが、よりよいフィルタにしていくことになるが、これら二つはトレードオフの関係になっている。&lt;/p&gt;
+
+&lt;p&gt;スパムメールフィルタの例では、間違える確率を下げるために条件をゆるくしていくと、ハムをスパムと間違えることは少なくなるが、実際のスパムをスパムとして判定出来る確率も下がっていくだろう。&lt;/p&gt;
+
+&lt;p&gt;目的に応じて、バランスを取りながら数値を見ていくことになるが、そのバランスを取る時にF値という指標を使うことがある。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;F値 = 2 x 適合率 x 再現率 /(適合率+再現率)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;それぞれの指標を見ながら、精度を高めていくことが重要である。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;参考にしたサイト：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://d.hatena.ne.jp/Zellij/20120214/p1&#34;&gt;http://d.hatena.ne.jp/Zellij/20120214/p1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.baru-san.net/archives/141&#34;&gt;http://www.baru-san.net/archives/141&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

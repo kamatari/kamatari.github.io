@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Opencv on Lifering</title>
+    <link>http://kamatari.github.io/categories/opencv/</link>
+    <description>Recent content in Opencv on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Sun, 06 Jul 2014 11:19:00 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/opencv/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>homebrewでmacにopencvを入れる</title>
+      <link>http://kamatari.github.io/2014/07/06/how-to-install-opencv-in-mac/</link>
+      <pubDate>Sun, 06 Jul 2014 11:19:00 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/07/06/how-to-install-opencv-in-mac/</guid>
+      <description>
+
+&lt;h3 id=&#34;brew-installで失敗:eccc82578bb1d0d757eb4155a25811bd&#34;&gt;brew installで失敗&lt;/h3&gt;
+
+&lt;p&gt;何もしないと、opencvのこと知らないみたいだった&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;[kamatari :~/]$ brew install opencv
+Error: No available formula for opencv
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;解決方法:eccc82578bb1d0d757eb4155a25811bd&#34;&gt;解決方法&lt;/h3&gt;
+
+&lt;p&gt;homebrew scienceというのをいれる&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;[kamatari :~/]$ brew tap homebrew/science
+Cloning into &#39;/usr/local/Library/Taps/homebrew/homebrew-science&#39;...
+remote: Reusing existing pack: 5364, done.
+remote: Total 5364 (delta 0), reused 0 (delta 0)
+Receiving objects: 100% (5364/5364), 1.37 MiB | 633.00 KiB/s, done.
+Resolving deltas: 100% (2763/2763), done.
+Checking connectivity... done.
+Tapped 326 formulae
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;見つけられました&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;[kamatari :~/proj]$ brew install opencv
+==&amp;gt; Installing dependencies for opencv: cmake, jpeg, libpng, libtiff
+==&amp;gt; Installing opencv dependency: cmake
+==&amp;gt; Downloading https://downloads.sf.net/project/machomebrew/Bottles/cmake-3.0.0.mavericks.bottle.tar.gz
+######################################################################## 100.0%
+==&amp;gt; Pouring cmake-3.0.0.mavericks.bottle.tar.gz
+🍺  /usr/local/Cellar/cmake/3.0.0: 1622 files, 25M
+==&amp;gt; Installing opencv dependency: jpeg
+==&amp;gt; Downloading https://downloads.sf.net/project/machomebrew/Bottles/jpeg-8d.mavericks.bottle.2.tar.gz
+######################################################################## 100.0%
+==&amp;gt; Pouring jpeg-8d.mavericks.bottle.2.tar.gz
+🍺  /usr/local/Cellar/jpeg/8d: 18 files, 780K
+==&amp;gt; Installing opencv dependency: libpng
+==&amp;gt; Downloading https://downloads.sf.net/project/machomebrew/Bottles/libpng-1.6.12.mavericks.bottle.tar.gz
+######################################################################## 100.0%
+==&amp;gt; Pouring libpng-1.6.12.mavericks.bottle.tar.gz
+🍺  /usr/local/Cellar/libpng/1.6.12: 17 files, 1.2M
+==&amp;gt; Installing opencv dependency: libtiff
+==&amp;gt; Downloading https://downloads.sf.net/project/machomebrew/Bottles/libtiff-4.0.3.mavericks.bottle.tar.gz
+######################################################################## 100.0%
+==&amp;gt; Pouring libtiff-4.0.3.mavericks.bottle.tar.gz
+🍺  /usr/local/Cellar/libtiff/4.0.3: 254 files, 3.8M
+==&amp;gt; Installing opencv
+==&amp;gt; Downloading https://github.com/Itseez/opencv/archive/2.4.9.tar.gz
+######################################################################## 100.0%
+==&amp;gt; cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/Cellar/opencv/2.4.9 -DCMAKE_BUILD_TYPE=None -DCMAKE_FIND_FRAMEWORK=LAST -DCMAKE_VERBOSE_MAKEFILE=ON -Wno-dev -DCMAKE_OSX_DEPLOYMENT
+==&amp;gt; make
+==&amp;gt; make install
+==&amp;gt; Caveats
+If you need Python to find the installed site-packages:
+  mkdir -p ~/Library/Python/2.7/lib/python/site-packages
+  echo &#39;/usr/local/lib/python2.7/site-packages&#39; &amp;gt; ~/Library/Python/2.7/lib/python/site-packages/homebrew.pth
+==&amp;gt; Summary
+🍺  /usr/local/Cellar/opencv/2.4.9: 219 files, 38M, built in 10.7 minutes
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

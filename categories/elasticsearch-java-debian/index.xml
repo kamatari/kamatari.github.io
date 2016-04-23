@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Elasticsearch Java Debian on Lifering</title>
+    <link>http://kamatari.github.io/categories/elasticsearch-java-debian/</link>
+    <description>Recent content in Elasticsearch Java Debian on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Sun, 07 Dec 2014 15:10:31 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/elasticsearch-java-debian/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>debianにElasticsearch 1.4.1をinstallした話</title>
+      <link>http://kamatari.github.io/2014/12/07/install-elasticsearch-on-debian/</link>
+      <pubDate>Sun, 07 Dec 2014 15:10:31 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/12/07/install-elasticsearch-on-debian/</guid>
+      <description>
+
+&lt;h1 id=&#34;java環境つくる:f44e9335b07c8e35a642c52359341df3&#34;&gt;Java環境つくる&lt;/h1&gt;
+
+&lt;h2 id=&#34;oracle-jdk7のinstall:f44e9335b07c8e35a642c52359341df3&#34;&gt;Oracle JDK7のinstall&lt;/h2&gt;
+
+&lt;p&gt;ここからJDKのダウンロードページに行って、環境にあったものを選ぶ&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.oracle.com/technetwork/java/javase/downloads/index.html&#34;&gt;http://www.oracle.com/technetwork/java/javase/downloads/index.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;jdk-7u71-linux-x64-tar-gzを選択:f44e9335b07c8e35a642c52359341df3&#34;&gt;jdk-7u71-linux-x64.tar.gzを選択&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ tar -xvf jdk-7u71-linux-x64.gz
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;usr-lib以下に移動:f44e9335b07c8e35a642c52359341df3&#34;&gt;/usr/lib以下に移動&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo mv jdk1.7.0_71 jvm/jdk1.7.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;alternativesを使ってjavaを今回の1-7-0に切り替えておく:f44e9335b07c8e35a642c52359341df3&#34;&gt;alternativesを使ってjavaを今回の1.7.0に切り替えておく&lt;/h2&gt;
+
+&lt;p&gt;(参考: &lt;a href=&#34;http://qiita.com/hidekuro/items/f931ae527244bce34698&#34;&gt;update-alternativesに管理してもらうコマンドを追加する&lt;/a&gt;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo update-alternatives --install &amp;quot;/usr/bin/java&amp;quot; &amp;quot;java&amp;quot; &amp;quot;/usr/lib/jvm/jdk1.7.0/bin/java&amp;quot; 1
+$ sudo update-alternatives --install &amp;quot;/usr/bin/javac&amp;quot; &amp;quot;javac&amp;quot; &amp;quot;/usr/lib/jvm/jdk1.7.0/bin/javac&amp;quot; 1
+$ sudo update-alternatives --install &amp;quot;/usr/bin/javaws&amp;quot; &amp;quot;javaws&amp;quot; &amp;quot;/usr/lib/jvm/jdk1.7.0/bin/javaws&amp;quot; 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;それぞれで今回installした-usr-lib-jdk1-7-0以下を指定:f44e9335b07c8e35a642c52359341df3&#34;&gt;それぞれで今回installした/usr/lib/jdk1.7.0以下を指定&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo update-alternatives --config java
+$ sudo update-alternatives --config javac
+$ sudo update-alternatives --config javaws
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;確認:f44e9335b07c8e35a642c52359341df3&#34;&gt;確認&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ java -version
+
+java -version
+java version &amp;quot;1.7.0_71&amp;quot;
+Java(TM) SE Runtime Environment (build 1.7.0_71-b14)
+Java HotSpot(TM) 64-Bit Server VM (build 24.71-b01, mixed mode)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;elasticsearchのinstall:f44e9335b07c8e35a642c52359341df3&#34;&gt;Elasticsearchのinstall&lt;/h1&gt;
+
+&lt;h2 id=&#34;公式からdeb形式でダウンロードする:f44e9335b07c8e35a642c52359341df3&#34;&gt;公式からdeb形式でダウンロードする&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.elasticsearch.org/overview/elkdownloads/&#34;&gt;http://www.elasticsearch.org/overview/elkdownloads/&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.1.deb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;install:f44e9335b07c8e35a642c52359341df3&#34;&gt;install&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo dpkg -i elasticsearch-1.4.1.deb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;起動とlogの確認:f44e9335b07c8e35a642c52359341df3&#34;&gt;起動とlogの確認&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo /etc/init.d/elasticsearch start
+$ tail -f /var/log/elasticsearch/elasticsearch.log
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;curlで状態を確認:f44e9335b07c8e35a642c52359341df3&#34;&gt;curlで状態を確認&lt;/h2&gt;
+
+&lt;p&gt;status が greenかどうか&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ curl -XGET localhost:9200/_cluster/health?pretty
+
+{
+  &amp;quot;cluster_name&amp;quot; : &amp;quot;elasticsearch&amp;quot;,
+  &amp;quot;status&amp;quot; : &amp;quot;green&amp;quot;,
+  &amp;quot;timed_out&amp;quot; : false,
+  &amp;quot;number_of_nodes&amp;quot; : 1,
+  &amp;quot;number_of_data_nodes&amp;quot; : 1,
+  &amp;quot;active_primary_shards&amp;quot; : 0,
+  &amp;quot;active_shards&amp;quot; : 0,
+  &amp;quot;relocating_shards&amp;quot; : 0,
+  &amp;quot;initializing_shards&amp;quot; : 0,
+  &amp;quot;unassigned_shards&amp;quot; : 0
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;pluginのinstall:f44e9335b07c8e35a642c52359341df3&#34;&gt;pluginのinstall&lt;/h2&gt;
+
+&lt;p&gt;以下ふたつ入れてみる&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;kuromoji
+
+&lt;ul&gt;
+&lt;li&gt;対応verを確認するべし &lt;a href=&#34;https://github.com/elasticsearch/elasticsearch-analysis-kuromoji&#34;&gt;https://github.com/elasticsearch/elasticsearch-analysis-kuromoji&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;HQ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo /usr/share/elasticsearch/bin/plugin -install elasticsearch/elasticsearch-analysis-kuromoji/2.4.1
+$ sudo /usr/share/elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;確認-1:f44e9335b07c8e35a642c52359341df3&#34;&gt;確認&lt;/h2&gt;
+
+&lt;p&gt;curlで投げたresponseの中にpluginsという項目があるので、そこにinstallしたpluginがあるか確認する&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -XGET &#39;http://localhost:9200/_nodes?pretty=true&#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;pluginを使って-状態の確認:f44e9335b07c8e35a642c52359341df3&#34;&gt;pluginを使って、状態の確認&lt;/h2&gt;
+
+&lt;p&gt;今入れたHQを使って、以下のアドレスへブラウザでアクセスして確認することができる (ドメインは適宜変更)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://localhost:9200/_plugin/HQ&#34;&gt;http://localhost:9200/_plugin/HQ&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

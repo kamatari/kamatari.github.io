@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Debian Python Opencv on Lifering</title>
+    <link>http://kamatari.github.io/categories/debian-python-opencv/</link>
+    <description>Recent content in Debian Python Opencv on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Sat, 29 Nov 2014 01:34:23 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/debian-python-opencv/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>debianにinstallしたパッケージの場所</title>
+      <link>http://kamatari.github.io/2014/11/29/location-which-debian-package-installed/</link>
+      <pubDate>Sat, 29 Nov 2014 01:34:23 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/11/29/location-which-debian-package-installed/</guid>
+      <description>
+
+&lt;h1 id=&#34;apt-getでinstallしたpython-opencvがimport出来なかった:70ae5f4797c953568ee8a7e4964f0250&#34;&gt;apt-getでinstallしたpython-opencvがimport出来なかった&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ python
+Python 2.5.2 (r252:60911, Jan 24 2010, 14:53:14)
+[GCC 4.3.2] on linux2
+Type &amp;quot;help&amp;quot;, &amp;quot;copyright&amp;quot;, &amp;quot;credits&amp;quot; or &amp;quot;license&amp;quot; for more information.
+&amp;gt;&amp;gt;&amp;gt; import cv
+Traceback (most recent call last):
+  File &amp;quot;&amp;lt;stdin&amp;gt;&amp;quot;, line 1, in &amp;lt;module&amp;gt;
+  ImportError: No module named cv
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;python-opencvとしてinstallしたファイルはどこに:70ae5f4797c953568ee8a7e4964f0250&#34;&gt;python-opencvとしてinstallしたファイルはどこに&lt;/h1&gt;
+
+&lt;p&gt;dpkgでLオプションを使うと表示できるようだ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ dpkg -L python-opencv
+/.
+/usr
+/usr/lib
+/usr/lib/python-support
+/usr/lib/python-support/python-opencv
+/usr/lib/python-support/python-opencv/python2.5
+/usr/lib/python-support/python-opencv/python2.5/opencv
+/usr/lib/python-support/python-opencv/python2.5/opencv/_highgui.so
+/usr/lib/python-support/python-opencv/python2.5/opencv/_cv.so
+/usr/share
+/usr/share/doc
+/usr/share/doc/python-opencv
+/usr/share/doc/python-opencv/copyright
+/usr/share/doc/python-opencv/changelog.Debian.gz
+/usr/share/doc/python-opencv/changelog.gz
+/usr/share/python-support
+/usr/share/python-support/python-opencv
+/usr/share/python-support/python-opencv/opencv
+/usr/share/python-support/python-opencv/opencv/highgui.py
+/usr/share/python-support/python-opencv/opencv/__init__.py
+/usr/share/python-support/python-opencv/opencv/matlab_syntax.py
+/usr/share/python-support/python-opencv/opencv/cv.py
+/usr/share/python-support/python-opencv/opencv/adaptors.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;/usr/share/python-support/python-opencv/opencv ディレクトリにcv.pyがあるので、ここにpythonのパスを通せば使えそう。&lt;/p&gt;
+
+&lt;p&gt;だが、同じディレクトリに&lt;code&gt;__init__.py&lt;/code&gt;がある。これはディレクトリのパッケージを初期化するファイル。&lt;/p&gt;
+
+&lt;p&gt;これが存在するということは、opencvというディレクトリがパッケージであるということなのだ。なので&lt;code&gt;opnecv&lt;/code&gt;としてimportすれば使える。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ python
+Python 2.5.2 (r252:60911, Jan 24 2010, 14:53:14)
+[GCC 4.3.2] on linux2
+Type &amp;quot;help&amp;quot;, &amp;quot;copyright&amp;quot;, &amp;quot;credits&amp;quot; or &amp;quot;license&amp;quot; for more information.
+&amp;gt;&amp;gt;&amp;gt; import opencv
+&amp;gt;&amp;gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ただ調べてみて分かったのは、&lt;code&gt;import opencv&lt;/code&gt;しかできないのは古いパッケージで、新しいパッケージではpythonのパス以下に&lt;code&gt;cv.so&lt;/code&gt;があり、&lt;code&gt;import cv&lt;/code&gt;が使えるようだった&amp;hellip;。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;import cvでokバージョン&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ dpkg -s python-opencv |grep Version
+Version: 2.1.0-3+squeeze1
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;import cv だめだったバージョン&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ dpkg -s python-opencv|grep Version
+Version: 1.0.0-6.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

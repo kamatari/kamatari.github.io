@@ -102,5 +102,1459 @@ ValueError: Input strings must be a multiple of 16 in length
 </description>
     </item>
     
+    <item>
+      <title>python3系のqrコマンドで出るtype errorの直し方</title>
+      <link>http://kamatari.github.io/2016/01/17/how-to-fix-typeerror-of-qr-command/</link>
+      <pubDate>Sun, 17 Jan 2016 17:41:12 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2016/01/17/how-to-fix-typeerror-of-qr-command/</guid>
+      <description>
+
+&lt;h1 id=&#34;python-qrcodeとは:5ea90d3059e4d26034263885044e6bae&#34;&gt;python-qrcodeとは&lt;/h1&gt;
+
+&lt;p&gt;Pythonでqrcodeを扱うための外部パッケージに&lt;a href=&#34;https://pypi.python.org/pypi/qrcode&#34;&gt;「qrcode」&lt;/a&gt;がある。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;インストール方法
+&lt;code&gt;
+$ pip3 install qrcode
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;で、installすると、qrコマンドが使えるようになる。次のように使うと、コマンドラインからQRコードを生成できて便利。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ qr &amp;quot;http://kamatari.github.io&amp;quot; &amp;gt; blog_url.png
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://kamatari.github.io/images/blog_url.png&#34; alt=&#34;生成されたqrcode&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;発生する問題:5ea90d3059e4d26034263885044e6bae&#34;&gt;発生する問題&lt;/h1&gt;
+
+&lt;p&gt;ただ、次のようなエラーがPython3系で発生する。メッセージを見ると、2系から3系になったときにstring型とbyte型を区別して扱うようになった影響のエラーっぽいことが分かる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Traceback (most recent call last):
+  File &amp;quot;/Library/Frameworks/Python.framework/Versions/3.5/bin/qr&amp;quot;, line 9, in &amp;lt;module&amp;gt;
+    load_entry_point(&#39;qrcode==5.1&#39;, &#39;console_scripts&#39;, &#39;qr&#39;)()
+  File &amp;quot;/Library/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/qrcode/console_scripts.py&amp;quot;, line 60, in main
+    img.save(sys.stdout)
+  File &amp;quot;/Library/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/qrcode/image/pil.py&amp;quot;, line 32, in save
+    self._img.save(stream, kind)
+  File &amp;quot;/Library/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/PIL/Image.py&amp;quot;, line 1665, in save
+    save_handler(self, fp, filename)
+  File &amp;quot;/Library/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/PIL/PngImagePlugin.py&amp;quot;, line 690, in _save
+    fp.write(_MAGIC)
+TypeError: write() argument must be str, not bytes
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;解決方法:5ea90d3059e4d26034263885044e6bae&#34;&gt;解決方法&lt;/h1&gt;
+
+&lt;p&gt;qrcodeの&lt;code&gt;console_scrripts.py&lt;/code&gt;の&lt;code&gt;img.save&lt;/code&gt;の部分を直せばよさそうだ。しかし、githubにある本家のコードを見に行った所、すでに修正されていた。pypiにリリースされるまでは、下のcommitを参考に自分の環境のファイルを修正するか、githubから落としてきたコードを使おう。(修正する場合、自分の環境のファイルがどこにあるかは、表示されているエラーの内容を確認のこと)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/lincolnloop/python-qrcode/blob/master/qrcode/console_scripts.py#L80&#34;&gt;当該ファイル&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/lincolnloop/python-qrcode/commit/97be1b444ac5522b6eef7c9b8e9bcc66f6cb616a&#34;&gt;当該commit&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>vagrant で ipython notebook 環境を構築した話</title>
+      <link>http://kamatari.github.io/2015/06/01/install-ipython-notebook-to-vagrant/</link>
+      <pubDate>Mon, 01 Jun 2015 23:33:55 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2015/06/01/install-ipython-notebook-to-vagrant/</guid>
+      <description>
+
+&lt;h1 id=&#34;ipython-notebookとは:93bfed9ce63c7085a388ea213ab48061&#34;&gt;ipython notebookとは&lt;/h1&gt;
+
+&lt;p&gt;ざっくり言うとiPythonをweb browser上で動かせるやつ。(参考: &lt;a href=&#34;http://kamatari.github.io/blog/2015/05/05/first-step-of-ipython/&#34;&gt;ipythonとは&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;今はpythonだけじゃなくてRとかRubyとか他言語もいろいろ動かせるらしく、名前もipython notebookから、Jupyterになった。JupiterじゃなくてJu&amp;rdquo;py&amp;rdquo;terなのがキモ。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://jupyter.org&#34;&gt;Jupyter 公式&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;入力した式をinlineでグラフ表示したり、その状態を保存しておくことができる機能が使いたかったので、環境をつくってみた。
+いろいろ必要なライブラリがあって、どんどんローカル環境に入れていくと、あとからつらくなりそうだなと思ってvagrantでつくってpackageにまとめたメモ。&lt;/p&gt;
+
+&lt;p&gt;下に貼った画像みたいに、グラフを見つつブラウザで試しながら、修正してすぐ反映できるツールである。ファイルは拡張子 .ipynb で保存できて、一ヶ月くらい前からgithubでもサポートされるようになってていい感じ。(参考 : &lt;a href=&#34;http://blog.jupyter.org/2015/05/07/rendering-notebooks-on-github/&#34;&gt;Rendering Notebooks on GitHub&lt;/a&gt; )&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://kamatari.github.io/images/jupyter.png&#34; alt=&#34;公式&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;ベースになる-vagrantのserverを用意する:93bfed9ce63c7085a388ea213ab48061&#34;&gt;ベースになる vagrantのserverを用意する&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.vagrantbox.es&#34;&gt;vagrant box es&lt;/a&gt; から、今回はOfficial Ubuntu 14.04 daily Cloud Image amd64 を使う。まあなんでもいいとおもう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ vagrant box add ubuntu-14 https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
+$ vagrant init ubuntu-14
+$ vagrant up
+$ vagrant ssh
+$ sudo apt-get update   # @vagrant
+$ sudo apt-get upgrade  # @vagrant
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;ipython-notebook-jupyter-のインストール:93bfed9ce63c7085a388ea213ab48061&#34;&gt;ipython notebook (jupyter)のインストール&lt;/h1&gt;
+
+&lt;p&gt;pipでipythonをまずインストール&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip install ipython   # @vagrant
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;次に計算とか描画のためのライブラリを、&amp;rdquo;Anaconda&amp;rdquo;ごと入れる。&lt;/p&gt;
+
+&lt;p&gt;公式から&lt;a href=&#34;http://continuum.io/downloads&#34;&gt;Anaconda の インストーラー&lt;/a&gt;を落としてきて実行する。(&lt;a href=&#34;http://docs.continuum.io/anaconda/pkg-docs.html&#34;&gt;Anacondaで入るもの&lt;/a&gt;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ bash ./Anaconda-2.2.0-Linux-x86_64.sh
+$ conda update conda
+$ conda update ipython ipython-notebook ipython-qtconsole matplotlib
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;ipythonの起動:93bfed9ce63c7085a388ea213ab48061&#34;&gt;ipythonの起動&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ipython notebook --no-browser
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;オプションno browserをつけないと、w3mが立ち上がるので。&lt;/p&gt;
+
+&lt;h1 id=&#34;localのブラウザから確認:93bfed9ce63c7085a388ea213ab48061&#34;&gt;localのブラウザから確認&lt;/h1&gt;
+
+&lt;p&gt;Vagrantfileの&amp;rdquo;forwarded_port&amp;rdquo;で設定すれば、デフォルトのport 8888で、&lt;a href=&#34;http://localhost:8888/&#34;&gt;http://localhost:8888/&lt;/a&gt; からipython notebook が使えるはずだったが、うまくいかない。&lt;/p&gt;
+
+&lt;p&gt;一度vagrant のサーバーから出て、以下のコマンドで入りなおしてipythonを起動して確認できた。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ vagrant ssh -- -L 8888:localhost:8888
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(参考: &lt;a href=&#34;http://qiita.com/wwacky/items/133e81bd5cd558b27b7b&#34;&gt;vagrantで作ったVMでipython notebookを立ち上げてローカルからアクセスする&lt;/a&gt; )&lt;/p&gt;
+
+&lt;h1 id=&#34;環境をvagrant-box-にまとめる:93bfed9ce63c7085a388ea213ab48061&#34;&gt;環境をvagrant box にまとめる&lt;/h1&gt;
+
+&lt;p&gt;vagrantのサーバーから出て、packageコマンドでpackageにしたところ、容量が1.4GBになったので、削りたい。
+やったことは以下。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo umount /vagrant     # 共有フォルダを unmount
+$ sudo apt-get autoclean   # apt の cacheクリア
+$ dd if=/dev/zero of=zero bs=1M # zeroで埋める
+$ rm -f zero
+$ rm ~/.bash_history       # 履歴削除
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;( 参考: &lt;a href=&#34;http://blogged.e2esound.com/2014/05/29/compress_vagrant_box/&#34;&gt;Vagrant用のboxファイルを小さくする&lt;/a&gt; )&lt;/p&gt;
+
+&lt;p&gt;改めてpackage したところ、990Mで2/3ぐらいになってよかった。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ vagrant package
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;はまったところ:93bfed9ce63c7085a388ea213ab48061&#34;&gt;はまったところ&lt;/h1&gt;
+
+&lt;h3 id=&#34;ブラウザから確認できない:93bfed9ce63c7085a388ea213ab48061&#34;&gt;ブラウザから確認できない&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;前述の通り、&lt;code&gt;vagrant ssh -- -L 8888:localhost:8888&lt;/code&gt; でvagrantに入って、ipython notebookを起動&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;matplotlibを使ってグラフを描くと-libpng15が無いエラーが出る:93bfed9ce63c7085a388ea213ab48061&#34;&gt;matplotlibを使ってグラフを描くと、libpng15が無いエラーが出る&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;エラー内容&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt; ImportError: libpng15.so.15: cannot open shared object file: No such file or directory
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;matplotlibをanacondaからupdateして、問題を解消した。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ conda update matplotlib
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>「人工知能は人間を超えるか」を読んだ話</title>
+      <link>http://kamatari.github.io/2015/05/07/review-of-book-which-written-about-aritifical-intelligence-history-and-future/</link>
+      <pubDate>Thu, 07 May 2015 22:51:06 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2015/05/07/review-of-book-which-written-about-aritifical-intelligence-history-and-future/</guid>
+      <description>
+
+&lt;div class=&#34;amazlet-box&#34; style=&#34;margin-bottom:0px;&#34;&gt;&lt;div class=&#34;amazlet-image&#34; style=&#34;float:left;margin:0px 12px 1px 0px;&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/B00UAAK07S/kamiki-22/ref=nosim/&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51mWcqy%2BipL._SL160_.jpg&#34; alt=&#34;人工知能は人間を超えるか (角川ＥＰＵＢ選書)&#34; style=&#34;border: none;&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-info&#34; style=&#34;line-height:120%; margin-bottom: 10px&#34;&gt;&lt;div class=&#34;amazlet-name&#34; style=&#34;margin-bottom:10px;line-height:120%&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/B00UAAK07S/kamiki-22/ref=nosim/&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;人工知能は人間を超えるか (角川ＥＰＵＢ選書)&lt;/a&gt;&lt;div class=&#34;amazlet-powered-date&#34; style=&#34;font-size:80%;margin-top:5px;line-height:120%&#34;&gt;posted with &lt;a href=&#34;http://www.amazlet.com/&#34; title=&#34;amazlet&#34; target=&#34;_blank&#34;&gt;amazlet&lt;/a&gt; at 15.05.07&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-detail&#34;&gt;KADOKAWA / 中経出版 (2015-03-10)&lt;br /&gt;売り上げランキング: 29&lt;br /&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-sub-info&#34; style=&#34;float: left;&#34;&gt;&lt;div class=&#34;amazlet-link&#34; style=&#34;margin-top: 5px&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/B00UAAK07S/kamiki-22/ref=nosim/&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;Amazon.co.jpで詳細を見る&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-footer&#34; style=&#34;clear: left&#34;&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;#感想: とてもよかった。&lt;/p&gt;
+
+&lt;h2 id=&#34;この本は:fcbabccd73e85b5f3476cbd3839ff37b&#34;&gt;この本は&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2015年3月刊行&lt;/li&gt;
+&lt;li&gt;人工知能研究者が執筆&lt;/li&gt;
+&lt;li&gt;人工知能sugeeeという風潮に惑わされず、正しく人工知能の今を理解しようという本&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;概要:fcbabccd73e85b5f3476cbd3839ff37b&#34;&gt;概要&lt;/h2&gt;
+
+&lt;p&gt;　人工知能の歴史とこれからを俯瞰し、ディープラーニングという技術が持っている意味を知ることができる良書だった。2015年3月に刊行された本書は、将棋の電脳戦、IBMのワトソン、ソフトバンクのPepperなどの記憶に新しい話題と盛り上がりを紹介しつつ、現在の人工知能の実力を冷静に正しく伝えている。人工知能のいまできること、これから出来るようになりそうなこと、人間を超えるには、あとどのようなステップが必要なのかが筆者の言葉で、たとえ話なども交えながら分かりやすく書かれている。&lt;/p&gt;
+
+&lt;p&gt;　人工知能研究者の著者が、丁寧に人工知能に対する誤解を解く話とも言える。&lt;/p&gt;
+
+&lt;h2 id=&#34;おもしろかったところ:fcbabccd73e85b5f3476cbd3839ff37b&#34;&gt;おもしろかったところ&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;人工知能による
+
+&lt;ul&gt;
+&lt;li&gt;金融市場での高頻度取引の話&lt;/li&gt;
+&lt;li&gt;法律の分野での証拠集めの話&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;人工知能への誤解
+
+&lt;ul&gt;
+&lt;li&gt;「すでに実現したこと」&lt;/li&gt;
+&lt;li&gt;「もうすぐ実現しそうなこと」&lt;/li&gt;
+&lt;li&gt;「実現しそうもないこと」が混ざってる&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;世に言う「人工知能」をレベルで4段階に分類する話&lt;/li&gt;
+&lt;li&gt;過去に2回あった人工知能ブームの内容、当時の壁&lt;/li&gt;
+&lt;li&gt;IBM ワトソンの仕組み&lt;/li&gt;
+&lt;li&gt;機械翻訳の難しさの話
+
+&lt;ul&gt;
+&lt;li&gt;本当に違和感ない翻訳までの道のりがけっこう遠いんだなという話&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;国家プロジェクト「第五世代コンピュータ」の話&lt;/li&gt;
+&lt;li&gt;機械学習の種類と概要の話&lt;/li&gt;
+&lt;li&gt;★ディープラーニングとはなんなのか
+
+&lt;ul&gt;
+&lt;li&gt;天気予報を使った例がとてもわかりやすい&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;グーグルの猫認識の話&lt;/li&gt;
+&lt;li&gt;ディープラーニングが人工知能界にもたらした意味&lt;/li&gt;
+&lt;li&gt;シンギュラリティ(技術的特異点)は起こるのか&amp;hellip;
+
+&lt;ul&gt;
+&lt;li&gt;=&amp;gt; 夢物語です✌ (&amp;lsquo;ω&amp;rsquo;) ✌&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;日本の人工知能の発展のために、ここが今微妙だよ x 5点&lt;/li&gt;
+&lt;li&gt;人工知能学会の表紙で炎上した話(編集長だった)
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.ai-gakkai.or.jp/「人工知能」の表紙に対する意見や議論に関して/&#34;&gt;「人工知能」の表紙に対する意見や議論に関して&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>IPythonなるものの概要</title>
+      <link>http://kamatari.github.io/2015/05/05/first-step-of-ipython/</link>
+      <pubDate>Tue, 05 May 2015 10:59:14 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2015/05/05/first-step-of-ipython/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://kamatari.github.io/images/IPythonLogo.png&#34; alt=&#34;IPython_log&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;ipythonとは:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;IPythonとは&lt;/h1&gt;
+
+&lt;p&gt;ひとことで言うとpythonのインタラクティブシェルの強化版
+(&lt;a href=&#34;http://ipython.org/ipython-doc/stable/interactive/tutorial.html&#34;&gt;公式tutorial&lt;/a&gt; と &lt;a href=&#34;https://github.com/ipython/ipython&#34;&gt;github&lt;/a&gt;)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;補完機能の強化&lt;/li&gt;
+&lt;li&gt;イントロスペクションの強化&lt;/li&gt;
+&lt;li&gt;Magic Functionsという便利コマンドが使える&lt;/li&gt;
+&lt;li&gt;履歴機能の強化&lt;/li&gt;
+&lt;li&gt;OSのシェルコマンドが使える&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;インストールと起動:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;インストールと起動&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip install ipython
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ipython
+Python 2.7.5 (default, Mar  9 2014, 22:15:05)
+Type &amp;quot;copyright&amp;quot;, &amp;quot;credits&amp;quot; or &amp;quot;license&amp;quot; for more information.
+
+IPython 3.1.0 -- An enhanced Interactive Python.
+?         -&amp;gt; Introduction and overview of IPython&#39;s features.
+%quickref -&amp;gt; Quick reference.
+help      -&amp;gt; Python&#39;s own help system.
+object?   -&amp;gt; Details about &#39;object&#39;, use &#39;object??&#39; for extra details.
+
+In [1]:
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;補完機能:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;補完機能&lt;/h1&gt;
+
+&lt;p&gt;tabキーでimportできるモジュール補完。メソッドや、自分で定義した変数も補完できる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;In [1]: import c&amp;lt;tab&amp;gt;
+cPickle      calendar     cgitb        cmd          codeop       commands     contextlib   copy_reg     ctypes       cv2
+cProfile     cfmfile      chunk        code         collections  compileall   cookielib    crypt        curses       cythonmagic
+cStringIO    cgi          cmath        codecs       colorsys     compiler     copy         csv          cv
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;イントロスペクション:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;イントロスペクション&lt;/h1&gt;
+
+&lt;p&gt;importしたオブジェクトの後ろに&amp;rdquo;?&amp;ldquo;をつけてenterで、オブジェクトの説明を表示。&amp;rdquo;??&amp;ldquo;をつけると、より詳細な説明が表示される。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;In [8]: import calendar
+
+In [9]: calendar?
+Type:        module
+String form: &amp;lt;module &#39;calendar&#39; from &#39;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/calendar.pyc&#39;&amp;gt;
+File:        /System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/calendar.py
+Docstring:
+Calendar printing functions
+
+Note when comparing these calendars to the ones printed by cal(1): By
+default, these calendars have Monday as the first day of the week, and
+Sunday as the last (the European convention). Use setfirstweekday() to
+set the first day of the week (0=Monday, 6=Sunday).
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;magic-functions:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;Magic functions&lt;/h1&gt;
+
+&lt;p&gt;独自の便利コマンドが使えるようになるという話。prefixに&amp;rdquo;%&amp;ldquo;がついているコマンド。例えば&amp;rdquo;%timeit&amp;rdquo;を使うと実行時間を計測してくれる。
+&lt;a href=&#34;https://ipython.org/ipython-doc/dev/interactive/magics.html&#34;&gt;magic function 一覧&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;In [11]: %timeit range(10000)
+The slowest run took 4.81 times longer than the fastest. This could mean that an intermediate result is being cached
+10000 loops, best of 3: 131 µs per loop
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;履歴機能:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;履歴機能&lt;/h1&gt;
+
+&lt;p&gt;InとOutの数字を指定することで、履歴を呼び出せる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;In [16]: 45 * 4
+Out[16]: 180
+
+In [17]: Out[16] #outの16を呼び出した
+Out[17]: 180
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;マジックメソッド&amp;rdquo;%history&amp;rdquo;を使って履歴をまとめて見ることも出来るし、直近の出力を、一つまえは&amp;rdquo;&lt;strong&gt;_&lt;/strong&gt;&amp;rdquo;,二つまえは&amp;rdquo;&lt;strong&gt;__&lt;/strong&gt;&amp;ldquo;、三つまえは&amp;rdquo;&lt;strong&gt;___&lt;/strong&gt;&amp;ldquo;を使ってさかのぼることが出来る。&lt;/p&gt;
+
+&lt;h1 id=&#34;osのシェルコマンドが使える:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;OSのシェルコマンドが使える&lt;/h1&gt;
+
+&lt;p&gt;先頭に&amp;rdquo;!&amp;ldquo;をつけて実行することで使える。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;In [27]: !date
+2015年 5月 5日 火曜日 12時48分17秒 JST
+
+In [28]: !uptime
+12:48  up 1 day, 12:40, 2 users, load averages: 3.08 2.23 1.72
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>debian環境のルート証明書を更新した話</title>
+      <link>http://kamatari.github.io/2015/03/12/how-to-install-root-certificate-on-debian/</link>
+      <pubDate>Thu, 12 Mar 2015 00:41:26 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2015/03/12/how-to-install-root-certificate-on-debian/</guid>
+      <description>&lt;p&gt;とあるアプリケーションにログインする際に、エラーが出て失敗する問題が発生した。&lt;/p&gt;
+
+&lt;p&gt;認証処理を行っているphpのlogには、以下のようなメッセージが吐かれている。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[11-Mar-2015 11:40:08] Got no response code when fetching  https://openid-xxxxx/
+[11-Mar-2015 11:40:08] CURL error (60): SSL certificate problem, verify that the CA cert is OK.
+Details: error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このエラーは、アプリケーションのサーバーから、認証をするサーバー(openidを使っていた)に対してのcurlで、SSLの認証の失敗で出ているようだ。&lt;/p&gt;
+
+&lt;p&gt;手動でcurlを打った時のログがこれ。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl https://openid-xxxxx/
+curl: (60) SSL certificate problem, verify that the CA cert is OK. Details:
+error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed
+More details here: http://curl.haxx.se/docs/sslcerts.html
+
+curl performs SSL certificate verification by default, using a &amp;quot;bundle&amp;quot;
+of Certificate Authority (CA) public keys (CA certs). The default
+bundle is named curl-ca-bundle.crt; you can specify an alternate file
+using the --cacert option.
+If this HTTPS server uses a certificate signed by a CA represented in
+the bundle, the certificate verification probably failed due to a
+problem with the certificate (it might be expired, or the name might
+not match the domain name in the URL).
+If you&#39;d like to turn off curl&#39;s verification of the certificate, use
+the -k (or --insecure) option.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;原因は、SHA-1の証明書をSHA-2へ切り替えた事で、新しい証明書に対応したルート証明書がアプリケーションのサーバーになかったことだ。
+(※ 単純なSHA-1からSHA-2の切り替えだけだとルート証明書を変えなくてもいいらしいが…?)&lt;/p&gt;
+
+&lt;p&gt;現象としてはちょうど一年くらい前にあった、古いOSにインストールされてたルート証明書の期限が切れた時と同じだ。(原因はちがうけど)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://oauth.jp/blog/2014/01/30/globalsign-root-cert-expired/&#34;&gt;Y!J API が止まった日 - GlobalSign の Root 証明書切れから学んだこと&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;とにかく有効なルート証明書をアプリケーションのサーバーに入れないと解消できない。
+自分を含めた古いOSをたいせつに(使う|使わざるを得ない)勢のいつかの期限切れのために、以下に更新方法を残しておく。&lt;/p&gt;
+
+&lt;p&gt;debianにはupdate-ca-certificatesというコマンドがあるので、manで内容を確認しつつ使ってみる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ man update-ca-certificate 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;使ってる認証局(globalsignとかverisign)のルート証明書を手に入れる。拡張子は.crtに。&lt;/li&gt;
+&lt;li&gt;/usr/share/ca-certificates以下に、1のxxxx.crt を置く。&lt;/li&gt;
+&lt;li&gt;/etc/ca-certificates.confに、2のpathを書く&lt;/li&gt;
+&lt;li&gt;update-ca-certificatesを実行して、更新&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo update-ca-certificates
+Updating certificates in /etc/ssl/certs... WARNING: Skipping duplicate certificate cacert.org.pem
+WARNING: Skipping duplicate certificate ca-certificates.crt
+1 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d....done.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;無事更新できたら、curlしてerrorが出ない事を確認。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl https://openid-xxxxx/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ちなみに、更新したのにcurlで以下のようなエラーが出ることがある。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl: (35) error:0D0C50A1:asn1 encoding routines:ASN1_item_verify:unknown message digest algorithm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;調べると太古のバグっぽい。&lt;a href=&#34;http://curl.haxx.se/mail/tracker-2009-07/0020.html&#34;&gt;[ curl-Bugs-2825989 ] curl refuses sha-2 signed certificates&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;openssl系のパッケージをupdateすると、解消できた。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get install openssl
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>静的サイトエンジン HUGOの使い方</title>
+      <link>http://kamatari.github.io/2015/01/18/how-to-setup-hugo/</link>
+      <pubDate>Sun, 18 Jan 2015 15:33:26 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2015/01/18/how-to-setup-hugo/</guid>
+      <description>
+
+&lt;h1 id=&#34;インストール:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;インストール&lt;/h1&gt;
+
+&lt;p&gt;今回はmac環境で、brewを使う。golangが必要なので、それも一緒にいれる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ brew install go
+$ brew install hugo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;もちろん&lt;code&gt;go get&lt;/code&gt;でも落とせるし、ここから&lt;a href=&#34;https://github.com/spf13/hugo/releases&#34;&gt;https://github.com/spf13/hugo/releases&lt;/a&gt; ファイルをダウンロードでもOK&lt;/p&gt;
+
+&lt;h1 id=&#34;サイト作成:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;サイト作成&lt;/h1&gt;
+
+&lt;p&gt;つくりたいサイトのpathを入れて&lt;code&gt;hugo new site&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ hugo new site /path/to/site
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;新規ページ-新規blog投稿:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;新規ページ、新規blog投稿&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ hugo new about-page.md
+$ hugo new post/first_post.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;blogのテーマの取得:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;blogのテーマの取得&lt;/h1&gt;
+
+&lt;p&gt;公式に置いてあるテーマはここから確認できる。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/spf13/hugoThemes&#34;&gt;hugoThemes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;スクリーンショットが無くて、何がどれやらという感じなので、最初は全部取ってきてもいいかもしれない。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ git clone --recursive https://github.com/spf13/hugoThemes.git themes
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ちなみに個別に取ってきたいなら、themesディレクトリを作って、その下にgit cloneして持ってくる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ mkdir themes
+$ cd themes
+$ git clone url-of-theme-which-you-want
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;blog-をlocalで確認:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;blog をlocalで確認&lt;/h1&gt;
+
+&lt;p&gt;さきほど丸ごと持ってきたthemeの中から好きな名前を指定。記事の中で&lt;code&gt;draft = true&lt;/code&gt;になっている記事も表示するオプションをつけて、serverをたてる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ hugo server --theme=redlounge --buildDrafts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;そうすると、コマンドのログにも出ているが、&lt;a href=&#34;http://localhost:1313&#34;&gt;http://localhost:1313&lt;/a&gt; から、構築したサイトの確認ができる。&lt;/p&gt;
+
+&lt;h1 id=&#34;github-pagesにhugoで作ったサイトの設置:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;github pagesにhugoで作ったサイトの設置&lt;/h1&gt;
+
+&lt;p&gt;ここに丁寧に書いてある:P &lt;a href=&#34;http://gohugo.io/tutorials/github-pages-blog/&#34;&gt;Hosting on GitHub Pages&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;感想:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;感想&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;hugoの素晴らしいところ
+
+&lt;ul&gt;
+&lt;li&gt;とにかくサイトの生成が速い&lt;/li&gt;
+&lt;li&gt;draft機能&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;その他
+
+&lt;ul&gt;
+&lt;li&gt;あんまり便利機能無いけど、まだv0.12なのでこれから&lt;/li&gt;
+&lt;li&gt;ドキュメントちゃんとある&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;いまの段階ではまだ、octopressを使おうかな。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>adafruitのTFT2.8液晶セットアップ方法</title>
+      <link>http://kamatari.github.io/2015/01/11/how-to-setup-adafruit-tft2-dot-8-touchscreen/</link>
+      <pubDate>Sun, 11 Jan 2015 16:43:31 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2015/01/11/how-to-setup-adafruit-tft2-dot-8-touchscreen/</guid>
+      <description>
+
+&lt;h1 id=&#34;これ:768e8da07cec207a6c75c94a4ab24819&#34;&gt;これ&lt;/h1&gt;
+
+&lt;p&gt;すごくいいです。
+&lt;div class=&#34;amazlet-box&#34; style=&#34;margin-bottom:0px;&#34;&gt;&lt;div class=&#34;amazlet-image&#34; style=&#34;float:left;margin:0px 12px 1px 0px;&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/B00KD6X7OW/kamiki-22/ref=nosim/&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51zgGzvmZ6L._SL160_.jpg&#34; alt=&#34;Raspberry Pi用2.8インチ　TFTモニタ特別セット&#34; style=&#34;border: none;&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-info&#34; style=&#34;line-height:120%; margin-bottom: 10px&#34;&gt;&lt;div class=&#34;amazlet-name&#34; style=&#34;margin-bottom:10px;line-height:120%&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/B00KD6X7OW/kamiki-22/ref=nosim/&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;Raspberry Pi用2.8インチ　TFTモニタ特別セット&lt;/a&gt;&lt;div class=&#34;amazlet-powered-date&#34; style=&#34;font-size:80%;margin-top:5px;line-height:120%&#34;&gt;posted with &lt;a href=&#34;http://www.amazlet.com/&#34; title=&#34;amazlet&#34; target=&#34;_blank&#34;&gt;amazlet&lt;/a&gt; at 15.01.11&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-detail&#34;&gt;TechShare &lt;br /&gt;売り上げランキング: 5,355&lt;br /&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-sub-info&#34; style=&#34;float: left;&#34;&gt;&lt;div class=&#34;amazlet-link&#34; style=&#34;margin-top: 5px&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/B00KD6X7OW/kamiki-22/ref=nosim/&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;Amazon.co.jpで詳細を見る&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-footer&#34; style=&#34;clear: left&#34;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;おもな素晴らしいところ:768e8da07cec207a6c75c94a4ab24819&#34;&gt;おもな素晴らしいところ&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;raspberry piに供給してる電源から、液晶の電源もとれる(電源ひとつだけでok)&lt;/li&gt;
+&lt;li&gt;HDMIをつなげなくても、raspberrypiのconsole画面を見ることができる&lt;/li&gt;
+&lt;li&gt;物理的なボタンでshutdown/bootができるようになる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;動かすまでに最低限ひつようなこと:768e8da07cec207a6c75c94a4ab24819&#34;&gt;動かすまでに最低限ひつようなこと&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;液晶とGPIOピンヘッダのハンダ付け&lt;/li&gt;
+&lt;li&gt;raspberrypiでソフトウェアのセットアップ&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;(追記: resistiveタイプとcapacitiveタイプで設定方法違うので注意)&lt;/p&gt;
+
+&lt;h2 id=&#34;ソフトのsetup方法はふたつある:768e8da07cec207a6c75c94a4ab24819&#34;&gt;ソフトのsetup方法はふたつある&lt;/h2&gt;
+
+&lt;h3 id=&#34;その1-installerを落としてきて実行:768e8da07cec207a6c75c94a4ab24819&#34;&gt;その1 installerを落としてきて実行&lt;/h3&gt;
+
+&lt;p&gt;以下コマンドでインストールできる。最後に、raspiを起動した時に液晶にconsole画面を表示するかと、取り付けたボタンでshutdownするか聞かれる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ wget http://adafru.it/pitftsh
+$ mv pitftsh pitft.sh
+$ chmod +x pitft.sh
+$ sudo ./pitft.sh -t 28r -r  #resistiveタイプ
+$ sudo ./pitft.sh -t 28c -r  #capacitiveタイプ
+$ sudo reboot
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以上。&lt;a href=&#34;https://learn.adafruit.com/adafruit-pitft-28-inch-resistive-touchscreen-display-raspberry-pi/easy-install&#34;&gt;公式サイトの説明はこちら&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;その2-真心を込めたコマンド手入力で設定:768e8da07cec207a6c75c94a4ab24819&#34;&gt;その2 真心を込めたコマンド手入力で設定&lt;/h3&gt;
+
+&lt;p&gt;心を込めたい(細かい設定がしたい)方はこちらで。&lt;/p&gt;
+
+&lt;p&gt;必要なdebファイルを落としてくる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ cd ~
+$ wget http://adafruit-download.s3.amazonaws.com/libraspberrypi-bin-adafruit.deb
+$ wget http://adafruit-download.s3.amazonaws.com/libraspberrypi-dev-adafruit.deb
+$ wget http://adafruit-download.s3.amazonaws.com/libraspberrypi-doc-adafruit.deb
+$ wget http://adafruit-download.s3.amazonaws.com/libraspberrypi0-adafruit.deb
+$ wget http://adafruit-download.s3.amazonaws.com/raspberrypi-bootloader-adafruit-20140917-1.deb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;インストール&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo dpkg -i -B *.deb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2013年の9月に出たバージョンより新しいraspbian使ってる人は、99-fbturbo.confを動かしとく必要がある&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo mv /usr/share/X11/xorg.conf.d/99-fbturbo.conf ~
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;再起動&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo reboot
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;moduleを入れて、xwindowを起動してtft液晶に表示 (※追記 resistiveタイプとcapacitiveタイプでmoduleが違う）&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;resistiveタイプ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo modprobe spi-bcm2708
+$ sudo modprobe fbtft_device name=adafruitts rotate=90
+$ export FRAMEBUFFER=/dev/fb1
+$ startx
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;capacitiveタイプ(※追記)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo modprobe spi-bcm2708
+$ sudo modprobe i2c-bcm2708
+$ sudo modprobe fbtft_device name=adafruitct28 rotate=90
+$ export FRAMEBUFFER=/dev/fb1
+$ startx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;表示されたら成功。さきほどのmoduleを毎回起動するコマンドを打たなくて済むように、etc modulesを編集&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;resistiveタイプ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo vim /etc/modules
+spi-bcm2708
+fbtft_device
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;capacitiveタイプ (※追記)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo vim /etc/modules
+i2c-bcm2708
+spi-bcm2708
+fbtft_device
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;modprobe fileを作って、設定を書く。そして再起動&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo vim /etc/modprobe.d/adafruit.conf
+options fbtft_device name=adafruitrt28 rotate=90 frequency=32000000
+$ sudo reboot
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;touchscreenのcallibration用のファイル作成:768e8da07cec207a6c75c94a4ab24819&#34;&gt;touchscreenのcallibration用のファイル作成&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;resistiveタイプ
+``` bash
+$ sudo mkdir /etc/X11/xorg.conf.d
+$ sudo vim /etc/X11/xorg.conf.d/99-calibration.conf&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Section &amp;ldquo;InputClass&amp;rdquo;
+        Identifier      &amp;ldquo;calibration&amp;rdquo;
+        MatchProduct    &amp;ldquo;stmpe-ts&amp;rdquo;
+        Option  &amp;ldquo;Calibration&amp;rdquo;   &amp;ldquo;3800 200 200 3800&amp;rdquo;
+        Option  &amp;ldquo;SwapAxes&amp;rdquo;      &amp;ldquo;1&amp;rdquo;
+EndSection&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
++ capacitiveタイプ (※追記)
+``` bash
+$ sudo mkdir /etc/X11/xorg.conf.d
+$ sudo vim /etc/X11/xorg.conf.d/99-captouch.conf
+
+Section &amp;quot;InputClass&amp;quot;
+         Identifier &amp;quot;captouch&amp;quot;
+         MatchProduct &amp;quot;ft6x06_ts&amp;quot;
+         Option &amp;quot;SwapAxes&amp;quot; &amp;quot;1&amp;quot;
+         Option &amp;quot;InvertY&amp;quot; &amp;quot;1&amp;quot;
+         Option &amp;quot;Calibration&amp;quot; &amp;quot;0 320 0 240&amp;quot;
+EndSection
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;xwindowを液晶で見るために毎回FRAMEBUFFERをexportしなくてすむように設定を追記&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo vim ~/.profile
+export FRAMEBUFFER=/dev/fb1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;ここからtouchscreenの設定:768e8da07cec207a6c75c94a4ab24819&#34;&gt;ここからtouchscreenの設定&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;resistiveタイプ
+&lt;code&gt;bash
+$ sudo vim /etc/udev/rules.d/95-stmpe.rules
+SUBSYSTEM==&amp;quot;input&amp;quot;, ATTRS{name}==&amp;quot;stmpe-ts&amp;quot;, ENV{DEVNAME}==&amp;quot;*event*&amp;quot;, SYMLINK+=&amp;quot;input/touchscreen&amp;quot;
+&lt;/code&gt;
+module stmpe_tsをremoveして再install&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo rmmod stmpe_ts; sudo modprobe stmpe_ts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;touchscreenができていることを確認 (うまく起動出来てないと、存在しない)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ls -l /dev/input/touchscreen
+drwxrwxrwx  1 root  root 6 Nov 12 27 15:04 /dev/input/touchscreen -&amp;gt; event2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;capacitiveタイプ(※追記)
+&lt;code&gt;bash
+$ sudo vim /etc/udev/rules.d/95-ft6206.rules
+SUBSYSTEM==&amp;quot;input&amp;quot;, ATTRS{name}==&amp;quot;ft6x06_ts&amp;quot;, ENV{DEVNAME}==&amp;quot;*event*&amp;quot;, SYMLINK+=&amp;quot;input/touchscreen&amp;quot;
+&lt;/code&gt;
+capacitiveタイプでは、module &lt;code&gt;ft6x06_ts&lt;/code&gt;を使う
+&lt;code&gt;bash
+$ sudo rmmod ft6x06_ts; sudo modprobe ft6x06_ts
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;touchscreenをテストしてみる:768e8da07cec207a6c75c94a4ab24819&#34;&gt;touchscreenをテストしてみる&lt;/h4&gt;
+
+&lt;p&gt;test用のmoduleをinstallして、実際にタッチしてみると入力が確認出来る&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo apt-get install evtest tslib libts-bin
+$ sudo evtest /dev/input/touchscreen
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;rotationを変えたりした後、callibrationを自動で行うためのツールがある&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ wget https://github.com/adafruit/PiTFT_Extras/raw/master/pitft_touch_cal.py
+$ sudo mkdir /etc/X11/xorg.conf.d/
+$ chmod +x pitft_touch_cal.py
+$ sudo ./pitft_touch_cal.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;manualで設定するcallibrationツールを利用することも出来る&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo TSLIB_FBDEVICE=/dev/fb1 TSLIB_TSDEVICE=/dev/input/touchscreen ts_calibrate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;touchscreenを使って線を描画するテストができる&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo TSLIB_FBDEVICE=/dev/fb1 TSLIB_TSDEVICE=/dev/input/touchscreen ts_test
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以上。&lt;a href=&#34;https://learn.adafruit.com/adafruit-pitft-28-inch-resistive-touchscreen-display-raspberry-pi/software-installation&#34;&gt;公式のスクリーンショット付き説明&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;はまったところ:768e8da07cec207a6c75c94a4ab24819&#34;&gt;はまったところ&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;液晶は表示出来るけど、touchscreenが反応しない&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;dmesgでだめっぽいの出てる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt; $ dmesg |grep stmpe-spi
+[   12.464470] stmpe-spi spi0.1: unknown chip id: 0x0
+[   12.482715] stmpe-spi: probe of spi0.1 failed with error_log(&#39; &#39; . var_export(, true)) -22
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;installer を使わずにやっていると、stmpe_tsをremoveしようとした時に、not currently loadedと言われる。これは、stmpeが動いてないからぽい。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo rmmod stmpe_ts; sudo modprobe stmpe_ts
+Error: Module stmpe_ts is not currently loaded
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;解決編:768e8da07cec207a6c75c94a4ab24819&#34;&gt;解決編&lt;/h2&gt;
+
+&lt;p&gt;いろいろ試してうまくいかず、きっとこれ不良品だなadafruitめ！と思ったが、なんのことはなかった。
+このtft2.8サイズの液晶には、静電容量方式のタッチパネルと、加圧を検知する抵抗膜方式のタッチパネルの2種類が存在したのだ。知らなかった。そして、当然セットアップ方法が違う。正しく公式サイトの手順通りに設定したら、きちんとtouchscreen動きました。&lt;/p&gt;
+
+&lt;p&gt;adafruit 最高っス！&lt;/p&gt;
+
+&lt;h3 id=&#34;公式サイト:768e8da07cec207a6c75c94a4ab24819&#34;&gt;公式サイト&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;静電容量方式のセットアップ (capacitive touchscreen)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://learn.adafruit.com/adafruit-2-8-pitft-capacitive-touch/software-install&#34;&gt;adafruit-2-8-pitft-capacitive-touchscreen&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;抵抗膜方式のセットアップ(resistive touchscreen)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://learn.adafruit.com/adafruit-pitft-28-inch-resistive-touchscreen-display-raspberry-pi/software-installation&#34;&gt;adafruit-pitft-28-inch-resistive-touchscreen&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;このブログの記事をさかのぼって、capacitiveの時の設定方法を追記しておいた。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>raspberry piで初めにやってみたこと</title>
+      <link>http://kamatari.github.io/2015/01/04/setting-lists-of-raspberry-pi/</link>
+      <pubDate>Sun, 04 Jan 2015 19:08:46 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2015/01/04/setting-lists-of-raspberry-pi/</guid>
+      <description>
+
+&lt;h1 id=&#34;raspberry-pi-を手に入れた:a34e14c254c276ac39573d5d58faf6f6&#34;&gt;raspberry pi を手に入れた&lt;/h1&gt;
+
+&lt;p&gt;実はarduinoも持っているのだけれど、どう作るとなにが実現できるのか自分にはイメージがわきづらくて、ブレッドボードになんとなく刺したLEDを点滅させたきりになっていた。&lt;/p&gt;
+
+&lt;p&gt;そういう意味では、raspberry piはlinuxなので、サーバーとして使ったり、最初からついてる入出力端子から作ってみたい何かを想像しやすい。いろいろ試したので、今までにやったことをひとまずまとめておく。&lt;/p&gt;
+
+&lt;h1 id=&#34;osのinstall:a34e14c254c276ac39573d5d58faf6f6&#34;&gt;osのinstall&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raspberrypi.org/downloads/&#34;&gt;raspberry piの公式サイト&lt;/a&gt;から、NOOBSなら内容をSDカードにコピー。
+SDカードをraspberry piに刺したあと、電源を投入すればinstallできる。OSのimgをダウンロードした場合は、公式サイトの&lt;a href=&#34;http://www.raspberrypi.org/documentation/installation/installing-images/mac.md&#34;&gt;macでimgからinstallするまで&lt;/a&gt;を参照。&lt;/p&gt;
+
+&lt;p&gt;初回はraspi-configという設定画面がひらくので、キーボードとssh設定、あとtimezoneの設定とかをした。設定が完了したら再起動しておわり。&lt;/p&gt;
+
+&lt;p&gt;設定画面は以下のコマンドでも起動することができる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo raspi-config
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参考: &lt;a href=&#34;http://www.hiramine.com/physicalcomputing/raspberrypi/setup_firstbootandconfig.html&#34;&gt;raspberry pi 初回起動と初期設定&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;raspberry-piにmacからsshしてupdate:a34e14c254c276ac39573d5d58faf6f6&#34;&gt;raspberry piにmacからsshしてupdate&lt;/h1&gt;
+
+&lt;p&gt;家でraspberry piの画面を表示するには、Wii UのHDMIケーブルでテレビとつなげるしかなくて、全然コンパクトじゃなかった。&lt;/p&gt;
+
+&lt;p&gt;基板に有線LANを刺し、raspberry pi 上でifconfigしてip addressを確認。そのaddressにpiユーザーでsshすることで、mac上からraspiを操作出来るようになるのだ。記念にmacからupdateなどをしておく。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;@mac $ ssh pi@192.168.0.3
+@raspberry $ sudo apt-get update
+@raspberry $ sudo apt-get upgrade
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;無線lanの設定:a34e14c254c276ac39573d5d58faf6f6&#34;&gt;無線lanの設定&lt;/h1&gt;
+
+&lt;p&gt;buffaroのusb型無線LANを使って、有線LANを使わなくてもnetworkにつなげるように設定をする。
+raspberry piのusb端子にまずは無線LANを刺して、有線LANは抜いておく。&lt;/p&gt;
+
+&lt;p&gt;lsusbというコマンドがあって、これで先ほどのusb型無線LAN自体を認識できているか確認できる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ lsusb
+Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp.
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp.
+Bus 001 Device 004: ID 04d9:2011 Holtek Semiconductor, Inc.
+Bus 001 Device 005: ID 0411:01a2 BUFFALO INC. (formerly MelCo., Inc.) WLI-UC-GNM Wireless LAN Adapter [Ralink RT8070]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;無線LANをつなぐために以下二つファイルを編集する。名前の通り、networkのinterfaceと、無線LANの設定を行うファイルだ。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;/etc/network/interfaces&lt;/li&gt;
+&lt;li&gt;/etc/wpa_supplicant/wpa_supplicant.conf&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;まずは&lt;code&gt;/etc/network/interfaces&lt;/code&gt;のwifiの設定項目を編集する&lt;/p&gt;
+
+&lt;p&gt;defaultの設定部分をコメントアウトし、ipをmanualではなくdhcpを利用するようにするのと、wpa-roamではなくwpa-confにする。
+それと、起動した時に自動でつながるようにallow-hotplugも設定する。
+固定ipにしないのは、あとで名前で引けるようにするため。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;allow-hotplug wlan0
+iface wlan0 inet dhcp
+#iface wlan0 inet manual
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+#wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+iface default inet dhcp
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;次にアクセスポイントのssidとpasswordをwpa_passphraseコマンドに渡して、出力を設定ファイルに反映する。
+ssidを&lt;code&gt;raspberry&lt;/code&gt; パスワードを&lt;code&gt;raspi&lt;/code&gt;とすると&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo sh -c &amp;quot;wpa_passphrase raspberry raspi &amp;gt;&amp;gt; /etc/wpa_supplicant/wpa_supplicant.conf&amp;quot;
+$ sudo cat /etc/wpa_supplicant/wpa_supplicant.conf
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+network={
+    ssid=raspberry
+    #psk=raspi
+    psk=2b1d17284c5410ee5eaae7151290e9744af2182b0eb8af20dd4ebb415928f726
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;反映したあと直接編集するのだが、ここが非常にはまりやすいポイント。
+無線の方式や、設定項目によって、記載する内容が異なるので、自分の環境の方式を確認しながらやらなくてはならない。
+例えばwifiがANY接続禁止にしているときは、&lt;code&gt;scan_ssid=1&lt;/code&gt; を追記することが必要など。
+認証方式などはこのコマンドで確認出来る。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;@raskam $ sudo iwlist wlan0 scan
+・・・
+IE: WPA Version 1
+    Group Cipher : TKIP
+    Pairwise Ciphers (1) : TKIP
+    Authentication Suites (1) : PSK
+・・・
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(その他参考：&lt;a href=&#34;http://www.youchikurin.com/blog/2007/06/linuxlan_1.html&#34;&gt;Linuxで無線LAN&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;設定が出来たら最後にwifiインターフェイスの再起動をして、iwconfigを見たり、pingを打ってネットにつながったか確認。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo ifdown wlan0
+$ sudo ifup wlan0
+
+$ iwconfig
+$ ping 8.8.8.8
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;ホスト名でraspberry-piを指定してssh出来るようにする:a34e14c254c276ac39573d5d58faf6f6&#34;&gt;ホスト名でraspberry piを指定してssh出来るようにする&lt;/h1&gt;
+
+&lt;p&gt;これを設定することで、ip addressが変わっても、同じ環境にある限り接続できるので便利になる。
+これをAvahiを使って実現する。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo apt-get install avahi-daemon
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ホスト名を&lt;code&gt;/etc/hostname&lt;/code&gt;に書くのと、&lt;code&gt;/etc/hosts/&lt;/code&gt;にも編集をしておく&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ vim /etc/hostname
+---
+raskam
+---
+$ vim /etc/hosts
+---
+127.0.0.1 raskam
+---
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで設定ができたら、再起動して、macからhostnameでssh接続が出来るかを確認する。無線LANで接続するときは、先ほど決めたhostnameに&lt;code&gt;.local&lt;/code&gt;をつけないと接続出来ないことに気をつける。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;@raspberry $ ps -aef |grep avahi
+avahi     2126     1  0 07:16 ?        00:00:00 avahi-daemon: running [raskam.local]
+avahi     2130  2126  0 07:16 ?        00:00:00 avahi-daemon: chroot helper
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;@mac $ ssh pi@raskam.local
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;raspbianのxwindowをmacで操作する:a34e14c254c276ac39573d5d58faf6f6&#34;&gt;raspbianのxwindowをmacで操作する&lt;/h1&gt;
+
+&lt;p&gt;raspberry pi 側でtightvncserverをinstallして、起動する&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get install tightvncserver
+$ vncserver :1 -geometry 1024x768 -depth 24
+そしてパスワードを設定
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;macでFinderからサーバーへ接続する項目で、vncとipと5901番portを以下のように入力すると、画面が表示されて操作ができるようになる&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;vnc://192.168.0.3:5901
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>debianにElasticsearch 1.4.1をinstallした話</title>
+      <link>http://kamatari.github.io/2014/12/07/install-elasticsearch-on-debian/</link>
+      <pubDate>Sun, 07 Dec 2014 15:10:31 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/12/07/install-elasticsearch-on-debian/</guid>
+      <description>
+
+&lt;h1 id=&#34;java環境つくる:f44e9335b07c8e35a642c52359341df3&#34;&gt;Java環境つくる&lt;/h1&gt;
+
+&lt;h2 id=&#34;oracle-jdk7のinstall:f44e9335b07c8e35a642c52359341df3&#34;&gt;Oracle JDK7のinstall&lt;/h2&gt;
+
+&lt;p&gt;ここからJDKのダウンロードページに行って、環境にあったものを選ぶ&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.oracle.com/technetwork/java/javase/downloads/index.html&#34;&gt;http://www.oracle.com/technetwork/java/javase/downloads/index.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;jdk-7u71-linux-x64-tar-gzを選択:f44e9335b07c8e35a642c52359341df3&#34;&gt;jdk-7u71-linux-x64.tar.gzを選択&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ tar -xvf jdk-7u71-linux-x64.gz
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;usr-lib以下に移動:f44e9335b07c8e35a642c52359341df3&#34;&gt;/usr/lib以下に移動&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo mv jdk1.7.0_71 jvm/jdk1.7.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;alternativesを使ってjavaを今回の1-7-0に切り替えておく:f44e9335b07c8e35a642c52359341df3&#34;&gt;alternativesを使ってjavaを今回の1.7.0に切り替えておく&lt;/h2&gt;
+
+&lt;p&gt;(参考: &lt;a href=&#34;http://qiita.com/hidekuro/items/f931ae527244bce34698&#34;&gt;update-alternativesに管理してもらうコマンドを追加する&lt;/a&gt;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo update-alternatives --install &amp;quot;/usr/bin/java&amp;quot; &amp;quot;java&amp;quot; &amp;quot;/usr/lib/jvm/jdk1.7.0/bin/java&amp;quot; 1
+$ sudo update-alternatives --install &amp;quot;/usr/bin/javac&amp;quot; &amp;quot;javac&amp;quot; &amp;quot;/usr/lib/jvm/jdk1.7.0/bin/javac&amp;quot; 1
+$ sudo update-alternatives --install &amp;quot;/usr/bin/javaws&amp;quot; &amp;quot;javaws&amp;quot; &amp;quot;/usr/lib/jvm/jdk1.7.0/bin/javaws&amp;quot; 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;それぞれで今回installした-usr-lib-jdk1-7-0以下を指定:f44e9335b07c8e35a642c52359341df3&#34;&gt;それぞれで今回installした/usr/lib/jdk1.7.0以下を指定&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo update-alternatives --config java
+$ sudo update-alternatives --config javac
+$ sudo update-alternatives --config javaws
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;確認:f44e9335b07c8e35a642c52359341df3&#34;&gt;確認&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ java -version
+
+java -version
+java version &amp;quot;1.7.0_71&amp;quot;
+Java(TM) SE Runtime Environment (build 1.7.0_71-b14)
+Java HotSpot(TM) 64-Bit Server VM (build 24.71-b01, mixed mode)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;elasticsearchのinstall:f44e9335b07c8e35a642c52359341df3&#34;&gt;Elasticsearchのinstall&lt;/h1&gt;
+
+&lt;h2 id=&#34;公式からdeb形式でダウンロードする:f44e9335b07c8e35a642c52359341df3&#34;&gt;公式からdeb形式でダウンロードする&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.elasticsearch.org/overview/elkdownloads/&#34;&gt;http://www.elasticsearch.org/overview/elkdownloads/&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.1.deb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;install:f44e9335b07c8e35a642c52359341df3&#34;&gt;install&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo dpkg -i elasticsearch-1.4.1.deb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;起動とlogの確認:f44e9335b07c8e35a642c52359341df3&#34;&gt;起動とlogの確認&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo /etc/init.d/elasticsearch start
+$ tail -f /var/log/elasticsearch/elasticsearch.log
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;curlで状態を確認:f44e9335b07c8e35a642c52359341df3&#34;&gt;curlで状態を確認&lt;/h2&gt;
+
+&lt;p&gt;status が greenかどうか&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ curl -XGET localhost:9200/_cluster/health?pretty
+
+{
+  &amp;quot;cluster_name&amp;quot; : &amp;quot;elasticsearch&amp;quot;,
+  &amp;quot;status&amp;quot; : &amp;quot;green&amp;quot;,
+  &amp;quot;timed_out&amp;quot; : false,
+  &amp;quot;number_of_nodes&amp;quot; : 1,
+  &amp;quot;number_of_data_nodes&amp;quot; : 1,
+  &amp;quot;active_primary_shards&amp;quot; : 0,
+  &amp;quot;active_shards&amp;quot; : 0,
+  &amp;quot;relocating_shards&amp;quot; : 0,
+  &amp;quot;initializing_shards&amp;quot; : 0,
+  &amp;quot;unassigned_shards&amp;quot; : 0
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;pluginのinstall:f44e9335b07c8e35a642c52359341df3&#34;&gt;pluginのinstall&lt;/h2&gt;
+
+&lt;p&gt;以下ふたつ入れてみる&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;kuromoji
+
+&lt;ul&gt;
+&lt;li&gt;対応verを確認するべし &lt;a href=&#34;https://github.com/elasticsearch/elasticsearch-analysis-kuromoji&#34;&gt;https://github.com/elasticsearch/elasticsearch-analysis-kuromoji&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;HQ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo /usr/share/elasticsearch/bin/plugin -install elasticsearch/elasticsearch-analysis-kuromoji/2.4.1
+$ sudo /usr/share/elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;確認-1:f44e9335b07c8e35a642c52359341df3&#34;&gt;確認&lt;/h2&gt;
+
+&lt;p&gt;curlで投げたresponseの中にpluginsという項目があるので、そこにinstallしたpluginがあるか確認する&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -XGET &#39;http://localhost:9200/_nodes?pretty=true&#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;pluginを使って-状態の確認:f44e9335b07c8e35a642c52359341df3&#34;&gt;pluginを使って、状態の確認&lt;/h2&gt;
+
+&lt;p&gt;今入れたHQを使って、以下のアドレスへブラウザでアクセスして確認することができる (ドメインは適宜変更)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://localhost:9200/_plugin/HQ&#34;&gt;http://localhost:9200/_plugin/HQ&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Web API The Good Partsを読んだ話</title>
+      <link>http://kamatari.github.io/2014/11/30/api-design-points/</link>
+      <pubDate>Sun, 30 Nov 2014 16:00:43 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/11/30/api-design-points/</guid>
+      <description>
+
+&lt;p&gt;&lt;div class=&#34;amazlet-box&#34; style=&#34;margin-bottom:0px;&#34;&gt;&lt;div class=&#34;amazlet-image&#34; style=&#34;float:left;margin:0px 12px 1px 0px;&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4873116864&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51GHwTNJgSL._SL160_.jpg&#34; alt=&#34;Web API: The Good Parts&#34; style=&#34;border: none;&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-info&#34; style=&#34;line-height:120%; margin-bottom: 10px&#34;&gt;&lt;div class=&#34;amazlet-name&#34; style=&#34;margin-bottom:10px;line-height:120%&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4873116864&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;Web API: The Good Parts&lt;/a&gt;&lt;div class=&#34;amazlet-powered-date&#34; style=&#34;font-size:80%;margin-top:5px;line-height:120%&#34;&gt;posted with &lt;a href=&#34;http://www.amazlet.com/&#34; title=&#34;amazlet&#34; target=&#34;_blank&#34;&gt;amazlet&lt;/a&gt; at 14.12.02&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-detail&#34;&gt;水野 貴明 &lt;br /&gt;オライリージャパン &lt;br /&gt;売り上げランキング: 1,496&lt;br /&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-sub-info&#34; style=&#34;float: left;&#34;&gt;&lt;div class=&#34;amazlet-link&#34; style=&#34;margin-top: 5px&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4873116864&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;Amazon.co.jpで詳細を見る&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-footer&#34; style=&#34;clear: left&#34;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;感想:bf42ce96247b9f24eb242d5d65427cd8&#34;&gt;感想&lt;/h1&gt;
+
+&lt;p&gt;web APIの設計をするときに意識するべきことが、大手webサービス(Facebook, Twitter, Instagram, etc)のAPIと比較して書いてあり、これを読めば自分のサービスに合った設計ができるようになっていると感じた。&lt;/p&gt;
+
+&lt;p&gt;例えば自分が初めてAPIを設計しようと考えた時、自分が今までに使ったことのあるAPIを振り返ったりして、良いところや悪いところを参考にしながらつくろうとするはずで、それぞれの設計の意図やその比較がこの本のようにまとまっているのはとても分かりやすいと思う。&lt;/p&gt;
+
+&lt;p&gt;また、比較的新しい(2014に発表された)設計思想などにも触れられており、従来のパターンだけではないAPIを設計するヒントにもなるだろう。&lt;/p&gt;
+
+&lt;p&gt;以下備忘録として、三つ気になったポイントを書いておく。これらの他にも様々な項目について記載されているので、APIを設計するにあたって何かしら新しい気づきがあると思う。&lt;/p&gt;
+
+&lt;h2 id=&#34;対象となる開発者の数とapiの設計思想について:bf42ce96247b9f24eb242d5d65427cd8&#34;&gt;対象となる開発者の数とAPIの設計思想について&lt;/h2&gt;
+
+&lt;p&gt;APIの設計思想は、誰でもが使えるように広く公開するAPIと、そうでないAPIとで異なるという話があった。&lt;/p&gt;
+
+&lt;p&gt;具体的な例として、Eコマースサイトのスマートフォン向けのアプリケーションを作る為のAPIの設計の例が挙げられている。&lt;/p&gt;
+
+&lt;p&gt;このアプリのホーム画面で使いたい情報が、「新着の商品」、「人気の商品」、「ログイン中のユーザ情報」、「購買履歴に基づくレコメンド」など様々であったとき、一般的な方法に基づいてそれぞれの機能ごとのエンドポイントを持ったAPIをつくることが最良とは言えない。&lt;/p&gt;
+
+&lt;p&gt;ホーム画面で表示する情報をひとつにまとめた&amp;rdquo;ホーム画面表示用API&amp;rdquo;を作成したほうが、クライアントアプリを作る開発者にとって、確実に利便性が高いだろうという話だ。&lt;/p&gt;
+
+&lt;h2 id=&#34;hateoasについて:bf42ce96247b9f24eb242d5d65427cd8&#34;&gt;HATEOASについて&lt;/h2&gt;
+
+&lt;p&gt;HATEOAS (Hypermedia as the engine of application state)は、APIの返すデータの中に、次の行動、取得するデータ等のURIをリンクとして含めることで、そのデータを見れば次にどのエンドポイントにアクセスすればよいかがわわかるような設計のこととされている。&lt;/p&gt;
+
+&lt;p&gt;具体的な例として挙げられているのが、友達一覧のデータを取得するAPIがあったとき、そのレスポンスの中に友達の名前とともに、それぞれの友達の詳細を取得するためのuriを入れておくというような設計だ。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;{
+  &amp;quot;friends&amp;quot;:[
+    { &amp;quot;name&amp;quot;: &amp;quot;Saeed&amp;quot;,
+      &amp;quot;link&amp;quot;: {
+        &amp;quot;uri&amp;quot;: &amp;quot;https://api.exmaple.com/v1/users/12345&amp;quot;,
+        &amp;quot;rel&amp;quot;: &amp;quot;user/detail&amp;quot;
+      }
+    },
+    { &amp;quot;name&amp;quot;: &amp;quot;Jack&amp;quot;,
+      &amp;quot;link&amp;quot;: {
+        &amp;quot;uri&amp;quot;: &amp;quot;https://api.exmaple.com/v1/users/6789&amp;quot;,
+        &amp;quot;rel&amp;quot;: &amp;quot;user/detail&amp;quot;
+      }
+    },
+...
+...
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;この友人の詳細情報を取得するuriをたたくと、今度はその友人とやりとりしたメッセージを取得するuriや、友達関係を解消するuriを含んでいるかもしれない。&lt;/p&gt;
+
+&lt;h2 id=&#34;性別のデータをどう表すかについて:bf42ce96247b9f24eb242d5d65427cd8&#34;&gt;性別のデータをどう表すかについて&lt;/h2&gt;
+
+&lt;p&gt;以前であれば生物学的な性別のみで、男性と女性とを1と2の数値で表すこともあったが、近年では社会的/文化的性別を選択可能にしているサービスも増え、性別を文字列で扱うところが圧倒的に多いとしている。&lt;/p&gt;
+
+&lt;p&gt;なかでもFacebookは2014年の2月に、選択可能な性別を一気に50種類以上に増やしたそうだ。&lt;/p&gt;
+
+&lt;p&gt;ただ、生物学的な性別が必要な、例えば医療系のサービスもあるので、適切なものを選択していく必要がありそうだ。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>debianにinstallしたパッケージの場所</title>
+      <link>http://kamatari.github.io/2014/11/29/location-which-debian-package-installed/</link>
+      <pubDate>Sat, 29 Nov 2014 01:34:23 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/11/29/location-which-debian-package-installed/</guid>
+      <description>
+
+&lt;h1 id=&#34;apt-getでinstallしたpython-opencvがimport出来なかった:70ae5f4797c953568ee8a7e4964f0250&#34;&gt;apt-getでinstallしたpython-opencvがimport出来なかった&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ python
+Python 2.5.2 (r252:60911, Jan 24 2010, 14:53:14)
+[GCC 4.3.2] on linux2
+Type &amp;quot;help&amp;quot;, &amp;quot;copyright&amp;quot;, &amp;quot;credits&amp;quot; or &amp;quot;license&amp;quot; for more information.
+&amp;gt;&amp;gt;&amp;gt; import cv
+Traceback (most recent call last):
+  File &amp;quot;&amp;lt;stdin&amp;gt;&amp;quot;, line 1, in &amp;lt;module&amp;gt;
+  ImportError: No module named cv
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;python-opencvとしてinstallしたファイルはどこに:70ae5f4797c953568ee8a7e4964f0250&#34;&gt;python-opencvとしてinstallしたファイルはどこに&lt;/h1&gt;
+
+&lt;p&gt;dpkgでLオプションを使うと表示できるようだ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ dpkg -L python-opencv
+/.
+/usr
+/usr/lib
+/usr/lib/python-support
+/usr/lib/python-support/python-opencv
+/usr/lib/python-support/python-opencv/python2.5
+/usr/lib/python-support/python-opencv/python2.5/opencv
+/usr/lib/python-support/python-opencv/python2.5/opencv/_highgui.so
+/usr/lib/python-support/python-opencv/python2.5/opencv/_cv.so
+/usr/share
+/usr/share/doc
+/usr/share/doc/python-opencv
+/usr/share/doc/python-opencv/copyright
+/usr/share/doc/python-opencv/changelog.Debian.gz
+/usr/share/doc/python-opencv/changelog.gz
+/usr/share/python-support
+/usr/share/python-support/python-opencv
+/usr/share/python-support/python-opencv/opencv
+/usr/share/python-support/python-opencv/opencv/highgui.py
+/usr/share/python-support/python-opencv/opencv/__init__.py
+/usr/share/python-support/python-opencv/opencv/matlab_syntax.py
+/usr/share/python-support/python-opencv/opencv/cv.py
+/usr/share/python-support/python-opencv/opencv/adaptors.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;/usr/share/python-support/python-opencv/opencv ディレクトリにcv.pyがあるので、ここにpythonのパスを通せば使えそう。&lt;/p&gt;
+
+&lt;p&gt;だが、同じディレクトリに&lt;code&gt;__init__.py&lt;/code&gt;がある。これはディレクトリのパッケージを初期化するファイル。&lt;/p&gt;
+
+&lt;p&gt;これが存在するということは、opencvというディレクトリがパッケージであるということなのだ。なので&lt;code&gt;opnecv&lt;/code&gt;としてimportすれば使える。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ python
+Python 2.5.2 (r252:60911, Jan 24 2010, 14:53:14)
+[GCC 4.3.2] on linux2
+Type &amp;quot;help&amp;quot;, &amp;quot;copyright&amp;quot;, &amp;quot;credits&amp;quot; or &amp;quot;license&amp;quot; for more information.
+&amp;gt;&amp;gt;&amp;gt; import opencv
+&amp;gt;&amp;gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ただ調べてみて分かったのは、&lt;code&gt;import opencv&lt;/code&gt;しかできないのは古いパッケージで、新しいパッケージではpythonのパス以下に&lt;code&gt;cv.so&lt;/code&gt;があり、&lt;code&gt;import cv&lt;/code&gt;が使えるようだった&amp;hellip;。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;import cvでokバージョン&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ dpkg -s python-opencv |grep Version
+Version: 2.1.0-3+squeeze1
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;import cv だめだったバージョン&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ dpkg -s python-opencv|grep Version
+Version: 1.0.0-6.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>各種フィルタの精度評価の指標について</title>
+      <link>http://kamatari.github.io/2014/11/06/indicators-of-the-filter-accuracy/</link>
+      <pubDate>Thu, 06 Nov 2014 23:54:29 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/11/06/indicators-of-the-filter-accuracy/</guid>
+      <description>
+
+&lt;p&gt;スパムメールフィルタや画像フィルタなどを使って、OK/NGを判定する仕組みを作ろうとした時に、その精度を数値化する必要がある。
+フィルタが有用かどうかを判断したり、改良するときの指標になるからだ。&lt;/p&gt;
+
+&lt;h2 id=&#34;正解率-不正解率-という指標:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;正解率(不正解率)という指標&lt;/h2&gt;
+
+&lt;p&gt;正解率とは、正しく判定出来た数を、全ての試行の数で割ったものである。
+正解率99%のフィルタと聞くと有用に思えるが、単純に正解率だけを見て採用するのは危険な場合がある。&lt;/p&gt;
+
+&lt;p&gt;例えば、フィルタがスパム判定したメールを自動的に削除するメールシステムがあるとする。
+2種類のフィルタ、AとBのどちらが適切か知るために1000件のメールを処理して正解率を算出した。&lt;/p&gt;
+
+&lt;h4 id=&#34;フィルタa-1000件処理した結果:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;フィルタA 1000件処理した結果&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;スパム判定したメールは100件&lt;/li&gt;
+&lt;li&gt;スパム判定したメールのうち、10件はスパムではなかった&lt;/li&gt;
+&lt;li&gt;スパムでないと判定したメールは、全て正しかった&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;フィルタAは間違えた10件を除いた990件が正解だったので、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;正解率 = 990/1000 * 100 = 99%
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;フィルタb-1000件処理した結果:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;フィルタB 1000件処理した結果&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;スパム判定したメールは10件&lt;/li&gt;
+&lt;li&gt;スパム判定したメールは全てスパムだった&lt;/li&gt;
+&lt;li&gt;スパムでないと判定したメールの中に、スパムが80件存在した&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;フィルタBは間違えた80件を除いた920件が正解だったので、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;正解率 = 920/1000 * 100 = 92%
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;今回のメールシステムでは誤った判定をするとメールが削除されてしまうので、正解率は低いがスパム判定を間違えないフィルタBを採用するだろう。&lt;/p&gt;
+
+&lt;h2 id=&#34;適合率と再現率という指標:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;適合率と再現率という指標&lt;/h2&gt;
+
+&lt;p&gt;前項でフィルタBを選んだ判断基準は、&amp;rdquo;適合率&amp;rdquo;と&amp;rdquo;再現率&amp;rdquo;という指標を使い数値で比較することができる。&lt;/p&gt;
+
+&lt;h4 id=&#34;適合率とは:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;適合率とは&lt;/h4&gt;
+
+&lt;p&gt;判定結果の正しさで、スパムであると判定した中に正解がどの程度あるか。&lt;/p&gt;
+
+&lt;h4 id=&#34;再現率とは:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;再現率とは&lt;/h4&gt;
+
+&lt;p&gt;判定結果の網羅性で、実際に存在したスパムをどの程度見つけることができるか。&lt;/p&gt;
+
+&lt;h4 id=&#34;実際に計算してみる:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;実際に計算してみる&lt;/h4&gt;
+
+&lt;p&gt;まず、フィルタでスパム判定した結果を4つのグループに分ける。&lt;/p&gt;
+
+&lt;p&gt;(※ハムはスパムの逆の意)&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;スパムと判定して、スパムだったもの (True Positive)&lt;/li&gt;
+&lt;li&gt;スパムと判定したが、ハムだったもの (False Positive)&lt;/li&gt;
+&lt;li&gt;ハムと判定したが、スパムだったもの (False Negative)&lt;/li&gt;
+&lt;li&gt;ハムと判定して、ハムだったもの (True Negative)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;頭にTrueとついているものが判定として正解で、逆がFalseになる。&lt;/p&gt;
+
+&lt;h4 id=&#34;計算式:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;計算式&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;適合率 = TP / (TP+FP)
+再現率 = TP / (TP+FN)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これを先ほどのフィルタでそれぞれで計算すると&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;フィルタA&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;適合率 = 90 / (90+10) = 90%&lt;/li&gt;
+&lt;li&gt;再現率 = 90 / (90+0)  = 100%&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;フィルタB&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;適合率 = 10 / (10+0)  = 100%&lt;/li&gt;
+&lt;li&gt;再現率 = 10 / (10+80) = 11.1%&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;つまり、先ほどは適合率(判定結果の正しさ)を見て、フィルタBを選択したといえる。&lt;/p&gt;
+
+&lt;h2 id=&#34;フィルタを改良する時に見る指標について:6bab3065c04214f2d54a2d141cbf72d5&#34;&gt;フィルタを改良する時に見る指標について&lt;/h2&gt;
+
+&lt;p&gt;適合率と再現率をともに高めていくことが、よりよいフィルタにしていくことになるが、これら二つはトレードオフの関係になっている。&lt;/p&gt;
+
+&lt;p&gt;スパムメールフィルタの例では、間違える確率を下げるために条件をゆるくしていくと、ハムをスパムと間違えることは少なくなるが、実際のスパムをスパムとして判定出来る確率も下がっていくだろう。&lt;/p&gt;
+
+&lt;p&gt;目的に応じて、バランスを取りながら数値を見ていくことになるが、そのバランスを取る時にF値という指標を使うことがある。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;F値 = 2 x 適合率 x 再現率 /(適合率+再現率)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;それぞれの指標を見ながら、精度を高めていくことが重要である。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;参考にしたサイト：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://d.hatena.ne.jp/Zellij/20120214/p1&#34;&gt;http://d.hatena.ne.jp/Zellij/20120214/p1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.baru-san.net/archives/141&#34;&gt;http://www.baru-san.net/archives/141&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>gif画像をopencvで扱う</title>
+      <link>http://kamatari.github.io/2014/10/11/how-to-use-gif-on-opencv/</link>
+      <pubDate>Sat, 11 Oct 2014 12:07:14 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/10/11/how-to-use-gif-on-opencv/</guid>
+      <description>
+
+&lt;h2 id=&#34;opencvはgifに対応してなかった:03b7fc6f6a8e36424eeb697a92d4fbd7&#34;&gt;opencvはgifに対応してなかった&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import cv
+img = cv.LoadImage(&#39;sample.gif&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;こんな感じでcv.LoadImageでgif画像を読み込もうとすると以下のようなエラーが出る&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python test3.py sample.gif
+Traceback (most recent call last):
+  File &amp;quot;test3.py&amp;quot;, line 2, in &amp;lt;module&amp;gt;
+    img = cv.LoadImage(&#39;sample.gif&#39;)
+IOError: [Errno 2] No such file or directory: &#39;sample.gif&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;表題の通りにopencv-でgifを使うには:03b7fc6f6a8e36424eeb697a92d4fbd7&#34;&gt;表題の通りにopencv でgifを使うには&lt;/h2&gt;
+
+&lt;p&gt;cv2を使う。エラーはでない。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import cv2
+img = cv2.imread(&#39;sample.gif&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;しかし、世の中には古い環境などで&lt;code&gt;import cv&lt;/code&gt;しか使えないつらい時がある。
+&lt;a href=&#34;http://opencv.jp/opencv-2svn/py/cookbook.html#pil-image-opencv&#34;&gt;opencvのマニュアル&lt;/a&gt;を見ると、PIL Imageからopencvに変換するにはというのがあって、これを利用してみる&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;from PIL import Image
+import cv
+sample = Image.open(&#39;sample.gif&#39;)
+cv_im = cv.CreateImageHeader(sample.size, cv.IPL_DEPTH_8U, 3)
+cv.SetData(cv_im, sample.tostring())
+print sample.size, cv.GetSize(cv_im)
+(868, 600) (868, 600)
+&amp;gt;&amp;gt;&amp;gt; print sample.tostring() == cv_im.tostring()
+False
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;gif画像のsizeは取得できたが、同じデータに変換は出来なかった&lt;/p&gt;
+
+&lt;h2 id=&#34;gifをcvでどうしても取り扱いたかった時どうしたか:03b7fc6f6a8e36424eeb697a92d4fbd7&#34;&gt;gifをcvでどうしても取り扱いたかった時どうしたか&lt;/h2&gt;
+
+&lt;p&gt;gifをjpgに変換することで逃げた ┗(^o^ )┓三&lt;/p&gt;
+
+&lt;p&gt;以下のようにPILを使って、&lt;code&gt;sample.gif&lt;/code&gt;をjpgに変換して&lt;code&gt;convertfromgif.jpg&lt;/code&gt;として保存したものを利用するようにした&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from PIL import Image
+im = Image.open(&#39;sample.gif&#39;).convert(&#39;RGB&#39;).save(&#39;convertfromgif.jpg&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>図形の輪郭座標と面積から円形度を計算する</title>
+      <link>http://kamatari.github.io/2014/10/07/calculate-degree-of-circularity/</link>
+      <pubDate>Tue, 07 Oct 2014 21:03:48 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/10/07/calculate-degree-of-circularity/</guid>
+      <description>
+
+&lt;h1 id=&#34;円形度とは:9c62e37884b042fff1454a13469e8d4d&#34;&gt;円形度とは&lt;/h1&gt;
+
+&lt;p&gt;円っぽさを定量的にはかるための尺度で、1.0に近いほど円らしいとする&lt;/p&gt;
+
+&lt;h2 id=&#34;円形度を求める理由:9c62e37884b042fff1454a13469e8d4d&#34;&gt;円形度を求める理由&lt;/h2&gt;
+
+&lt;p&gt;画像処理で対象の画像からいろんな形の図形が抽出できたとき、目的とするオブジェクトかどうか判定するのに円形度を使うことができる&lt;/p&gt;
+
+&lt;h2 id=&#34;計算方法:9c62e37884b042fff1454a13469e8d4d&#34;&gt;計算方法&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;円形度 = 4π * S/L^2&lt;/code&gt; (S = 面積, L = 図形の周囲長)&lt;/p&gt;
+
+&lt;h2 id=&#34;円形度の計算の説明:9c62e37884b042fff1454a13469e8d4d&#34;&gt;円形度の計算の説明&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;図形を円と仮定して r = 半径とすると
+面積 S = π * r^2
+周囲長 L = 2πr
+
+4π * S/L^2 の公式のS, Lをrで置き換える
+
+4π * πr^2/(2πr)^2
+
+これを計算すると
+4π * S/L^2 = 1
+
+正円の時,1になる
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;opencvを使って-円形度を計算する:9c62e37884b042fff1454a13469e8d4d&#34;&gt;opencvを使って、円形度を計算する&lt;/h2&gt;
+
+&lt;p&gt;pythonでこんな感じ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import cv2
+import numpy as np
+# contourは輪郭点のリスト cv2.findContours
+# areaは図形の面積 cv2.contourArea
+
+def calcCircleLevel (contour, area):
+    perimeter = cv2.arcLength(contour, True)
+    circle_level = 4.0 * np.pi * area / (perimeter * perimeter); # perimeter = 0 のとき気をつける
+    return circle_level
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
   </channel>
 </rss>

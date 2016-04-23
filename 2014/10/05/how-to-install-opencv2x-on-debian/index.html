@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>debianにopencv2.xをinstallした話 &middot; kamatari</title>
+        <meta name="description" content="">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.15" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/normalize.css">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/highlight.css">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-41886618-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="Lifering" href="http://kamatari.github.io/">Lifering</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://kamatari.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                            <a class="button-square button-social hint--top" data-hint="Twitter" title="Twitter" href="https://twitter.com/iratamak">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/kamatari">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="About" href="/about/">About</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">debianにopencv2.xをinstallした話</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    
+
+<h1 id="opencv-2-4-9をmakeする作戦で進める:9b54f3de641fff8054d8bd7c0fd655c5">opencv 2.4.9をmakeする作戦で進める</h1>
+
+<p>debianは空の状態から作業開始.まずはupdateと必要なものをinstall</p>
+
+<pre><code class="language-bash">$ sudo apt-get -yV update
+$ sudo apt-get -yV upgrade
+$ sudo apt-get install cmake
+$ sudo apt-get install g++
+$ sudo apt-get install gcc
+$ sudo apt-get install unzip
+</code></pre>
+
+<p>次にopencvを落としてきて、<code>cmake</code> -&gt; <code>make</code></p>
+
+<pre><code class="language-bash">$ wget http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/2.4.9/opencv-2.4.9.zip
+$ unzip opencv-2.4.9.zip
+$ cd opencv-2.4.9/
+$ mkdir release
+$ cd release
+$ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_NEW_PYTHON_SUPPORT=ON -D BUILD_EXAMPLES=ON ..
+$ make
+</code></pre>
+
+<p>そうすると、以下のようなログを出して失敗</p>
+
+<pre><code class="language-bash">・
+・
+・
+Linking CXX static library ../../lib/libopencv_ocl_pch_dephelp.a
+[ 67%] Built target opencv_ocl_pch_dephelp
+Scanning dependencies of target pch_Generate_opencv_ocl
+[ 67%] Generating precomp.hpp
+[ 67%] Generating precomp.hpp.gch/opencv_ocl_RELEASE.gch
+[ 68%] Built target pch_Generate_opencv_ocl
+[ 68%] Generating opencl_kernels.cpp, opencl_kernels.hpp
+CMake Error at /home/vagrant/opencv-2.4.9/cmake/cl2cpp.cmake:50 (string):
+  string does not recognize sub-command MD5
+   
+   make[2]: *** [modules/ocl/opencl_kernels.cpp] Error 1
+   make[1]: *** [modules/ocl/CMakeFiles/opencv_ocl.dir/all] Error
+</code></pre>
+
+<p>MD5をrecognizeできないと言うので、md5のパッケージを入れてから再度makeする</p>
+
+<pre><code class="language-bash">$ sudo apt-get install isomd5sum
+$ make
+</code></pre>
+
+<p>だが、ログのメッセージは変わらず失敗</p>
+
+<p>その後、cmakeのバージョンが古いため発生することを知る</p>
+
+<h2 id="cmakeの新しいバージョンをinstall:9b54f3de641fff8054d8bd7c0fd655c5">cmakeの新しいバージョンをinstall</h2>
+
+<pre><code class="language-bash"># 失敗したcmakeのversion
+$ cmake --version
+cmake version 2.8.2
+</code></pre>
+
+<pre><code class="language-bash">$ cd
+$ mkdir cmakebuild
+$ cd cmakebuild/
+$ wget http://www.cmake.org/files/v2.8/cmake-2.8.11.2.tar.gz
+$ tar xvzf cmake-2.8.11.2.tar.gz
+$ cd cmake-2.8.11.2/
+$ ./configure
+$ make
+$ sudo make install
+</code></pre>
+
+<p>cmakeのversionをあげたので、再びopencvのcmakeから行う</p>
+
+<pre><code class="language-bash">$ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_NEW_PYTHON_SUPPORT=ON -D BUILD_EXAMPLES=ON ..
+</code></pre>
+
+<p>そしてそのログ</p>
+
+<pre><code class="language-bash">-- The CXX compiler identification is GNU 4.4.5
+-- The C compiler identification is GNU 4.4.5
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detected version of GNU GCC: 44 (404)
+-- Could NOT find ZLIB (missing:  ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
+-- Could NOT find TIFF (missing:  TIFF_LIBRARY TIFF_INCLUDE_DIR)
+-- Could NOT find JPEG (missing:  JPEG_LIBRARY JPEG_INCLUDE_DIR)
+-- Found JPEG: libjpeg
+-- Could NOT find Jasper (missing:  JASPER_LIBRARIES JASPER_INCLUDE_DIR)
+-- Found ZLIB: zlib (found version &quot;1.2.7&quot;)
+-- Could NOT find PNG (missing:  PNG_LIBRARY PNG_PNG_INCLUDE_DIR)
+-- Looking for linux/videodev.h
+-- Looking for linux/videodev.h - found
+-- Looking for linux/videodev2.h
+-- Looking for linux/videodev2.h - found
+-- Looking for sys/videoio.h
+-- Looking for sys/videoio.h - not found
+-- Looking for libavformat/avformat.h
+-- Looking for libavformat/avformat.h - not found
+-- Looking for ffmpeg/avformat.h
+-- Looking for ffmpeg/avformat.h - not found
+-- Found PythonInterp: /usr/bin/python2.6 (found suitable version &quot;2.6.6&quot;, minimum required is &quot;2.0&quot;)
+-- Could NOT find PythonLibs (missing:  PYTHON_LIBRARIES PYTHON_INCLUDE_DIRS) (Required is exact version &quot;2.6.6&quot;)                                                                                                                                                    [87/1904]
+Traceback (most recent call last):
+  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;
+  ImportError: No module named numpy.distutils
+  -- Could NOT find JNI (missing:  JAVA_AWT_LIBRARY JAVA_JVM_LIBRARY JAVA_INCLUDE_PATH JAVA_INCLUDE_PATH2 JAVA_AWT_INCLUDE_PATH)
+  ・
+  ・
+  ・
+</code></pre>
+
+<h2 id="ログから-足りないらしいものをいくつか入れる:9b54f3de641fff8054d8bd7c0fd655c5">ログから、足りないらしいものをいくつか入れる</h2>
+
+<pre><code class="language-bash">$ sudo apt-get install python-numpy
+$ sudo apt-get install python-dev
+$ easy_install pip
+$ ln -sv /usr/local/bin/pipxx /usr/bin/pip
+$ pip install pip --upgrade
+</code></pre>
+
+<p>もう一度 <code>cmake</code> -&gt; <code>make</code></p>
+
+<pre><code class="language-bash">$ cd opencv-2.4.9/release
+$ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_NEW_PYTHON_SUPPORT=ON -D BUILD_EXAMPLES=ON ..
+$ make
+・
+・
+・
+Scanning dependencies of target example_ocl_surf_matcher
+[ 99%] Building CXX object samples/ocl/CMakeFiles/example_ocl_surf_matcher.dir/surf_matcher.cpp.o
+Linking CXX executable ../../bin/ocl-example-surf_matcher
+[ 99%] Built target example_ocl_surf_matcher
+Scanning dependencies of target example_ocl_tvl1_optical_flow
+[100%] Building CXX object samples/ocl/CMakeFiles/example_ocl_tvl1_optical_flow.dir/tvl1_optical_flow.cpp.o
+Linking CXX executable ../../bin/ocl-example-tvl1_optical_flow
+[100%] Built target example_ocl_tvl1_optical_flow
+</code></pre>
+
+<p>ようやくうまくいったので、インストール</p>
+
+<pre><code class="language-bash">$ sudo make install
+</code></pre>
+
+<h2 id="最後にcv2をimportできるかを確認:9b54f3de641fff8054d8bd7c0fd655c5">最後にcv2をimportできるかを確認</h2>
+
+<pre><code class="language-bash">$ python
+Python 2.6.6 (r266:84292, Dec 26 2010, 22:31:48)
+[GCC 4.4.5] on linux2
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt; import cv2
+&gt;&gt;&gt;
+</code></pre>
+
+<p>OK! おしまい</p>
+
+<h2 id="蛇足:9b54f3de641fff8054d8bd7c0fd655c5">蛇足</h2>
+
+<p>以下のように<code>import cv2</code>が失敗するときは、<code>/usr/local/lib/python2.6/site-packages/</code>の下に<code>cv2.so</code>が無いから。</p>
+
+<pre><code class="language-bash">$ python                                                                                                                                                          []
+&gt;&gt;&gt; import cv2
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  ImportError: No module named cv2
+</code></pre>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        <a class="icon-twitter" href="http://twitter.com/share?text=debian%e3%81%abopencv2.x%e3%82%92install%e3%81%97%e3%81%9f%e8%a9%b1&url=http%3a%2f%2fkamatari.github.io%2f2014%2f10%2f05%2fhow-to-install-opencv2x-on-debian%2f"
+            onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+            <i class="fa fa-twitter"></i>
+            <span class="hidden">Twitter</span>
+        </a>
+
+        <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fkamatari.github.io%2f2014%2f10%2f05%2fhow-to-install-opencv2x-on-debian%2f"
+            onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+            <i class="fa fa-facebook"></i>
+            <span class="hidden">Facebook</span>
+        </a>
+
+        <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fkamatari.github.io%2f2014%2f10%2f05%2fhow-to-install-opencv2x-on-debian%2f"
+           onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+           <i class="fa fa-google-plus"></i>
+            <span class="hidden">Google+</span>
+        </a>
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="Lifering" href="http://kamatari.github.io/">Lifering</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2016 / Powered by <a href="http://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://kamatari.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+        <script src="http://kamatari.github.io/js/jquery.fitvids.js"></script>
+        <script src="http://kamatari.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

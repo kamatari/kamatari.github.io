@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Raspberrypi on Lifering</title>
+    <link>http://kamatari.github.io/categories/raspberrypi/</link>
+    <description>Recent content in Raspberrypi on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Sun, 11 Jan 2015 16:43:31 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/raspberrypi/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>adafruitのTFT2.8液晶セットアップ方法</title>
+      <link>http://kamatari.github.io/2015/01/11/how-to-setup-adafruit-tft2-dot-8-touchscreen/</link>
+      <pubDate>Sun, 11 Jan 2015 16:43:31 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2015/01/11/how-to-setup-adafruit-tft2-dot-8-touchscreen/</guid>
+      <description>
+
+&lt;h1 id=&#34;これ:768e8da07cec207a6c75c94a4ab24819&#34;&gt;これ&lt;/h1&gt;
+
+&lt;p&gt;すごくいいです。
+&lt;div class=&#34;amazlet-box&#34; style=&#34;margin-bottom:0px;&#34;&gt;&lt;div class=&#34;amazlet-image&#34; style=&#34;float:left;margin:0px 12px 1px 0px;&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/B00KD6X7OW/kamiki-22/ref=nosim/&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51zgGzvmZ6L._SL160_.jpg&#34; alt=&#34;Raspberry Pi用2.8インチ　TFTモニタ特別セット&#34; style=&#34;border: none;&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-info&#34; style=&#34;line-height:120%; margin-bottom: 10px&#34;&gt;&lt;div class=&#34;amazlet-name&#34; style=&#34;margin-bottom:10px;line-height:120%&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/B00KD6X7OW/kamiki-22/ref=nosim/&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;Raspberry Pi用2.8インチ　TFTモニタ特別セット&lt;/a&gt;&lt;div class=&#34;amazlet-powered-date&#34; style=&#34;font-size:80%;margin-top:5px;line-height:120%&#34;&gt;posted with &lt;a href=&#34;http://www.amazlet.com/&#34; title=&#34;amazlet&#34; target=&#34;_blank&#34;&gt;amazlet&lt;/a&gt; at 15.01.11&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-detail&#34;&gt;TechShare &lt;br /&gt;売り上げランキング: 5,355&lt;br /&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-sub-info&#34; style=&#34;float: left;&#34;&gt;&lt;div class=&#34;amazlet-link&#34; style=&#34;margin-top: 5px&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/B00KD6X7OW/kamiki-22/ref=nosim/&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;Amazon.co.jpで詳細を見る&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-footer&#34; style=&#34;clear: left&#34;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;おもな素晴らしいところ:768e8da07cec207a6c75c94a4ab24819&#34;&gt;おもな素晴らしいところ&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;raspberry piに供給してる電源から、液晶の電源もとれる(電源ひとつだけでok)&lt;/li&gt;
+&lt;li&gt;HDMIをつなげなくても、raspberrypiのconsole画面を見ることができる&lt;/li&gt;
+&lt;li&gt;物理的なボタンでshutdown/bootができるようになる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;動かすまでに最低限ひつようなこと:768e8da07cec207a6c75c94a4ab24819&#34;&gt;動かすまでに最低限ひつようなこと&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;液晶とGPIOピンヘッダのハンダ付け&lt;/li&gt;
+&lt;li&gt;raspberrypiでソフトウェアのセットアップ&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;(追記: resistiveタイプとcapacitiveタイプで設定方法違うので注意)&lt;/p&gt;
+
+&lt;h2 id=&#34;ソフトのsetup方法はふたつある:768e8da07cec207a6c75c94a4ab24819&#34;&gt;ソフトのsetup方法はふたつある&lt;/h2&gt;
+
+&lt;h3 id=&#34;その1-installerを落としてきて実行:768e8da07cec207a6c75c94a4ab24819&#34;&gt;その1 installerを落としてきて実行&lt;/h3&gt;
+
+&lt;p&gt;以下コマンドでインストールできる。最後に、raspiを起動した時に液晶にconsole画面を表示するかと、取り付けたボタンでshutdownするか聞かれる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ wget http://adafru.it/pitftsh
+$ mv pitftsh pitft.sh
+$ chmod +x pitft.sh
+$ sudo ./pitft.sh -t 28r -r  #resistiveタイプ
+$ sudo ./pitft.sh -t 28c -r  #capacitiveタイプ
+$ sudo reboot
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以上。&lt;a href=&#34;https://learn.adafruit.com/adafruit-pitft-28-inch-resistive-touchscreen-display-raspberry-pi/easy-install&#34;&gt;公式サイトの説明はこちら&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;その2-真心を込めたコマンド手入力で設定:768e8da07cec207a6c75c94a4ab24819&#34;&gt;その2 真心を込めたコマンド手入力で設定&lt;/h3&gt;
+
+&lt;p&gt;心を込めたい(細かい設定がしたい)方はこちらで。&lt;/p&gt;
+
+&lt;p&gt;必要なdebファイルを落としてくる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ cd ~
+$ wget http://adafruit-download.s3.amazonaws.com/libraspberrypi-bin-adafruit.deb
+$ wget http://adafruit-download.s3.amazonaws.com/libraspberrypi-dev-adafruit.deb
+$ wget http://adafruit-download.s3.amazonaws.com/libraspberrypi-doc-adafruit.deb
+$ wget http://adafruit-download.s3.amazonaws.com/libraspberrypi0-adafruit.deb
+$ wget http://adafruit-download.s3.amazonaws.com/raspberrypi-bootloader-adafruit-20140917-1.deb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;インストール&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo dpkg -i -B *.deb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2013年の9月に出たバージョンより新しいraspbian使ってる人は、99-fbturbo.confを動かしとく必要がある&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo mv /usr/share/X11/xorg.conf.d/99-fbturbo.conf ~
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;再起動&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo reboot
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;moduleを入れて、xwindowを起動してtft液晶に表示 (※追記 resistiveタイプとcapacitiveタイプでmoduleが違う）&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;resistiveタイプ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo modprobe spi-bcm2708
+$ sudo modprobe fbtft_device name=adafruitts rotate=90
+$ export FRAMEBUFFER=/dev/fb1
+$ startx
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;capacitiveタイプ(※追記)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo modprobe spi-bcm2708
+$ sudo modprobe i2c-bcm2708
+$ sudo modprobe fbtft_device name=adafruitct28 rotate=90
+$ export FRAMEBUFFER=/dev/fb1
+$ startx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;表示されたら成功。さきほどのmoduleを毎回起動するコマンドを打たなくて済むように、etc modulesを編集&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;resistiveタイプ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo vim /etc/modules
+spi-bcm2708
+fbtft_device
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;capacitiveタイプ (※追記)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo vim /etc/modules
+i2c-bcm2708
+spi-bcm2708
+fbtft_device
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;modprobe fileを作って、設定を書く。そして再起動&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo vim /etc/modprobe.d/adafruit.conf
+options fbtft_device name=adafruitrt28 rotate=90 frequency=32000000
+$ sudo reboot
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;touchscreenのcallibration用のファイル作成:768e8da07cec207a6c75c94a4ab24819&#34;&gt;touchscreenのcallibration用のファイル作成&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;resistiveタイプ
+``` bash
+$ sudo mkdir /etc/X11/xorg.conf.d
+$ sudo vim /etc/X11/xorg.conf.d/99-calibration.conf&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Section &amp;ldquo;InputClass&amp;rdquo;
+        Identifier      &amp;ldquo;calibration&amp;rdquo;
+        MatchProduct    &amp;ldquo;stmpe-ts&amp;rdquo;
+        Option  &amp;ldquo;Calibration&amp;rdquo;   &amp;ldquo;3800 200 200 3800&amp;rdquo;
+        Option  &amp;ldquo;SwapAxes&amp;rdquo;      &amp;ldquo;1&amp;rdquo;
+EndSection&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
++ capacitiveタイプ (※追記)
+``` bash
+$ sudo mkdir /etc/X11/xorg.conf.d
+$ sudo vim /etc/X11/xorg.conf.d/99-captouch.conf
+
+Section &amp;quot;InputClass&amp;quot;
+         Identifier &amp;quot;captouch&amp;quot;
+         MatchProduct &amp;quot;ft6x06_ts&amp;quot;
+         Option &amp;quot;SwapAxes&amp;quot; &amp;quot;1&amp;quot;
+         Option &amp;quot;InvertY&amp;quot; &amp;quot;1&amp;quot;
+         Option &amp;quot;Calibration&amp;quot; &amp;quot;0 320 0 240&amp;quot;
+EndSection
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;xwindowを液晶で見るために毎回FRAMEBUFFERをexportしなくてすむように設定を追記&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo vim ~/.profile
+export FRAMEBUFFER=/dev/fb1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;ここからtouchscreenの設定:768e8da07cec207a6c75c94a4ab24819&#34;&gt;ここからtouchscreenの設定&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;resistiveタイプ
+&lt;code&gt;bash
+$ sudo vim /etc/udev/rules.d/95-stmpe.rules
+SUBSYSTEM==&amp;quot;input&amp;quot;, ATTRS{name}==&amp;quot;stmpe-ts&amp;quot;, ENV{DEVNAME}==&amp;quot;*event*&amp;quot;, SYMLINK+=&amp;quot;input/touchscreen&amp;quot;
+&lt;/code&gt;
+module stmpe_tsをremoveして再install&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo rmmod stmpe_ts; sudo modprobe stmpe_ts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;touchscreenができていることを確認 (うまく起動出来てないと、存在しない)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ls -l /dev/input/touchscreen
+drwxrwxrwx  1 root  root 6 Nov 12 27 15:04 /dev/input/touchscreen -&amp;gt; event2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;capacitiveタイプ(※追記)
+&lt;code&gt;bash
+$ sudo vim /etc/udev/rules.d/95-ft6206.rules
+SUBSYSTEM==&amp;quot;input&amp;quot;, ATTRS{name}==&amp;quot;ft6x06_ts&amp;quot;, ENV{DEVNAME}==&amp;quot;*event*&amp;quot;, SYMLINK+=&amp;quot;input/touchscreen&amp;quot;
+&lt;/code&gt;
+capacitiveタイプでは、module &lt;code&gt;ft6x06_ts&lt;/code&gt;を使う
+&lt;code&gt;bash
+$ sudo rmmod ft6x06_ts; sudo modprobe ft6x06_ts
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;touchscreenをテストしてみる:768e8da07cec207a6c75c94a4ab24819&#34;&gt;touchscreenをテストしてみる&lt;/h4&gt;
+
+&lt;p&gt;test用のmoduleをinstallして、実際にタッチしてみると入力が確認出来る&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo apt-get install evtest tslib libts-bin
+$ sudo evtest /dev/input/touchscreen
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;rotationを変えたりした後、callibrationを自動で行うためのツールがある&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ wget https://github.com/adafruit/PiTFT_Extras/raw/master/pitft_touch_cal.py
+$ sudo mkdir /etc/X11/xorg.conf.d/
+$ chmod +x pitft_touch_cal.py
+$ sudo ./pitft_touch_cal.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;manualで設定するcallibrationツールを利用することも出来る&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo TSLIB_FBDEVICE=/dev/fb1 TSLIB_TSDEVICE=/dev/input/touchscreen ts_calibrate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;touchscreenを使って線を描画するテストができる&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo TSLIB_FBDEVICE=/dev/fb1 TSLIB_TSDEVICE=/dev/input/touchscreen ts_test
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以上。&lt;a href=&#34;https://learn.adafruit.com/adafruit-pitft-28-inch-resistive-touchscreen-display-raspberry-pi/software-installation&#34;&gt;公式のスクリーンショット付き説明&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;はまったところ:768e8da07cec207a6c75c94a4ab24819&#34;&gt;はまったところ&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;液晶は表示出来るけど、touchscreenが反応しない&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;dmesgでだめっぽいの出てる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt; $ dmesg |grep stmpe-spi
+[   12.464470] stmpe-spi spi0.1: unknown chip id: 0x0
+[   12.482715] stmpe-spi: probe of spi0.1 failed with error_log(&#39; &#39; . var_export(, true)) -22
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;installer を使わずにやっていると、stmpe_tsをremoveしようとした時に、not currently loadedと言われる。これは、stmpeが動いてないからぽい。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo rmmod stmpe_ts; sudo modprobe stmpe_ts
+Error: Module stmpe_ts is not currently loaded
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;解決編:768e8da07cec207a6c75c94a4ab24819&#34;&gt;解決編&lt;/h2&gt;
+
+&lt;p&gt;いろいろ試してうまくいかず、きっとこれ不良品だなadafruitめ！と思ったが、なんのことはなかった。
+このtft2.8サイズの液晶には、静電容量方式のタッチパネルと、加圧を検知する抵抗膜方式のタッチパネルの2種類が存在したのだ。知らなかった。そして、当然セットアップ方法が違う。正しく公式サイトの手順通りに設定したら、きちんとtouchscreen動きました。&lt;/p&gt;
+
+&lt;p&gt;adafruit 最高っス！&lt;/p&gt;
+
+&lt;h3 id=&#34;公式サイト:768e8da07cec207a6c75c94a4ab24819&#34;&gt;公式サイト&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;静電容量方式のセットアップ (capacitive touchscreen)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://learn.adafruit.com/adafruit-2-8-pitft-capacitive-touch/software-install&#34;&gt;adafruit-2-8-pitft-capacitive-touchscreen&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;抵抗膜方式のセットアップ(resistive touchscreen)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://learn.adafruit.com/adafruit-pitft-28-inch-resistive-touchscreen-display-raspberry-pi/software-installation&#34;&gt;adafruit-pitft-28-inch-resistive-touchscreen&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;このブログの記事をさかのぼって、capacitiveの時の設定方法を追記しておいた。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>raspberry piで初めにやってみたこと</title>
+      <link>http://kamatari.github.io/2015/01/04/setting-lists-of-raspberry-pi/</link>
+      <pubDate>Sun, 04 Jan 2015 19:08:46 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2015/01/04/setting-lists-of-raspberry-pi/</guid>
+      <description>
+
+&lt;h1 id=&#34;raspberry-pi-を手に入れた:a34e14c254c276ac39573d5d58faf6f6&#34;&gt;raspberry pi を手に入れた&lt;/h1&gt;
+
+&lt;p&gt;実はarduinoも持っているのだけれど、どう作るとなにが実現できるのか自分にはイメージがわきづらくて、ブレッドボードになんとなく刺したLEDを点滅させたきりになっていた。&lt;/p&gt;
+
+&lt;p&gt;そういう意味では、raspberry piはlinuxなので、サーバーとして使ったり、最初からついてる入出力端子から作ってみたい何かを想像しやすい。いろいろ試したので、今までにやったことをひとまずまとめておく。&lt;/p&gt;
+
+&lt;h1 id=&#34;osのinstall:a34e14c254c276ac39573d5d58faf6f6&#34;&gt;osのinstall&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raspberrypi.org/downloads/&#34;&gt;raspberry piの公式サイト&lt;/a&gt;から、NOOBSなら内容をSDカードにコピー。
+SDカードをraspberry piに刺したあと、電源を投入すればinstallできる。OSのimgをダウンロードした場合は、公式サイトの&lt;a href=&#34;http://www.raspberrypi.org/documentation/installation/installing-images/mac.md&#34;&gt;macでimgからinstallするまで&lt;/a&gt;を参照。&lt;/p&gt;
+
+&lt;p&gt;初回はraspi-configという設定画面がひらくので、キーボードとssh設定、あとtimezoneの設定とかをした。設定が完了したら再起動しておわり。&lt;/p&gt;
+
+&lt;p&gt;設定画面は以下のコマンドでも起動することができる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo raspi-config
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参考: &lt;a href=&#34;http://www.hiramine.com/physicalcomputing/raspberrypi/setup_firstbootandconfig.html&#34;&gt;raspberry pi 初回起動と初期設定&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;raspberry-piにmacからsshしてupdate:a34e14c254c276ac39573d5d58faf6f6&#34;&gt;raspberry piにmacからsshしてupdate&lt;/h1&gt;
+
+&lt;p&gt;家でraspberry piの画面を表示するには、Wii UのHDMIケーブルでテレビとつなげるしかなくて、全然コンパクトじゃなかった。&lt;/p&gt;
+
+&lt;p&gt;基板に有線LANを刺し、raspberry pi 上でifconfigしてip addressを確認。そのaddressにpiユーザーでsshすることで、mac上からraspiを操作出来るようになるのだ。記念にmacからupdateなどをしておく。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;@mac $ ssh pi@192.168.0.3
+@raspberry $ sudo apt-get update
+@raspberry $ sudo apt-get upgrade
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;無線lanの設定:a34e14c254c276ac39573d5d58faf6f6&#34;&gt;無線lanの設定&lt;/h1&gt;
+
+&lt;p&gt;buffaroのusb型無線LANを使って、有線LANを使わなくてもnetworkにつなげるように設定をする。
+raspberry piのusb端子にまずは無線LANを刺して、有線LANは抜いておく。&lt;/p&gt;
+
+&lt;p&gt;lsusbというコマンドがあって、これで先ほどのusb型無線LAN自体を認識できているか確認できる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ lsusb
+Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp.
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp.
+Bus 001 Device 004: ID 04d9:2011 Holtek Semiconductor, Inc.
+Bus 001 Device 005: ID 0411:01a2 BUFFALO INC. (formerly MelCo., Inc.) WLI-UC-GNM Wireless LAN Adapter [Ralink RT8070]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;無線LANをつなぐために以下二つファイルを編集する。名前の通り、networkのinterfaceと、無線LANの設定を行うファイルだ。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;/etc/network/interfaces&lt;/li&gt;
+&lt;li&gt;/etc/wpa_supplicant/wpa_supplicant.conf&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;まずは&lt;code&gt;/etc/network/interfaces&lt;/code&gt;のwifiの設定項目を編集する&lt;/p&gt;
+
+&lt;p&gt;defaultの設定部分をコメントアウトし、ipをmanualではなくdhcpを利用するようにするのと、wpa-roamではなくwpa-confにする。
+それと、起動した時に自動でつながるようにallow-hotplugも設定する。
+固定ipにしないのは、あとで名前で引けるようにするため。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;allow-hotplug wlan0
+iface wlan0 inet dhcp
+#iface wlan0 inet manual
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+#wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+iface default inet dhcp
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;次にアクセスポイントのssidとpasswordをwpa_passphraseコマンドに渡して、出力を設定ファイルに反映する。
+ssidを&lt;code&gt;raspberry&lt;/code&gt; パスワードを&lt;code&gt;raspi&lt;/code&gt;とすると&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo sh -c &amp;quot;wpa_passphrase raspberry raspi &amp;gt;&amp;gt; /etc/wpa_supplicant/wpa_supplicant.conf&amp;quot;
+$ sudo cat /etc/wpa_supplicant/wpa_supplicant.conf
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+network={
+    ssid=raspberry
+    #psk=raspi
+    psk=2b1d17284c5410ee5eaae7151290e9744af2182b0eb8af20dd4ebb415928f726
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;反映したあと直接編集するのだが、ここが非常にはまりやすいポイント。
+無線の方式や、設定項目によって、記載する内容が異なるので、自分の環境の方式を確認しながらやらなくてはならない。
+例えばwifiがANY接続禁止にしているときは、&lt;code&gt;scan_ssid=1&lt;/code&gt; を追記することが必要など。
+認証方式などはこのコマンドで確認出来る。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;@raskam $ sudo iwlist wlan0 scan
+・・・
+IE: WPA Version 1
+    Group Cipher : TKIP
+    Pairwise Ciphers (1) : TKIP
+    Authentication Suites (1) : PSK
+・・・
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(その他参考：&lt;a href=&#34;http://www.youchikurin.com/blog/2007/06/linuxlan_1.html&#34;&gt;Linuxで無線LAN&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;設定が出来たら最後にwifiインターフェイスの再起動をして、iwconfigを見たり、pingを打ってネットにつながったか確認。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo ifdown wlan0
+$ sudo ifup wlan0
+
+$ iwconfig
+$ ping 8.8.8.8
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;ホスト名でraspberry-piを指定してssh出来るようにする:a34e14c254c276ac39573d5d58faf6f6&#34;&gt;ホスト名でraspberry piを指定してssh出来るようにする&lt;/h1&gt;
+
+&lt;p&gt;これを設定することで、ip addressが変わっても、同じ環境にある限り接続できるので便利になる。
+これをAvahiを使って実現する。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ sudo apt-get install avahi-daemon
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ホスト名を&lt;code&gt;/etc/hostname&lt;/code&gt;に書くのと、&lt;code&gt;/etc/hosts/&lt;/code&gt;にも編集をしておく&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ vim /etc/hostname
+---
+raskam
+---
+$ vim /etc/hosts
+---
+127.0.0.1 raskam
+---
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで設定ができたら、再起動して、macからhostnameでssh接続が出来るかを確認する。無線LANで接続するときは、先ほど決めたhostnameに&lt;code&gt;.local&lt;/code&gt;をつけないと接続出来ないことに気をつける。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;@raspberry $ ps -aef |grep avahi
+avahi     2126     1  0 07:16 ?        00:00:00 avahi-daemon: running [raskam.local]
+avahi     2130  2126  0 07:16 ?        00:00:00 avahi-daemon: chroot helper
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;@mac $ ssh pi@raskam.local
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;raspbianのxwindowをmacで操作する:a34e14c254c276ac39573d5d58faf6f6&#34;&gt;raspbianのxwindowをmacで操作する&lt;/h1&gt;
+
+&lt;p&gt;raspberry pi 側でtightvncserverをinstallして、起動する&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get install tightvncserver
+$ vncserver :1 -geometry 1024x768 -depth 24
+そしてパスワードを設定
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;macでFinderからサーバーへ接続する項目で、vncとipと5901番portを以下のように入力すると、画面が表示されて操作ができるようになる&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;vnc://192.168.0.3:5901
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Golang Hugo on Lifering</title>
+    <link>http://kamatari.github.io/categories/golang-hugo/</link>
+    <description>Recent content in Golang Hugo on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Sun, 18 Jan 2015 15:33:26 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/golang-hugo/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>静的サイトエンジン HUGOの使い方</title>
+      <link>http://kamatari.github.io/2015/01/18/how-to-setup-hugo/</link>
+      <pubDate>Sun, 18 Jan 2015 15:33:26 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2015/01/18/how-to-setup-hugo/</guid>
+      <description>
+
+&lt;h1 id=&#34;インストール:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;インストール&lt;/h1&gt;
+
+&lt;p&gt;今回はmac環境で、brewを使う。golangが必要なので、それも一緒にいれる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ brew install go
+$ brew install hugo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;もちろん&lt;code&gt;go get&lt;/code&gt;でも落とせるし、ここから&lt;a href=&#34;https://github.com/spf13/hugo/releases&#34;&gt;https://github.com/spf13/hugo/releases&lt;/a&gt; ファイルをダウンロードでもOK&lt;/p&gt;
+
+&lt;h1 id=&#34;サイト作成:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;サイト作成&lt;/h1&gt;
+
+&lt;p&gt;つくりたいサイトのpathを入れて&lt;code&gt;hugo new site&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ hugo new site /path/to/site
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;新規ページ-新規blog投稿:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;新規ページ、新規blog投稿&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ hugo new about-page.md
+$ hugo new post/first_post.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;blogのテーマの取得:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;blogのテーマの取得&lt;/h1&gt;
+
+&lt;p&gt;公式に置いてあるテーマはここから確認できる。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/spf13/hugoThemes&#34;&gt;hugoThemes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;スクリーンショットが無くて、何がどれやらという感じなので、最初は全部取ってきてもいいかもしれない。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ git clone --recursive https://github.com/spf13/hugoThemes.git themes
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ちなみに個別に取ってきたいなら、themesディレクトリを作って、その下にgit cloneして持ってくる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ mkdir themes
+$ cd themes
+$ git clone url-of-theme-which-you-want
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;blog-をlocalで確認:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;blog をlocalで確認&lt;/h1&gt;
+
+&lt;p&gt;さきほど丸ごと持ってきたthemeの中から好きな名前を指定。記事の中で&lt;code&gt;draft = true&lt;/code&gt;になっている記事も表示するオプションをつけて、serverをたてる。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ hugo server --theme=redlounge --buildDrafts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;そうすると、コマンドのログにも出ているが、&lt;a href=&#34;http://localhost:1313&#34;&gt;http://localhost:1313&lt;/a&gt; から、構築したサイトの確認ができる。&lt;/p&gt;
+
+&lt;h1 id=&#34;github-pagesにhugoで作ったサイトの設置:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;github pagesにhugoで作ったサイトの設置&lt;/h1&gt;
+
+&lt;p&gt;ここに丁寧に書いてある:P &lt;a href=&#34;http://gohugo.io/tutorials/github-pages-blog/&#34;&gt;Hosting on GitHub Pages&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;感想:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;感想&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;hugoの素晴らしいところ
+
+&lt;ul&gt;
+&lt;li&gt;とにかくサイトの生成が速い&lt;/li&gt;
+&lt;li&gt;draft機能&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;その他
+
+&lt;ul&gt;
+&lt;li&gt;あんまり便利機能無いけど、まだv0.12なのでこれから&lt;/li&gt;
+&lt;li&gt;ドキュメントちゃんとある&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;いまの段階ではまだ、octopressを使おうかな。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

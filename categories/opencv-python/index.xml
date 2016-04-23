@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Opencv Python on Lifering</title>
+    <link>http://kamatari.github.io/categories/opencv-python/</link>
+    <description>Recent content in Opencv Python on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Sat, 11 Oct 2014 12:07:14 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/opencv-python/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>gif画像をopencvで扱う</title>
+      <link>http://kamatari.github.io/2014/10/11/how-to-use-gif-on-opencv/</link>
+      <pubDate>Sat, 11 Oct 2014 12:07:14 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/10/11/how-to-use-gif-on-opencv/</guid>
+      <description>
+
+&lt;h2 id=&#34;opencvはgifに対応してなかった:03b7fc6f6a8e36424eeb697a92d4fbd7&#34;&gt;opencvはgifに対応してなかった&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import cv
+img = cv.LoadImage(&#39;sample.gif&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;こんな感じでcv.LoadImageでgif画像を読み込もうとすると以下のようなエラーが出る&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python test3.py sample.gif
+Traceback (most recent call last):
+  File &amp;quot;test3.py&amp;quot;, line 2, in &amp;lt;module&amp;gt;
+    img = cv.LoadImage(&#39;sample.gif&#39;)
+IOError: [Errno 2] No such file or directory: &#39;sample.gif&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;表題の通りにopencv-でgifを使うには:03b7fc6f6a8e36424eeb697a92d4fbd7&#34;&gt;表題の通りにopencv でgifを使うには&lt;/h2&gt;
+
+&lt;p&gt;cv2を使う。エラーはでない。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import cv2
+img = cv2.imread(&#39;sample.gif&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;しかし、世の中には古い環境などで&lt;code&gt;import cv&lt;/code&gt;しか使えないつらい時がある。
+&lt;a href=&#34;http://opencv.jp/opencv-2svn/py/cookbook.html#pil-image-opencv&#34;&gt;opencvのマニュアル&lt;/a&gt;を見ると、PIL Imageからopencvに変換するにはというのがあって、これを利用してみる&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;from PIL import Image
+import cv
+sample = Image.open(&#39;sample.gif&#39;)
+cv_im = cv.CreateImageHeader(sample.size, cv.IPL_DEPTH_8U, 3)
+cv.SetData(cv_im, sample.tostring())
+print sample.size, cv.GetSize(cv_im)
+(868, 600) (868, 600)
+&amp;gt;&amp;gt;&amp;gt; print sample.tostring() == cv_im.tostring()
+False
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;gif画像のsizeは取得できたが、同じデータに変換は出来なかった&lt;/p&gt;
+
+&lt;h2 id=&#34;gifをcvでどうしても取り扱いたかった時どうしたか:03b7fc6f6a8e36424eeb697a92d4fbd7&#34;&gt;gifをcvでどうしても取り扱いたかった時どうしたか&lt;/h2&gt;
+
+&lt;p&gt;gifをjpgに変換することで逃げた ┗(^o^ )┓三&lt;/p&gt;
+
+&lt;p&gt;以下のようにPILを使って、&lt;code&gt;sample.gif&lt;/code&gt;をjpgに変換して&lt;code&gt;convertfromgif.jpg&lt;/code&gt;として保存したものを利用するようにした&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from PIL import Image
+im = Image.open(&#39;sample.gif&#39;).convert(&#39;RGB&#39;).save(&#39;convertfromgif.jpg&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

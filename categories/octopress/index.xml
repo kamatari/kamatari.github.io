@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Octopress on Lifering</title>
+    <link>http://kamatari.github.io/categories/octopress/</link>
+    <description>Recent content in Octopress on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Tue, 23 Sep 2014 18:16:00 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/octopress/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Octopress 固定ページの追加の仕方</title>
+      <link>http://kamatari.github.io/2014/09/23/how-to-post-new-page/</link>
+      <pubDate>Tue, 23 Sep 2014 18:16:00 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2014/09/23/how-to-post-new-page/</guid>
+      <description>
+
+&lt;h3 id=&#34;octopressで新規の記事ではなく-固定のページをつくる方法:c88f6845d72d26df44d97931a844cd66&#34;&gt;octopressで新規の記事ではなく、固定のページをつくる方法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;自分のプロフィールであるaboutページを作ってみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ rake new_page[&#39;about&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;生成された新しいページ用のファイルへの書き方は、記事を書くときと同じようにmarkdownで書く&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ vim source/about/index.markdown
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ページのリンクを追加する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;参照する場所がないとアクセスされないので、リンクを追加&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ vim source/_includes/custom/navigation.html
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;ul class=&amp;quot;main&amp;quot;&amp;gt;
+  &amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;{{ root_url }}/about&amp;quot;&amp;gt;About&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;{{ root_url }}/&amp;quot;&amp;gt;Blog&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;{{ root_url }}/blog/archives&amp;quot;&amp;gt;Archives&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Octopress &#43; Github Pages で記事を投稿する方法</title>
+      <link>http://kamatari.github.io/2013/10/25/how-to-post-entry/</link>
+      <pubDate>Fri, 25 Oct 2013 01:42:00 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2013/10/25/how-to-post-entry/</guid>
+      <description>
+
+&lt;h2 id=&#34;概要:31dc4c417d092d6f5d75b43e4fb14699&#34;&gt;概要&lt;/h2&gt;
+
+&lt;p&gt;octopressとGithub Pagesで構築したblogに記事を投稿する方法をまとめた&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://kamatari.github.io/blog/2013/10/24/create-a-blog-with-octopress/&#34;&gt;Octopress + Github Pagesでblogを構築した話&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;まず記事を書くファイルを生成する:31dc4c417d092d6f5d75b43e4fb14699&#34;&gt;まず記事を書くファイルを生成する&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ rake new_post[&#39;title&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;title&lt;/code&gt;に入れた文字列は、記事のpermalinkのurlになる。例えばこの記事を作るときは以下のように&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:31dc4c417d092d6f5d75b43e4fb14699:1&#34;&gt;&lt;a rel=&#34;footnote&#34; href=&#34;#fn:31dc4c417d092d6f5d75b43e4fb14699:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ rake new_post[&#39;how to post entry&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;そうするとファイルが、&lt;code&gt;sorce/_posts&lt;/code&gt;の下に生成される&lt;/p&gt;
+
+&lt;h2 id=&#34;記事の情報を編集する:31dc4c417d092d6f5d75b43e4fb14699&#34;&gt;記事の情報を編集する&lt;/h2&gt;
+
+&lt;p&gt;生成したファイルを開くと以下の内容が記述してある&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;---
+layout: post
+title: &amp;quot;how to post entry&amp;quot;
+date: 2014-01-19 14:30
+comments: true
+categories:
+---
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;それぞれの項目についての説明&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;layout:&lt;/code&gt;   投稿のレイアウトのタイプを設定できる&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;title:&lt;/code&gt;    実際に記事のタイトルとして表示されるテキストをここに書く&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;date:&lt;/code&gt;     ここに記載した時刻が記事の投稿時刻になる&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;comments:&lt;/code&gt; コメントを許可するかどうか&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;categories:&lt;/code&gt;カテゴリを設定可能&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;記事を書く:31dc4c417d092d6f5d75b43e4fb14699&#34;&gt;記事を書く&lt;/h2&gt;
+
+&lt;p&gt;上記の設定の&lt;code&gt;---&lt;/code&gt;の下からmarkdown形式で本文を書く
+それと、octopressにはmarkdown記法で書いた本文を投稿前にpreviewできる&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ rake preview
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とすると、defaultで&lt;code&gt;http://localhost:4000&lt;/code&gt;で、書いた記事が実際にどのように表示するか確認ができる&lt;/p&gt;
+
+&lt;h2 id=&#34;記事を投稿する:31dc4c417d092d6f5d75b43e4fb14699&#34;&gt;記事を投稿する&lt;/h2&gt;
+
+&lt;p&gt;記事が書き終わって確認が出来たら、以下のコマンドでアップ&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ rake generate
+$ rake deploy
+&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:31dc4c417d092d6f5d75b43e4fb14699:1&#34;&gt;必要に応じて&lt;code&gt;rake&lt;/code&gt;の前に&lt;code&gt;bundle exec&lt;/code&gt;をつける
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:31dc4c417d092d6f5d75b43e4fb14699:1&#34;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Octopress &#43; Github Pages でblogを構築した話</title>
+      <link>http://kamatari.github.io/2013/10/24/create-a-blog-with-octopress/</link>
+      <pubDate>Thu, 24 Oct 2013 01:58:00 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2013/10/24/create-a-blog-with-octopress/</guid>
+      <description>
+
+&lt;h2 id=&#34;概要:d5576d2a88d563c42fddfbbadbfc16a3&#34;&gt;概要&lt;/h2&gt;
+
+&lt;p&gt;octopressとGithub Pagesを使ってblogを構築する手順と、記事の更新/公開方法、blogのthemeを変更する手順をまとめた。
+記事の投稿方法は別記事に。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://kamatari.github.io/blog/2013/10/25/how-to-post-entry/&#34;&gt;記事を投稿する方法&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;octopressでblogを書くメリット。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;+ 静的ファイルを表示するだけなので、wordpressより軽い
++ markdownで記事が書ける
++ webではなく、ローカルで記事が書ける
++ gitで管理できる
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;blog構築:d5576d2a88d563c42fddfbbadbfc16a3&#34;&gt;blog構築&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;[1]&lt;/strong&gt; githubで、username.github.ioというレポジトリを作成&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;usernameがkamatariだったら=&amp;gt; &lt;a href=&#34;https://github.com/kamatari/kamatari.github.io&#34;&gt;https://github.com/kamatari/kamatari.github.io&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;[2]&lt;/strong&gt; localにoctopressの環境を構築&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;octopressを落としてくる (今後blogの設定、記事の投稿はこのディレクトリ内で行う)&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ git clone git://github.com/imathis/octopress.git octopress
+$ cd octopress
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;[3]&lt;/strong&gt; bundlerで必要なものをとってきて、defaultのoctopress themeを取得&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ gem install bundler
+$ bundle install
+$ bundle exec rake install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;[4]&lt;/strong&gt; Github Pagesに必要な設定を行う
+
+&lt;ul&gt;
+&lt;li&gt;setup_github_pages実行すると、途中でgithub のレポジトリを聞かれるので、[1]で作ったレポジトリのSSH clone URLを入力する&lt;/li&gt;
+&lt;li&gt;kamatariだと =&amp;gt; git@github.com:kamatari/kamatari.github.io.git&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ bundle exec rake setup_github_pages
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;[5]&lt;/strong&gt; blogのタイトルやauthor、dateformatなどの設定
+
+&lt;ul&gt;
+&lt;li&gt;blogの設定は、_config,ymlにまとまっているので、これを編集する&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ vim _config.yml
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;[6]&lt;/strong&gt; blogを構築して、Github Pagesにdeploy
+
+&lt;ul&gt;
+&lt;li&gt;[5]で設定した内容を反映したblogに必要なファイルを生成してdeployする&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ bundle exec rake generate
+$ bundle exec rake deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;[7]&lt;/strong&gt; &lt;a href=&#34;http://username.github.io&#34;&gt;http://username.github.io&lt;/a&gt; に先ほどgithubにpushしたblogが確認できるようになる&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;初回は少し時間がかかる場合もあるとか。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;[8]&lt;/strong&gt; 最後にaddしてcommitしてpushしておきます&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;branchはsourceを使う事に&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ git add .
+$ git commit -m &#39;commit new post&#39;
+$ git push origin source
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

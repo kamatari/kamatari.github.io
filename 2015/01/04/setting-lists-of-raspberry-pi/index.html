@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>raspberry piで初めにやってみたこと &middot; kamatari</title>
+        <meta name="description" content="">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.15" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/normalize.css">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/highlight.css">
+        <link rel="stylesheet" href="http://kamatari.github.io/css/style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-41886618-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="Lifering" href="http://kamatari.github.io/">Lifering</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://kamatari.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                            <a class="button-square button-social hint--top" data-hint="Twitter" title="Twitter" href="https://twitter.com/iratamak">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/kamatari">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="About" href="/about/">About</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">raspberry piで初めにやってみたこと</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    
+
+<h1 id="raspberry-pi-を手に入れた:a34e14c254c276ac39573d5d58faf6f6">raspberry pi を手に入れた</h1>
+
+<p>実はarduinoも持っているのだけれど、どう作るとなにが実現できるのか自分にはイメージがわきづらくて、ブレッドボードになんとなく刺したLEDを点滅させたきりになっていた。</p>
+
+<p>そういう意味では、raspberry piはlinuxなので、サーバーとして使ったり、最初からついてる入出力端子から作ってみたい何かを想像しやすい。いろいろ試したので、今までにやったことをひとまずまとめておく。</p>
+
+<h1 id="osのinstall:a34e14c254c276ac39573d5d58faf6f6">osのinstall</h1>
+
+<p><a href="http://www.raspberrypi.org/downloads/">raspberry piの公式サイト</a>から、NOOBSなら内容をSDカードにコピー。
+SDカードをraspberry piに刺したあと、電源を投入すればinstallできる。OSのimgをダウンロードした場合は、公式サイトの<a href="http://www.raspberrypi.org/documentation/installation/installing-images/mac.md">macでimgからinstallするまで</a>を参照。</p>
+
+<p>初回はraspi-configという設定画面がひらくので、キーボードとssh設定、あとtimezoneの設定とかをした。設定が完了したら再起動しておわり。</p>
+
+<p>設定画面は以下のコマンドでも起動することができる。</p>
+
+<pre><code class="language-bash">$ sudo raspi-config
+</code></pre>
+
+<p>参考: <a href="http://www.hiramine.com/physicalcomputing/raspberrypi/setup_firstbootandconfig.html">raspberry pi 初回起動と初期設定</a></p>
+
+<h1 id="raspberry-piにmacからsshしてupdate:a34e14c254c276ac39573d5d58faf6f6">raspberry piにmacからsshしてupdate</h1>
+
+<p>家でraspberry piの画面を表示するには、Wii UのHDMIケーブルでテレビとつなげるしかなくて、全然コンパクトじゃなかった。</p>
+
+<p>基板に有線LANを刺し、raspberry pi 上でifconfigしてip addressを確認。そのaddressにpiユーザーでsshすることで、mac上からraspiを操作出来るようになるのだ。記念にmacからupdateなどをしておく。</p>
+
+<pre><code class="language-bash">@mac $ ssh pi@192.168.0.3
+@raspberry $ sudo apt-get update
+@raspberry $ sudo apt-get upgrade
+</code></pre>
+
+<h1 id="無線lanの設定:a34e14c254c276ac39573d5d58faf6f6">無線lanの設定</h1>
+
+<p>buffaroのusb型無線LANを使って、有線LANを使わなくてもnetworkにつなげるように設定をする。
+raspberry piのusb端子にまずは無線LANを刺して、有線LANは抜いておく。</p>
+
+<p>lsusbというコマンドがあって、これで先ほどのusb型無線LAN自体を認識できているか確認できる。</p>
+
+<pre><code class="language-bash">$ lsusb
+Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp.
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp.
+Bus 001 Device 004: ID 04d9:2011 Holtek Semiconductor, Inc.
+Bus 001 Device 005: ID 0411:01a2 BUFFALO INC. (formerly MelCo., Inc.) WLI-UC-GNM Wireless LAN Adapter [Ralink RT8070]
+</code></pre>
+
+<p>無線LANをつなぐために以下二つファイルを編集する。名前の通り、networkのinterfaceと、無線LANの設定を行うファイルだ。</p>
+
+<ul>
+<li>/etc/network/interfaces</li>
+<li>/etc/wpa_supplicant/wpa_supplicant.conf</li>
+</ul>
+
+<p>まずは<code>/etc/network/interfaces</code>のwifiの設定項目を編集する</p>
+
+<p>defaultの設定部分をコメントアウトし、ipをmanualではなくdhcpを利用するようにするのと、wpa-roamではなくwpa-confにする。
+それと、起動した時に自動でつながるようにallow-hotplugも設定する。
+固定ipにしないのは、あとで名前で引けるようにするため。</p>
+
+<pre><code>allow-hotplug wlan0
+iface wlan0 inet dhcp
+#iface wlan0 inet manual
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+#wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+iface default inet dhcp
+</code></pre>
+
+<p>次にアクセスポイントのssidとpasswordをwpa_passphraseコマンドに渡して、出力を設定ファイルに反映する。
+ssidを<code>raspberry</code> パスワードを<code>raspi</code>とすると</p>
+
+<pre><code class="language-bash">$ sudo sh -c &quot;wpa_passphrase raspberry raspi &gt;&gt; /etc/wpa_supplicant/wpa_supplicant.conf&quot;
+$ sudo cat /etc/wpa_supplicant/wpa_supplicant.conf
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+network={
+    ssid=raspberry
+    #psk=raspi
+    psk=2b1d17284c5410ee5eaae7151290e9744af2182b0eb8af20dd4ebb415928f726
+}
+</code></pre>
+
+<p>反映したあと直接編集するのだが、ここが非常にはまりやすいポイント。
+無線の方式や、設定項目によって、記載する内容が異なるので、自分の環境の方式を確認しながらやらなくてはならない。
+例えばwifiがANY接続禁止にしているときは、<code>scan_ssid=1</code> を追記することが必要など。
+認証方式などはこのコマンドで確認出来る。</p>
+
+<pre><code class="language-bash">@raskam $ sudo iwlist wlan0 scan
+・・・
+IE: WPA Version 1
+    Group Cipher : TKIP
+    Pairwise Ciphers (1) : TKIP
+    Authentication Suites (1) : PSK
+・・・
+</code></pre>
+
+<p>(その他参考：<a href="http://www.youchikurin.com/blog/2007/06/linuxlan_1.html">Linuxで無線LAN</a>)</p>
+
+<p>設定が出来たら最後にwifiインターフェイスの再起動をして、iwconfigを見たり、pingを打ってネットにつながったか確認。</p>
+
+<pre><code class="language-bash">$ sudo ifdown wlan0
+$ sudo ifup wlan0
+
+$ iwconfig
+$ ping 8.8.8.8
+</code></pre>
+
+<h1 id="ホスト名でraspberry-piを指定してssh出来るようにする:a34e14c254c276ac39573d5d58faf6f6">ホスト名でraspberry piを指定してssh出来るようにする</h1>
+
+<p>これを設定することで、ip addressが変わっても、同じ環境にある限り接続できるので便利になる。
+これをAvahiを使って実現する。</p>
+
+<pre><code class="language-bash">$ sudo apt-get install avahi-daemon
+</code></pre>
+
+<p>ホスト名を<code>/etc/hostname</code>に書くのと、<code>/etc/hosts/</code>にも編集をしておく</p>
+
+<pre><code class="language-bash">$ vim /etc/hostname
+---
+raskam
+---
+$ vim /etc/hosts
+---
+127.0.0.1 raskam
+---
+</code></pre>
+
+<p>これで設定ができたら、再起動して、macからhostnameでssh接続が出来るかを確認する。無線LANで接続するときは、先ほど決めたhostnameに<code>.local</code>をつけないと接続出来ないことに気をつける。</p>
+
+<pre><code class="language-bash">@raspberry $ ps -aef |grep avahi
+avahi     2126     1  0 07:16 ?        00:00:00 avahi-daemon: running [raskam.local]
+avahi     2130  2126  0 07:16 ?        00:00:00 avahi-daemon: chroot helper
+</code></pre>
+
+<pre><code class="language-bash">@mac $ ssh pi@raskam.local
+</code></pre>
+
+<h1 id="raspbianのxwindowをmacで操作する:a34e14c254c276ac39573d5d58faf6f6">raspbianのxwindowをmacで操作する</h1>
+
+<p>raspberry pi 側でtightvncserverをinstallして、起動する</p>
+
+<pre><code>$ sudo apt-get install tightvncserver
+$ vncserver :1 -geometry 1024x768 -depth 24
+そしてパスワードを設定
+</code></pre>
+
+<p>macでFinderからサーバーへ接続する項目で、vncとipと5901番portを以下のように入力すると、画面が表示されて操作ができるようになる</p>
+
+<pre><code>vnc://192.168.0.3:5901
+</code></pre>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        <a class="icon-twitter" href="http://twitter.com/share?text=raspberry%20pi%e3%81%a7%e5%88%9d%e3%82%81%e3%81%ab%e3%82%84%e3%81%a3%e3%81%a6%e3%81%bf%e3%81%9f%e3%81%93%e3%81%a8&url=http%3a%2f%2fkamatari.github.io%2f2015%2f01%2f04%2fsetting-lists-of-raspberry-pi%2f"
+            onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+            <i class="fa fa-twitter"></i>
+            <span class="hidden">Twitter</span>
+        </a>
+
+        <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fkamatari.github.io%2f2015%2f01%2f04%2fsetting-lists-of-raspberry-pi%2f"
+            onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+            <i class="fa fa-facebook"></i>
+            <span class="hidden">Facebook</span>
+        </a>
+
+        <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fkamatari.github.io%2f2015%2f01%2f04%2fsetting-lists-of-raspberry-pi%2f"
+           onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+           <i class="fa fa-google-plus"></i>
+            <span class="hidden">Google+</span>
+        </a>
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="Lifering" href="http://kamatari.github.io/">Lifering</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2016 / Powered by <a href="http://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://kamatari.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+        <script src="http://kamatari.github.io/js/jquery.fitvids.js"></script>
+        <script src="http://kamatari.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

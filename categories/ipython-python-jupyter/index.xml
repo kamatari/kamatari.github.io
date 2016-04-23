@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ipython Python Jupyter on Lifering</title>
+    <link>http://kamatari.github.io/categories/ipython-python-jupyter/</link>
+    <description>Recent content in Ipython Python Jupyter on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Mon, 01 Jun 2015 23:33:55 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/categories/ipython-python-jupyter/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>vagrant で ipython notebook 環境を構築した話</title>
+      <link>http://kamatari.github.io/2015/06/01/install-ipython-notebook-to-vagrant/</link>
+      <pubDate>Mon, 01 Jun 2015 23:33:55 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2015/06/01/install-ipython-notebook-to-vagrant/</guid>
+      <description>
+
+&lt;h1 id=&#34;ipython-notebookとは:93bfed9ce63c7085a388ea213ab48061&#34;&gt;ipython notebookとは&lt;/h1&gt;
+
+&lt;p&gt;ざっくり言うとiPythonをweb browser上で動かせるやつ。(参考: &lt;a href=&#34;http://kamatari.github.io/blog/2015/05/05/first-step-of-ipython/&#34;&gt;ipythonとは&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;今はpythonだけじゃなくてRとかRubyとか他言語もいろいろ動かせるらしく、名前もipython notebookから、Jupyterになった。JupiterじゃなくてJu&amp;rdquo;py&amp;rdquo;terなのがキモ。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://jupyter.org&#34;&gt;Jupyter 公式&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;入力した式をinlineでグラフ表示したり、その状態を保存しておくことができる機能が使いたかったので、環境をつくってみた。
+いろいろ必要なライブラリがあって、どんどんローカル環境に入れていくと、あとからつらくなりそうだなと思ってvagrantでつくってpackageにまとめたメモ。&lt;/p&gt;
+
+&lt;p&gt;下に貼った画像みたいに、グラフを見つつブラウザで試しながら、修正してすぐ反映できるツールである。ファイルは拡張子 .ipynb で保存できて、一ヶ月くらい前からgithubでもサポートされるようになってていい感じ。(参考 : &lt;a href=&#34;http://blog.jupyter.org/2015/05/07/rendering-notebooks-on-github/&#34;&gt;Rendering Notebooks on GitHub&lt;/a&gt; )&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://kamatari.github.io/images/jupyter.png&#34; alt=&#34;公式&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;ベースになる-vagrantのserverを用意する:93bfed9ce63c7085a388ea213ab48061&#34;&gt;ベースになる vagrantのserverを用意する&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.vagrantbox.es&#34;&gt;vagrant box es&lt;/a&gt; から、今回はOfficial Ubuntu 14.04 daily Cloud Image amd64 を使う。まあなんでもいいとおもう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ vagrant box add ubuntu-14 https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
+$ vagrant init ubuntu-14
+$ vagrant up
+$ vagrant ssh
+$ sudo apt-get update   # @vagrant
+$ sudo apt-get upgrade  # @vagrant
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;ipython-notebook-jupyter-のインストール:93bfed9ce63c7085a388ea213ab48061&#34;&gt;ipython notebook (jupyter)のインストール&lt;/h1&gt;
+
+&lt;p&gt;pipでipythonをまずインストール&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip install ipython   # @vagrant
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;次に計算とか描画のためのライブラリを、&amp;rdquo;Anaconda&amp;rdquo;ごと入れる。&lt;/p&gt;
+
+&lt;p&gt;公式から&lt;a href=&#34;http://continuum.io/downloads&#34;&gt;Anaconda の インストーラー&lt;/a&gt;を落としてきて実行する。(&lt;a href=&#34;http://docs.continuum.io/anaconda/pkg-docs.html&#34;&gt;Anacondaで入るもの&lt;/a&gt;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ bash ./Anaconda-2.2.0-Linux-x86_64.sh
+$ conda update conda
+$ conda update ipython ipython-notebook ipython-qtconsole matplotlib
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;ipythonの起動:93bfed9ce63c7085a388ea213ab48061&#34;&gt;ipythonの起動&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ipython notebook --no-browser
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;オプションno browserをつけないと、w3mが立ち上がるので。&lt;/p&gt;
+
+&lt;h1 id=&#34;localのブラウザから確認:93bfed9ce63c7085a388ea213ab48061&#34;&gt;localのブラウザから確認&lt;/h1&gt;
+
+&lt;p&gt;Vagrantfileの&amp;rdquo;forwarded_port&amp;rdquo;で設定すれば、デフォルトのport 8888で、&lt;a href=&#34;http://localhost:8888/&#34;&gt;http://localhost:8888/&lt;/a&gt; からipython notebook が使えるはずだったが、うまくいかない。&lt;/p&gt;
+
+&lt;p&gt;一度vagrant のサーバーから出て、以下のコマンドで入りなおしてipythonを起動して確認できた。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ vagrant ssh -- -L 8888:localhost:8888
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(参考: &lt;a href=&#34;http://qiita.com/wwacky/items/133e81bd5cd558b27b7b&#34;&gt;vagrantで作ったVMでipython notebookを立ち上げてローカルからアクセスする&lt;/a&gt; )&lt;/p&gt;
+
+&lt;h1 id=&#34;環境をvagrant-box-にまとめる:93bfed9ce63c7085a388ea213ab48061&#34;&gt;環境をvagrant box にまとめる&lt;/h1&gt;
+
+&lt;p&gt;vagrantのサーバーから出て、packageコマンドでpackageにしたところ、容量が1.4GBになったので、削りたい。
+やったことは以下。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo umount /vagrant     # 共有フォルダを unmount
+$ sudo apt-get autoclean   # apt の cacheクリア
+$ dd if=/dev/zero of=zero bs=1M # zeroで埋める
+$ rm -f zero
+$ rm ~/.bash_history       # 履歴削除
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;( 参考: &lt;a href=&#34;http://blogged.e2esound.com/2014/05/29/compress_vagrant_box/&#34;&gt;Vagrant用のboxファイルを小さくする&lt;/a&gt; )&lt;/p&gt;
+
+&lt;p&gt;改めてpackage したところ、990Mで2/3ぐらいになってよかった。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ vagrant package
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;はまったところ:93bfed9ce63c7085a388ea213ab48061&#34;&gt;はまったところ&lt;/h1&gt;
+
+&lt;h3 id=&#34;ブラウザから確認できない:93bfed9ce63c7085a388ea213ab48061&#34;&gt;ブラウザから確認できない&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;前述の通り、&lt;code&gt;vagrant ssh -- -L 8888:localhost:8888&lt;/code&gt; でvagrantに入って、ipython notebookを起動&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;matplotlibを使ってグラフを描くと-libpng15が無いエラーが出る:93bfed9ce63c7085a388ea213ab48061&#34;&gt;matplotlibを使ってグラフを描くと、libpng15が無いエラーが出る&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;エラー内容&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt; ImportError: libpng15.so.15: cannot open shared object file: No such file or directory
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;matplotlibをanacondaからupdateして、問題を解消した。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ conda update matplotlib
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
