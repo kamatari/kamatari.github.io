@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Lifering</title>
+    <link>http://kamatari.github.io/post/</link>
+    <description>Recent content in Posts on Lifering</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>Masahiro Kamata</copyright>
+    <lastBuildDate>Sat, 23 Apr 2016 19:31:21 +0900</lastBuildDate>
+    <atom:link href="http://kamatari.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>暗号化ライブラリ pycrypto</title>
+      <link>http://kamatari.github.io/2016/04/23/what-is-pycrypto/</link>
+      <pubDate>Sat, 23 Apr 2016 19:31:21 +0900</pubDate>
+      
+      <guid>http://kamatari.github.io/2016/04/23/what-is-pycrypto/</guid>
+      <description>
+
+&lt;h1 id=&#34;pythonと情報セキュリティ:0e53121619dc045e05a54a1a83c415b8&#34;&gt;Pythonと情報セキュリティ&lt;/h1&gt;
+
+&lt;p&gt;Pythonは情報セキュリティの世界でよく使われる言語でもあります。
+いろいろな計算を行うライブラリが標準、外部ライブラリともにそろっていたり、Pythonのインタプリタの使い勝手がよかったり、手軽に書きやすいなどの理由から愛用している人も多いようです。
+TBS系で放送されたブラッディ・マンデイというドラマで主人公の凄腕ハッカーがPythonを使っていたことが（一部で）話題になっていたこともありました。&lt;/p&gt;
+
+&lt;p&gt;そんなPythonの暗号化/復号化するためのライブラリ「pycrypto」を紹介します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;[pycrypto]
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://pypi.python.org/pypi/pycrypto&#34;&gt;https://pypi.python.org/pypi/pycrypto&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;[ドキュメント]
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://pythonhosted.org/pycrypto/&#34;&gt;http://pythonhosted.org/pycrypto/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;pycryptoのつかいかた:0e53121619dc045e05a54a1a83c415b8&#34;&gt;pycryptoのつかいかた&lt;/h1&gt;
+
+&lt;p&gt;まずはpipでinstallを行います。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip install pycrypto
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(Mac python3系)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip3 install pycrypto
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;pipでinstallコマンドをコマンドプロンプト、ターミナルに入力すると、以下の様なテキストが表示され、無事にインストールが完了するはずです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Collecting pycrypto
+  Downloading pycrypto-2.6.1.tar.gz (446kB)
+    100% |████████████████████████████████| 446kB 1.1MB/s
+Installing collected packages: pycrypto
+  Running setup.py install for pycrypto
+Successfully installed pycrypto-2.6.1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;5行目でRunning setup.pyが実行されて、インストールした後にPythonで使うためのセットアップが自動的に行われていることが分かります。&lt;/p&gt;
+
+&lt;p&gt;それでは早速使ってみます。pycryptoは、&lt;code&gt;Crypto&lt;/code&gt;という名前でimportできます。その中で今回は「AES」という有名な暗号規格をつかって、暗号化と復号化を試してみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; from Crypto.Cipher import AES
+&amp;gt;&amp;gt;&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; secret_key = &#39;this is secret:)&#39;
+&amp;gt;&amp;gt;&amp;gt; message = &#39;Awesome python!!&#39;
+&amp;gt;&amp;gt;&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; crypto = AES.new(secret_key)
+&amp;gt;&amp;gt;&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; cipher_data = crypto.encrypt(message)
+&amp;gt;&amp;gt;&amp;gt; print(cipher_data)
+b&#39;\x9b\xe6p\xdc-\x7fBgDR\xc0\xa1aTf\xc0&#39;
+&amp;gt;&amp;gt;&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; original_message = crypto.decrypt(cipher_data)
+&amp;gt;&amp;gt;&amp;gt; print(original_message)
+b&#39;Awesome python!!&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;今回はAESのモジュールを使いたいので、1行目でCryptoモジュールのCipherの中からAESをimportしました。3行目のsecret_keyは、暗号化のために使う鍵です。4行目は、今回暗号化するメッセージです。5行目でcryptoオブジェクトをsecret_keyを使って、作成します。
+7行目で、encryptを使って、messageを暗号化して、cipher_dataに代入してprintで表示してみました。そして、最後に暗号化されたものをもとに戻せることを確認するために、そのcipher_dataを使って、元のメッセージを暗号化されたメッセージを復号化し、表示すると、「Awesome python!!」が表示されました。&lt;/p&gt;
+
+&lt;h1 id=&#34;注意ポイント:0e53121619dc045e05a54a1a83c415b8&#34;&gt;注意ポイント&lt;/h1&gt;
+
+&lt;p&gt;secret_keyは、半角16,24,32のうちのいずれかの長さにしなくてはなりません。また、messageは半角16文字の倍数の長さでなくてはなりません。暗号化したいメッセージに空白を後ろに足すなどして長さを16の倍数に合わせましょう。
+それぞれのルールが合わなかった場合、次のようなエラーが表示されます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;secret_keyの長さについて
+&lt;code&gt;
+ValueError: AES key must be either 16, 24, or 32 bytes long
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;messegeの長さについて
+&lt;code&gt;
+ValueError: Input strings must be a multiple of 16 in length
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
