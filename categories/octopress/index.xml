@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Octopress on Lifering</title>
-    <link>http://kamatari.github.io/categories/octopress/</link>
+    <link>https://kamatari.github.io/categories/octopress/</link>
     <description>Recent content in Octopress on Lifering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>Masahiro Kamata</copyright>
     <lastBuildDate>Tue, 23 Sep 2014 18:16:00 +0900</lastBuildDate>
-    <atom:link href="http://kamatari.github.io/categories/octopress/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kamatari.github.io/categories/octopress/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Octopress 固定ページの追加の仕方</title>
-      <link>http://kamatari.github.io/2014/09/23/how-to-post-new-page/</link>
+      <link>https://kamatari.github.io/2014/09/23/how-to-post-new-page/</link>
       <pubDate>Tue, 23 Sep 2014 18:16:00 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2014/09/23/how-to-post-new-page/</guid>
+      <guid>https://kamatari.github.io/2014/09/23/how-to-post-new-page/</guid>
       <description>
 
 &lt;h3 id=&#34;octopressで新規の記事ではなく-固定のページをつくる方法:c88f6845d72d26df44d97931a844cd66&#34;&gt;octopressで新規の記事ではなく、固定のページをつくる方法&lt;/h3&gt;
@@ -52,10 +52,10 @@
     
     <item>
       <title>Octopress &#43; Github Pages で記事を投稿する方法</title>
-      <link>http://kamatari.github.io/2013/10/25/how-to-post-entry/</link>
+      <link>https://kamatari.github.io/2013/10/25/how-to-post-entry/</link>
       <pubDate>Fri, 25 Oct 2013 01:42:00 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2013/10/25/how-to-post-entry/</guid>
+      <guid>https://kamatari.github.io/2013/10/25/how-to-post-entry/</guid>
       <description>
 
 &lt;h2 id=&#34;概要:31dc4c417d092d6f5d75b43e4fb14699&#34;&gt;概要&lt;/h2&gt;
@@ -132,10 +132,10 @@ $ rake deploy
     
     <item>
       <title>Octopress &#43; Github Pages でblogを構築した話</title>
-      <link>http://kamatari.github.io/2013/10/24/create-a-blog-with-octopress/</link>
+      <link>https://kamatari.github.io/2013/10/24/create-a-blog-with-octopress/</link>
       <pubDate>Thu, 24 Oct 2013 01:58:00 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2013/10/24/create-a-blog-with-octopress/</guid>
+      <guid>https://kamatari.github.io/2013/10/24/create-a-blog-with-octopress/</guid>
       <description>
 
 &lt;h2 id=&#34;概要:d5576d2a88d563c42fddfbbadbfc16a3&#34;&gt;概要&lt;/h2&gt;

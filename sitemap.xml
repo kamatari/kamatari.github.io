@@ -2,138 +2,138 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://kamatari.github.io/</loc>
+    <loc>https://kamatari.github.io/</loc>
     <lastmod>2016-04-23T19:31:21+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2016/04/23/what-is-pycrypto/</loc>
+    <loc>https://kamatari.github.io/2016/04/23/what-is-pycrypto/</loc>
     <lastmod>2016-04-23T19:31:21+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/about/</loc>
+    <loc>https://kamatari.github.io/about/</loc>
     <lastmod>2016-04-23T17:09:44+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2016/01/17/how-to-fix-typeerror-of-qr-command/</loc>
+    <loc>https://kamatari.github.io/2016/01/17/how-to-fix-typeerror-of-qr-command/</loc>
     <lastmod>2016-01-17T17:41:12+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2015/06/01/install-ipython-notebook-to-vagrant/</loc>
+    <loc>https://kamatari.github.io/2015/06/01/install-ipython-notebook-to-vagrant/</loc>
     <lastmod>2015-06-01T23:33:55+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2015/05/07/review-of-book-which-written-about-aritifical-intelligence-history-and-future/</loc>
+    <loc>https://kamatari.github.io/2015/05/07/review-of-book-which-written-about-aritifical-intelligence-history-and-future/</loc>
     <lastmod>2015-05-07T22:51:06+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2015/05/05/first-step-of-ipython/</loc>
+    <loc>https://kamatari.github.io/2015/05/05/first-step-of-ipython/</loc>
     <lastmod>2015-05-05T10:59:14+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2015/03/12/how-to-install-root-certificate-on-debian/</loc>
+    <loc>https://kamatari.github.io/2015/03/12/how-to-install-root-certificate-on-debian/</loc>
     <lastmod>2015-03-12T00:41:26+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2015/01/18/how-to-setup-hugo/</loc>
+    <loc>https://kamatari.github.io/2015/01/18/how-to-setup-hugo/</loc>
     <lastmod>2015-01-18T15:33:26+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2015/01/11/how-to-setup-adafruit-tft2-dot-8-touchscreen/</loc>
+    <loc>https://kamatari.github.io/2015/01/11/how-to-setup-adafruit-tft2-dot-8-touchscreen/</loc>
     <lastmod>2015-01-11T16:43:31+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2015/01/04/setting-lists-of-raspberry-pi/</loc>
+    <loc>https://kamatari.github.io/2015/01/04/setting-lists-of-raspberry-pi/</loc>
     <lastmod>2015-01-04T19:08:46+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/12/07/install-elasticsearch-on-debian/</loc>
+    <loc>https://kamatari.github.io/2014/12/07/install-elasticsearch-on-debian/</loc>
     <lastmod>2014-12-07T15:10:31+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/11/30/api-design-points/</loc>
+    <loc>https://kamatari.github.io/2014/11/30/api-design-points/</loc>
     <lastmod>2014-11-30T16:00:43+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/11/29/location-which-debian-package-installed/</loc>
+    <loc>https://kamatari.github.io/2014/11/29/location-which-debian-package-installed/</loc>
     <lastmod>2014-11-29T01:34:23+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/11/06/indicators-of-the-filter-accuracy/</loc>
+    <loc>https://kamatari.github.io/2014/11/06/indicators-of-the-filter-accuracy/</loc>
     <lastmod>2014-11-06T23:54:29+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/10/11/how-to-use-gif-on-opencv/</loc>
+    <loc>https://kamatari.github.io/2014/10/11/how-to-use-gif-on-opencv/</loc>
     <lastmod>2014-10-11T12:07:14+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/10/07/calculate-degree-of-circularity/</loc>
+    <loc>https://kamatari.github.io/2014/10/07/calculate-degree-of-circularity/</loc>
     <lastmod>2014-10-07T21:03:48+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/10/05/how-to-install-opencv2x-on-debian/</loc>
+    <loc>https://kamatari.github.io/2014/10/05/how-to-install-opencv2x-on-debian/</loc>
     <lastmod>2014-10-05T00:31:13+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/10/04/fix-octopress-rake-clean/</loc>
+    <loc>https://kamatari.github.io/2014/10/04/fix-octopress-rake-clean/</loc>
     <lastmod>2014-10-04T07:44:40+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/10/01/how-to-get-external-image-using-php/</loc>
+    <loc>https://kamatari.github.io/2014/10/01/how-to-get-external-image-using-php/</loc>
     <lastmod>2014-10-01T23:44:29+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/09/23/how-to-post-new-page/</loc>
+    <loc>https://kamatari.github.io/2014/09/23/how-to-post-new-page/</loc>
     <lastmod>2014-09-23T18:16:00+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/09/18/how-to-avoid-problem-of-opencv-installation/</loc>
+    <loc>https://kamatari.github.io/2014/09/18/how-to-avoid-problem-of-opencv-installation/</loc>
     <lastmod>2014-09-18T22:57:00+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/07/06/how-to-install-opencv-in-mac/</loc>
+    <loc>https://kamatari.github.io/2014/07/06/how-to-install-opencv-in-mac/</loc>
     <lastmod>2014-07-06T11:19:00+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/07/06/fix-brew-tmux-error/</loc>
+    <loc>https://kamatari.github.io/2014/07/06/fix-brew-tmux-error/</loc>
     <lastmod>2014-07-06T09:22:00+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2014/06/29/how-to-update-pip/</loc>
+    <loc>https://kamatari.github.io/2014/06/29/how-to-update-pip/</loc>
     <lastmod>2014-06-29T18:06:00+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2013/10/25/how-to-post-entry/</loc>
+    <loc>https://kamatari.github.io/2013/10/25/how-to-post-entry/</loc>
     <lastmod>2013-10-25T01:42:00+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kamatari.github.io/2013/10/24/create-a-blog-with-octopress/</loc>
+    <loc>https://kamatari.github.io/2013/10/24/create-a-blog-with-octopress/</loc>
     <lastmod>2013-10-24T01:58:00+09:00</lastmod>
   </url>
   

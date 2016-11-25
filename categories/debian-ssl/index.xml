@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Debian Ssl on Lifering</title>
-    <link>http://kamatari.github.io/categories/debian-ssl/</link>
+    <link>https://kamatari.github.io/categories/debian-ssl/</link>
     <description>Recent content in Debian Ssl on Lifering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>Masahiro Kamata</copyright>
     <lastBuildDate>Thu, 12 Mar 2015 00:41:26 +0900</lastBuildDate>
-    <atom:link href="http://kamatari.github.io/categories/debian-ssl/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kamatari.github.io/categories/debian-ssl/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>debian環境のルート証明書を更新した話</title>
-      <link>http://kamatari.github.io/2015/03/12/how-to-install-root-certificate-on-debian/</link>
+      <link>https://kamatari.github.io/2015/03/12/how-to-install-root-certificate-on-debian/</link>
       <pubDate>Thu, 12 Mar 2015 00:41:26 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2015/03/12/how-to-install-root-certificate-on-debian/</guid>
+      <guid>https://kamatari.github.io/2015/03/12/how-to-install-root-certificate-on-debian/</guid>
       <description>&lt;p&gt;とあるアプリケーションにログインする際に、エラーが出て失敗する問題が発生した。&lt;/p&gt;
 
 &lt;p&gt;認証処理を行っているphpのlogには、以下のようなメッセージが吐かれている。&lt;/p&gt;

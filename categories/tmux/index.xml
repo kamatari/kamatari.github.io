@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tmux on Lifering</title>
-    <link>http://kamatari.github.io/categories/tmux/</link>
+    <link>https://kamatari.github.io/categories/tmux/</link>
     <description>Recent content in Tmux on Lifering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>Masahiro Kamata</copyright>
     <lastBuildDate>Sun, 06 Jul 2014 09:22:00 +0900</lastBuildDate>
-    <atom:link href="http://kamatari.github.io/categories/tmux/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kamatari.github.io/categories/tmux/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title> tmux が起動しないのを直した話</title>
-      <link>http://kamatari.github.io/2014/07/06/fix-brew-tmux-error/</link>
+      <link>https://kamatari.github.io/2014/07/06/fix-brew-tmux-error/</link>
       <pubDate>Sun, 06 Jul 2014 09:22:00 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2014/07/06/fix-brew-tmux-error/</guid>
+      <guid>https://kamatari.github.io/2014/07/06/fix-brew-tmux-error/</guid>
       <description>
 
 &lt;h3 id=&#34;現象:6bd0312c1ea95fa398b8c4ff34f9ce76&#34;&gt;現象&lt;/h3&gt;

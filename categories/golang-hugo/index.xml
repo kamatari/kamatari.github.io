@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Golang Hugo on Lifering</title>
-    <link>http://kamatari.github.io/categories/golang-hugo/</link>
+    <link>https://kamatari.github.io/categories/golang-hugo/</link>
     <description>Recent content in Golang Hugo on Lifering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>Masahiro Kamata</copyright>
     <lastBuildDate>Sun, 18 Jan 2015 15:33:26 +0900</lastBuildDate>
-    <atom:link href="http://kamatari.github.io/categories/golang-hugo/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kamatari.github.io/categories/golang-hugo/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>静的サイトエンジン HUGOの使い方</title>
-      <link>http://kamatari.github.io/2015/01/18/how-to-setup-hugo/</link>
+      <link>https://kamatari.github.io/2015/01/18/how-to-setup-hugo/</link>
       <pubDate>Sun, 18 Jan 2015 15:33:26 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2015/01/18/how-to-setup-hugo/</guid>
+      <guid>https://kamatari.github.io/2015/01/18/how-to-setup-hugo/</guid>
       <description>
 
 &lt;h1 id=&#34;インストール:cfd18fb4abf301d899982bc3eaec6089&#34;&gt;インストール&lt;/h1&gt;

@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ipython Python Jupyter on Lifering</title>
-    <link>http://kamatari.github.io/categories/ipython-python-jupyter/</link>
+    <link>https://kamatari.github.io/categories/ipython-python-jupyter/</link>
     <description>Recent content in Ipython Python Jupyter on Lifering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>Masahiro Kamata</copyright>
     <lastBuildDate>Mon, 01 Jun 2015 23:33:55 +0900</lastBuildDate>
-    <atom:link href="http://kamatari.github.io/categories/ipython-python-jupyter/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kamatari.github.io/categories/ipython-python-jupyter/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>vagrant で ipython notebook 環境を構築した話</title>
-      <link>http://kamatari.github.io/2015/06/01/install-ipython-notebook-to-vagrant/</link>
+      <link>https://kamatari.github.io/2015/06/01/install-ipython-notebook-to-vagrant/</link>
       <pubDate>Mon, 01 Jun 2015 23:33:55 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2015/06/01/install-ipython-notebook-to-vagrant/</guid>
+      <guid>https://kamatari.github.io/2015/06/01/install-ipython-notebook-to-vagrant/</guid>
       <description>
 
 &lt;h1 id=&#34;ipython-notebookとは:93bfed9ce63c7085a388ea213ab48061&#34;&gt;ipython notebookとは&lt;/h1&gt;
@@ -33,7 +33,7 @@
 
 &lt;p&gt;下に貼った画像みたいに、グラフを見つつブラウザで試しながら、修正してすぐ反映できるツールである。ファイルは拡張子 .ipynb で保存できて、一ヶ月くらい前からgithubでもサポートされるようになってていい感じ。(参考 : &lt;a href=&#34;http://blog.jupyter.org/2015/05/07/rendering-notebooks-on-github/&#34;&gt;Rendering Notebooks on GitHub&lt;/a&gt; )&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://kamatari.github.io/images/jupyter.png&#34; alt=&#34;公式&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://kamatari.github.io/images/jupyter.png&#34; alt=&#34;公式&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;ベースになる-vagrantのserverを用意する:93bfed9ce63c7085a388ea213ab48061&#34;&gt;ベースになる vagrantのserverを用意する&lt;/h1&gt;
 

@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Raspberrypi on Lifering</title>
-    <link>http://kamatari.github.io/categories/raspberrypi/</link>
+    <link>https://kamatari.github.io/categories/raspberrypi/</link>
     <description>Recent content in Raspberrypi on Lifering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>Masahiro Kamata</copyright>
     <lastBuildDate>Sun, 11 Jan 2015 16:43:31 +0900</lastBuildDate>
-    <atom:link href="http://kamatari.github.io/categories/raspberrypi/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kamatari.github.io/categories/raspberrypi/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>adafruitのTFT2.8液晶セットアップ方法</title>
-      <link>http://kamatari.github.io/2015/01/11/how-to-setup-adafruit-tft2-dot-8-touchscreen/</link>
+      <link>https://kamatari.github.io/2015/01/11/how-to-setup-adafruit-tft2-dot-8-touchscreen/</link>
       <pubDate>Sun, 11 Jan 2015 16:43:31 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2015/01/11/how-to-setup-adafruit-tft2-dot-8-touchscreen/</guid>
+      <guid>https://kamatari.github.io/2015/01/11/how-to-setup-adafruit-tft2-dot-8-touchscreen/</guid>
       <description>
 
 &lt;h1 id=&#34;これ:768e8da07cec207a6c75c94a4ab24819&#34;&gt;これ&lt;/h1&gt;
@@ -275,10 +275,10 @@ Error: Module stmpe_ts is not currently loaded
     
     <item>
       <title>raspberry piで初めにやってみたこと</title>
-      <link>http://kamatari.github.io/2015/01/04/setting-lists-of-raspberry-pi/</link>
+      <link>https://kamatari.github.io/2015/01/04/setting-lists-of-raspberry-pi/</link>
       <pubDate>Sun, 04 Jan 2015 19:08:46 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2015/01/04/setting-lists-of-raspberry-pi/</guid>
+      <guid>https://kamatari.github.io/2015/01/04/setting-lists-of-raspberry-pi/</guid>
       <description>
 
 &lt;h1 id=&#34;raspberry-pi-を手に入れた:a34e14c254c276ac39573d5d58faf6f6&#34;&gt;raspberry pi を手に入れた&lt;/h1&gt;

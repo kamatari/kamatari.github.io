@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Books Api on Lifering</title>
-    <link>http://kamatari.github.io/categories/books-api/</link>
+    <link>https://kamatari.github.io/categories/books-api/</link>
     <description>Recent content in Books Api on Lifering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>Masahiro Kamata</copyright>
     <lastBuildDate>Sun, 30 Nov 2014 16:00:43 +0900</lastBuildDate>
-    <atom:link href="http://kamatari.github.io/categories/books-api/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kamatari.github.io/categories/books-api/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Web API The Good Partsを読んだ話</title>
-      <link>http://kamatari.github.io/2014/11/30/api-design-points/</link>
+      <link>https://kamatari.github.io/2014/11/30/api-design-points/</link>
       <pubDate>Sun, 30 Nov 2014 16:00:43 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2014/11/30/api-design-points/</guid>
+      <guid>https://kamatari.github.io/2014/11/30/api-design-points/</guid>
       <description>
 
 &lt;p&gt;&lt;div class=&#34;amazlet-box&#34; style=&#34;margin-bottom:0px;&#34;&gt;&lt;div class=&#34;amazlet-image&#34; style=&#34;float:left;margin:0px 12px 1px 0px;&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4873116864&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ecx.images-amazon.com/images/I/51GHwTNJgSL._SL160_.jpg&#34; alt=&#34;Web API: The Good Parts&#34; style=&#34;border: none;&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-info&#34; style=&#34;line-height:120%; margin-bottom: 10px&#34;&gt;&lt;div class=&#34;amazlet-name&#34; style=&#34;margin-bottom:10px;line-height:120%&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4873116864&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;Web API: The Good Parts&lt;/a&gt;&lt;div class=&#34;amazlet-powered-date&#34; style=&#34;font-size:80%;margin-top:5px;line-height:120%&#34;&gt;posted with &lt;a href=&#34;http://www.amazlet.com/&#34; title=&#34;amazlet&#34; target=&#34;_blank&#34;&gt;amazlet&lt;/a&gt; at 14.12.02&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-detail&#34;&gt;水野 貴明 &lt;br /&gt;オライリージャパン &lt;br /&gt;売り上げランキング: 1,496&lt;br /&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-sub-info&#34; style=&#34;float: left;&#34;&gt;&lt;div class=&#34;amazlet-link&#34; style=&#34;margin-top: 5px&#34;&gt;&lt;a href=&#34;http://www.amazon.co.jp/exec/obidos/ASIN/4873116864&#34; name=&#34;amazletlink&#34; target=&#34;_blank&#34;&gt;Amazon.co.jpで詳細を見る&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;amazlet-footer&#34; style=&#34;clear: left&#34;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/p&gt;

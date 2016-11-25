@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Python Opencv on Lifering</title>
-    <link>http://kamatari.github.io/categories/python-opencv/</link>
+    <link>https://kamatari.github.io/categories/python-opencv/</link>
     <description>Recent content in Python Opencv on Lifering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>Masahiro Kamata</copyright>
     <lastBuildDate>Tue, 07 Oct 2014 21:03:48 +0900</lastBuildDate>
-    <atom:link href="http://kamatari.github.io/categories/python-opencv/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kamatari.github.io/categories/python-opencv/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>図形の輪郭座標と面積から円形度を計算する</title>
-      <link>http://kamatari.github.io/2014/10/07/calculate-degree-of-circularity/</link>
+      <link>https://kamatari.github.io/2014/10/07/calculate-degree-of-circularity/</link>
       <pubDate>Tue, 07 Oct 2014 21:03:48 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2014/10/07/calculate-degree-of-circularity/</guid>
+      <guid>https://kamatari.github.io/2014/10/07/calculate-degree-of-circularity/</guid>
       <description>
 
 &lt;h1 id=&#34;円形度とは:9c62e37884b042fff1454a13469e8d4d&#34;&gt;円形度とは&lt;/h1&gt;
@@ -65,10 +65,10 @@ def calcCircleLevel (contour, area):
     
     <item>
       <title>homebrewでopencvがインストール出来ない問題</title>
-      <link>http://kamatari.github.io/2014/09/18/how-to-avoid-problem-of-opencv-installation/</link>
+      <link>https://kamatari.github.io/2014/09/18/how-to-avoid-problem-of-opencv-installation/</link>
       <pubDate>Thu, 18 Sep 2014 22:57:00 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2014/09/18/how-to-avoid-problem-of-opencv-installation/</guid>
+      <guid>https://kamatari.github.io/2014/09/18/how-to-avoid-problem-of-opencv-installation/</guid>
       <description>
 
 &lt;h3 id=&#34;brewでopencvが入らないことがあった:5a74b82014f2b0ac553545232a7ef3ba&#34;&gt;brewでopencvが入らないことがあった&lt;/h3&gt;

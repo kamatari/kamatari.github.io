@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Opencv Python Debian on Lifering</title>
-    <link>http://kamatari.github.io/categories/opencv-python-debian/</link>
+    <link>https://kamatari.github.io/categories/opencv-python-debian/</link>
     <description>Recent content in Opencv Python Debian on Lifering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>Masahiro Kamata</copyright>
     <lastBuildDate>Sun, 05 Oct 2014 00:31:13 +0900</lastBuildDate>
-    <atom:link href="http://kamatari.github.io/categories/opencv-python-debian/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kamatari.github.io/categories/opencv-python-debian/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>debianにopencv2.xをinstallした話</title>
-      <link>http://kamatari.github.io/2014/10/05/how-to-install-opencv2x-on-debian/</link>
+      <link>https://kamatari.github.io/2014/10/05/how-to-install-opencv2x-on-debian/</link>
       <pubDate>Sun, 05 Oct 2014 00:31:13 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2014/10/05/how-to-install-opencv2x-on-debian/</guid>
+      <guid>https://kamatari.github.io/2014/10/05/how-to-install-opencv2x-on-debian/</guid>
       <description>
 
 &lt;h1 id=&#34;opencv-2-4-9をmakeする作戦で進める:9b54f3de641fff8054d8bd7c0fd655c5&#34;&gt;opencv 2.4.9をmakeする作戦で進める&lt;/h1&gt;

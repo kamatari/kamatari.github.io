@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Php on Lifering</title>
-    <link>http://kamatari.github.io/categories/php/</link>
+    <link>https://kamatari.github.io/categories/php/</link>
     <description>Recent content in Php on Lifering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>Masahiro Kamata</copyright>
     <lastBuildDate>Wed, 01 Oct 2014 23:44:29 +0900</lastBuildDate>
-    <atom:link href="http://kamatari.github.io/categories/php/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kamatari.github.io/categories/php/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>phpでhttp越しに画像サイズを取得するいくつかの方法</title>
-      <link>http://kamatari.github.io/2014/10/01/how-to-get-external-image-using-php/</link>
+      <link>https://kamatari.github.io/2014/10/01/how-to-get-external-image-using-php/</link>
       <pubDate>Wed, 01 Oct 2014 23:44:29 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2014/10/01/how-to-get-external-image-using-php/</guid>
+      <guid>https://kamatari.github.io/2014/10/01/how-to-get-external-image-using-php/</guid>
       <description>
 
 &lt;h2 id=&#34;getimagesize:0a657fb6777f240a1e259b3ee5017dbc&#34;&gt;getimagesize()&lt;/h2&gt;

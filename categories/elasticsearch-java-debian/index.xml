@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Elasticsearch Java Debian on Lifering</title>
-    <link>http://kamatari.github.io/categories/elasticsearch-java-debian/</link>
+    <link>https://kamatari.github.io/categories/elasticsearch-java-debian/</link>
     <description>Recent content in Elasticsearch Java Debian on Lifering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>Masahiro Kamata</copyright>
     <lastBuildDate>Sun, 07 Dec 2014 15:10:31 +0900</lastBuildDate>
-    <atom:link href="http://kamatari.github.io/categories/elasticsearch-java-debian/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kamatari.github.io/categories/elasticsearch-java-debian/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>debianにElasticsearch 1.4.1をinstallした話</title>
-      <link>http://kamatari.github.io/2014/12/07/install-elasticsearch-on-debian/</link>
+      <link>https://kamatari.github.io/2014/12/07/install-elasticsearch-on-debian/</link>
       <pubDate>Sun, 07 Dec 2014 15:10:31 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2014/12/07/install-elasticsearch-on-debian/</guid>
+      <guid>https://kamatari.github.io/2014/12/07/install-elasticsearch-on-debian/</guid>
       <description>
 
 &lt;h1 id=&#34;java環境つくる:f44e9335b07c8e35a642c52359341df3&#34;&gt;Java環境つくる&lt;/h1&gt;

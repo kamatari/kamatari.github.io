@@ -2,23 +2,23 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Python on Lifering</title>
-    <link>http://kamatari.github.io/categories/python/</link>
+    <link>https://kamatari.github.io/categories/python/</link>
     <description>Recent content in Python on Lifering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>Masahiro Kamata</copyright>
     <lastBuildDate>Tue, 05 May 2015 10:59:14 +0900</lastBuildDate>
-    <atom:link href="http://kamatari.github.io/categories/python/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kamatari.github.io/categories/python/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>IPythonなるものの概要</title>
-      <link>http://kamatari.github.io/2015/05/05/first-step-of-ipython/</link>
+      <link>https://kamatari.github.io/2015/05/05/first-step-of-ipython/</link>
       <pubDate>Tue, 05 May 2015 10:59:14 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2015/05/05/first-step-of-ipython/</guid>
+      <guid>https://kamatari.github.io/2015/05/05/first-step-of-ipython/</guid>
       <description>
 
-&lt;p&gt;&lt;img src=&#34;http://kamatari.github.io/images/IPythonLogo.png&#34; alt=&#34;IPython_log&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://kamatari.github.io/images/IPythonLogo.png&#34; alt=&#34;IPython_log&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;ipythonとは:c9d356bb4f3d5111642cf861e82ace04&#34;&gt;IPythonとは&lt;/h1&gt;
 
@@ -118,10 +118,10 @@ In [28]: !uptime
     
     <item>
       <title>動かなくなったpipをupdateした話</title>
-      <link>http://kamatari.github.io/2014/06/29/how-to-update-pip/</link>
+      <link>https://kamatari.github.io/2014/06/29/how-to-update-pip/</link>
       <pubDate>Sun, 29 Jun 2014 18:06:00 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2014/06/29/how-to-update-pip/</guid>
+      <guid>https://kamatari.github.io/2014/06/29/how-to-update-pip/</guid>
       <description>
 
 &lt;h3 id=&#34;現象:271868aa518419d25be652fd5254801b&#34;&gt;現象&lt;/h3&gt;

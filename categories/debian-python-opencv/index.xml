@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Debian Python Opencv on Lifering</title>
-    <link>http://kamatari.github.io/categories/debian-python-opencv/</link>
+    <link>https://kamatari.github.io/categories/debian-python-opencv/</link>
     <description>Recent content in Debian Python Opencv on Lifering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>Masahiro Kamata</copyright>
     <lastBuildDate>Sat, 29 Nov 2014 01:34:23 +0900</lastBuildDate>
-    <atom:link href="http://kamatari.github.io/categories/debian-python-opencv/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kamatari.github.io/categories/debian-python-opencv/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>debianにinstallしたパッケージの場所</title>
-      <link>http://kamatari.github.io/2014/11/29/location-which-debian-package-installed/</link>
+      <link>https://kamatari.github.io/2014/11/29/location-which-debian-package-installed/</link>
       <pubDate>Sat, 29 Nov 2014 01:34:23 +0900</pubDate>
       
-      <guid>http://kamatari.github.io/2014/11/29/location-which-debian-package-installed/</guid>
+      <guid>https://kamatari.github.io/2014/11/29/location-which-debian-package-installed/</guid>
       <description>
 
 &lt;h1 id=&#34;apt-getでinstallしたpython-opencvがimport出来なかった:70ae5f4797c953568ee8a7e4964f0250&#34;&gt;apt-getでinstallしたpython-opencvがimport出来なかった&lt;/h1&gt;
